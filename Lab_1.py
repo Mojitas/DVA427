@@ -1,24 +1,25 @@
 import numpy as np
 
+# TODO: Det går att skriva saker som måste göras på detta sätt. Då dyker de up under TODO-fliken
 
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
+def sigmoid_derivative(x):
+    return x(1-x)
 
 size = 2
 amount = 3
 layers = 2
-
 rate = 5
 
-print('Hello world')
+    #TODO: Dela upp data i randomiserade grupper för träning, test och validering
 f = open("assignment1.txt", "r")
 if f.mode == 'r':
     contents = f.read()
     print(contents)
 
 training_inputs = np.array([[1, 0], [1, 1], [0, 1], [1, 0]])
-
 target = np.array([[0, 0, 1, 0]]).T
 
 weight1 = 2 * np.random.random((size, size)) - 1
