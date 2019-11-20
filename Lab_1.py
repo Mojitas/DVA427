@@ -13,11 +13,7 @@ amount = 3
 layers = 2
 rate = 5
 
-    #TODO: Dela upp data i randomiserade grupper för träning, test och validering
-f = open("assignment1.txt", "r")
-if f.mode == 'r':
-    contents = f.read()
-    print(contents)
+
 
 training_inputs = np.array([[1, 0], [1, 1], [0, 1], [1, 0]])
 target = np.array([[0, 0, 1, 0]]).T
