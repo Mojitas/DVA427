@@ -39,17 +39,19 @@ def sigmoid(x):
 if __name__ == '__main__': # typ våran main tror jag.
 
 
-    size = 2
-    amount = 3
+    data_segmentation()
+
+    size = 18
+    amount = 16 * 54
     layers = 2
-    rate = 5
+    rate = 0.1
 
-    training_inputs = np.array([[1, 0],
-                            [1, 1],
-                            [0, 1],
-                            [1, 0]])
+    #training_inputs = np.array([[1, 0],
+    #                        [1, 1],
+    #                        [0, 1],
+    #                        [1, 0]])
 
-    target = np.array([[0, 0, 1, 0]]).T
+    #target = np.array([[0, 0, 1, 0]]).T
 
     weight1 = 2 * np.random.random((size, size)) - 1
     weight2 = 2 * np.random.random(size) - 1
@@ -59,32 +61,31 @@ if __name__ == '__main__': # typ våran main tror jag.
     s = (size, 3)
     layer1 = np.zeros(s)  # 0 = value, 1 = delta, 2 = w0i
 
-    output = np.array([[0, 0]]).T
+    s2 = (2, 1)
+    output = np.zeros(s2)
 
-    for R in range(amount):
+    for R in range(1):
         for i in range(size):  # Setting W0i
             layer1[i, 2] = 2 * np.random.random_sample() - 1
 
         for i in range(size):  # Calculating output for layer 1 nodes
 
-            layer1[i, R] += sigmoid(inputs[i, 0] * weight1[i, 0])
+            layer1[i, 0] += sigmoid(inputs[0, 0, i] * weight1[i, 0])
 
         for i in range(size):  # Calculating output for layer 2 nodes (total output in this case)
 
-            temp = sigmoid(layer1[i, 0] * weight2[i])
-            output[0] = temp
-            print(sigmoid(layer1[i, 0] * weight2[i]))
-            print(output)
+            output[0] = sigmoid(layer1[i, 0] * weight2[i])
 
-        output[1] = output[0] * (1 - output[0]) * (target[0] - output[0])  # Delta for output
+        output[1] = output[0] * (1 - output[0]) * (training_outputs[0, 0] - output[0])  # Delta for output
 
         for i in range(size):
             layer1[i, 1] = layer1[i, 0] * (1 - layer1[i, 0]) * weight2[i] * output[1]  # Delta for layer1 i
             layer1[i, 2] += rate * layer1[i, 1]  # W0i for Layer1 nodes
             weight2[i] += rate * output[1] * layer1[i, 0]  # New weights for layer2
+            print(weight2[i])
 
         for i in range(size):  # Inputs
             for j in range(size):  # Layer1
-                weight1[i, j] = rate * layer1[j, 1] * inputs[i, 0]  # New weight1
+                weight1[i, j] = rate * layer1[j, 1] * inputs[0, 0, i]  # New weight1
 
-    # print(output[0])
+    #print(output[0])
