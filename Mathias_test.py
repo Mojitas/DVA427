@@ -12,7 +12,12 @@ test_data = np.zeros((172, 19))
 training_outputs = np.zeros((16, 54, 1))
 validation_result = np.zeros(115)
 test_result = np.zeros(172)
+np.random.seed()
+x=np.array([1,1,22,22,22,19,18,14,49.895756,17.775994,5.27092,0.771761,0.018632,0.006864,0.003923,0.003923,0.486903,0.100025,1],np.double)
+r=0
+y= 2 * np.random.random((19,1))-1
 
+print(1 / (1 + np.exp(-np.dot(x.T,y))))
 
 def data_segmentation():
     for i in range(16):  # transfers the training set
