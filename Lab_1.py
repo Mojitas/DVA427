@@ -1,21 +1,48 @@
-import numpy as np
+from Mathias_test import *
+
+#from Dan_test import *  # import the test stuff
+
 
 # TODO: Det går att skriva saker som måste göras på detta sätt. Då dyker de up under TODO-fliken
 
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
+class NeuralNetwork():  # class for related functions
 
-def sigmoid_derivative(x):
-    return x(1-x)
+# initialize the weigths
+    def __init__(self):
+        np.random.seed(1)
+        self.synaptic_weights = 2 * np.random.random((19, 1)) - 1
+
+# commit lots of math
+    def sigmoid(self, x):
+        return 1 / (1 + np.exp(-x))
+
+    def sigmoid_derivative(self, x):
+        return x(1 - x)
+
+
+    def train(self, training_inputs, training_outputs, training_iterations):
+        for iteration in range(training_iterations):
+            output = self.think(training_inputs)
+            error = training_outputs - output
+            weight_adjustments = np.dot(training_inputs.T, error * self.sigmoid_derivative(output))
+            self.synaptic_weights += weight_adjustments
+
+    def think(self, inputs):
+        inputs = inputs.astype(float)
+        output = self.sigmoid(np.dot(inputs, self.synaptic_weights))
+        return output
+
 
 size = 2
 amount = 3
 layers = 2
 rate = 5
 
+training_inputs = np.array([[1, 0],
+                            [1, 1],
+                            [0, 1],
+                            [1, 0]])
 
-
-training_inputs = np.array([[1, 0], [1, 1], [0, 1], [1, 0]])
 target = np.array([[0, 0, 1, 0]]).T
 
 weight1 = 2 * np.random.random((size, size)) - 1
@@ -52,6 +79,6 @@ for R in range(amount):
 
     for i in range(size):  # Inputs
         for j in range(size):  # Layer1
-            weight1[i, j] = rate * layer1[j, 1] * inputs[i, 0]  # New weigth1
+            weight1[i, j] = rate * layer1[j, 1] * inputs[i, 0]  # New weight1
 
-    #print(output[0])
+    # print(output[0])
