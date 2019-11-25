@@ -8,7 +8,7 @@ class NeuralNetwork():  # class for related functions
     # initialize the weigths
     def __init__(self):
         np.random.seed()
-        self.weights = 2 * np.random.random((19, 1)) -1
+        self.weights = 2 * np.random.random((19, 1)) -1     # range [-1,1]
 
     # commit lots of math
     def sigmoid(self, x):
@@ -17,19 +17,21 @@ class NeuralNetwork():  # class for related functions
     def sigmoid_derivative(self, x):
         return x * (1 - x)
 
-    def train(self, input_layer, output_layer, training_iterations):
+    def train(self, input_layer, output_layer, training_iterations):  #does training
         for i in range(training_iterations):
-            output = self.think(input_layer)
+            output = self.evaluate(input_layer)
             error = output_layer - output
             weight_adjustments = np.dot(input_layer.T, error * self.sigmoid_derivative(output))
             self.weights += weight_adjustments
 
 
 
-    def think(self, inputs):
+    def evaluate(self, inputs):
         inputs = inputs.astype(float)
         output = self.sigmoid(np.dot(inputs, self.weights))
         return output
+
+    def compare(self,input_layer,output_layer): # func for comparing when training has been done
 
 
 if __name__ == '__main__':  # typ våran main tror jag.
