@@ -4,7 +4,7 @@ import random
 
 # Data transfer stuff, changed to 19 inputs as referenced by the pdf
 data_array = np.array(pd.read_csv("assignment1.txt"))  # Reads from file
-np.set_printoptions(formatter={'float': '{: 0.9f}'.format})  # formats to 3 decimal places
+np.set_printoptions(formatter={'float': '{: 0.15f}'.format})  # formats to 3 decimal places
 #random.shuffle(data_array)  # randomises the data, unneccesary at first
 training_inputs = np.zeros((16, 54, 19))  # global variables for the data
 validation_data = np.zeros((115, 19))
