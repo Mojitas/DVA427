@@ -40,7 +40,7 @@ if __name__ == '__main__':  # typ våran main tror jag.
     data_segmentation()
 
     size = 18
-    amount = 16   * 54
+    amount = 16 * 54
     rate = 0.1
 
     weight1 = 2 * np.random.random((size, size)) - 1
@@ -52,15 +52,13 @@ if __name__ == '__main__':  # typ våran main tror jag.
     layer1 = np.zeros(s1)  # 0 = value, 1 = error, 2 = w0i
 
     s2 = (3, 1)
-    output = np.zeros(s2) # 0 = value, 1 = error, 2 = w0i
+    output = np.zeros(s2)  # 0 = value, 1 = error, 2 = w0i
     output[2] = 2 * np.random.random_sample() - 1
 
     for i in range(size):  # Setting W0i
         layer1[i, 2] = 2 * np.random.random_sample() - 1
 
     for R in range(amount):
-
-
 
         for i in range(size):  # Calculating output for layer 1 nodes
             sum1 = layer1[i, 2]  # Constant weight
@@ -70,12 +68,11 @@ if __name__ == '__main__':  # typ våran main tror jag.
 
             layer1[i, 0] = sigmoid(sum1)  # Value of node
 
-        sum2 = output[2]    #Why does output[2] ever change value??????????????
+        sum2 = output[2]  # Why does output[2] ever change value??????????????
 
         for i in range(size):  # Calculating output for layer 2 nodes (total output in this case)
 
             sum2 += layer1[i, 0] * weight2[i]
-
 
         output[0] = sigmoid(sum2)
 
@@ -84,17 +81,15 @@ if __name__ == '__main__':  # typ våran main tror jag.
 
         for i in range(size):
             layer1[i, 1] = layer1[i, 0] * (1 - layer1[i, 0]) * weight2[i] * output[1]  # Delta for layer1 i
-            #print(layer1[i,1])
+            # print(layer1[i,1])
             layer1[i, 2] += rate * layer1[i, 1]  # W0i for Layer1 nodes
             weight2[i] += rate * output[1] * layer1[i, 0]  # New weights for layer2
-
 
         for i in range(size):  # Inputs
             for j in range(size):  # Layer1
                 weight1[i, j] = rate * layer1[j, 1] * inputs[R % 16, math.floor(R / 16), i]  # New weight1
 
-        #print(weight2)
-
+        # print(weight2)
 
 for i in range(size):  # Calculating output for layer 1 nodes
 
