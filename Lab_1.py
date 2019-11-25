@@ -18,7 +18,6 @@ class NeuralNetwork():  # class for related functions
     def sigmoid_derivative(self, x):
         return x(1 - x)
 
-
     def train(self, training_inputs, training_outputs, training_iterations):
         for iteration in range(training_iterations):
             output = self.think(training_inputs)
@@ -32,60 +31,75 @@ class NeuralNetwork():  # class for related functions
         return output
 
 
-
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
-if __name__ == '__main__': # typ våran main tror jag.
 
+if __name__ == '__main__':  # typ våran main tror jag.
 
     data_segmentation()
 
     size = 18
-    amount = 16 * 54
-    layers = 2
+    amount = 16   * 54
     rate = 0.1
-
-    #training_inputs = np.array([[1, 0],
-    #                        [1, 1],
-    #                        [0, 1],
-    #                        [1, 0]])
-
-    #target = np.array([[0, 0, 1, 0]]).T
 
     weight1 = 2 * np.random.random((size, size)) - 1
     weight2 = 2 * np.random.random(size) - 1
 
     inputs = training_inputs
 
-    s = (size, 3)
-    layer1 = np.zeros(s)  # 0 = value, 1 = delta, 2 = w0i
+    s1 = (size, 3)
+    layer1 = np.zeros(s1)  # 0 = value, 1 = error, 2 = w0i
 
-    s2 = (2, 1)
-    output = np.zeros(s2)
+    s2 = (3, 1)
+    output = np.zeros(s2) # 0 = value, 1 = error, 2 = w0i
+    output[2] = 2 * np.random.random_sample() - 1
 
-    for R in range(1):
-        for i in range(size):  # Setting W0i
-            layer1[i, 2] = 2 * np.random.random_sample() - 1
+    for i in range(size):  # Setting W0i
+        layer1[i, 2] = 2 * np.random.random_sample() - 1
+
+    for R in range(amount):
+
+
 
         for i in range(size):  # Calculating output for layer 1 nodes
+            sum1 = layer1[i, 2]  # Constant weight
 
-            layer1[i, 0] += sigmoid(inputs[0, 0, i] * weight1[i, 0])
+            for j in range(size):  # Summing all inputs TO an node
+                sum1 += inputs[0, 0, j] * weight1[j, i]
+
+            layer1[i, 0] = sigmoid(sum1)  # Value of node
+
+        sum2 = output[2]    #Why does output[2] ever change value??????????????
 
         for i in range(size):  # Calculating output for layer 2 nodes (total output in this case)
 
-            output[0] = sigmoid(layer1[i, 0] * weight2[i])
+            sum2 += layer1[i, 0] * weight2[i]
 
-        output[1] = output[0] * (1 - output[0]) * (training_outputs[0, 0] - output[0])  # Delta for output
+
+        output[0] = sigmoid(sum2)
+
+        output[1] = output[0] * (1 - output[0]) * (training_outputs[math.floor(R / 54), R % 54] - output[0])
+        # The floor function is used due to the training data being split in groups of 54
 
         for i in range(size):
             layer1[i, 1] = layer1[i, 0] * (1 - layer1[i, 0]) * weight2[i] * output[1]  # Delta for layer1 i
+            #print(layer1[i,1])
             layer1[i, 2] += rate * layer1[i, 1]  # W0i for Layer1 nodes
             weight2[i] += rate * output[1] * layer1[i, 0]  # New weights for layer2
-            print(weight2[i])
+
 
         for i in range(size):  # Inputs
             for j in range(size):  # Layer1
-                weight1[i, j] = rate * layer1[j, 1] * inputs[0, 0, i]  # New weight1
+                weight1[i, j] = rate * layer1[j, 1] * inputs[R % 16, math.floor(R / 16), i]  # New weight1
 
-    #print(output[0])
+        #print(weight2)
+
+
+for i in range(size):  # Calculating output for layer 1 nodes
+
+    layer1[i, 0] += sigmoid(validation_data[0, i] * weight1[i, 0])
+
+for i in range(size):  # Calculating output for layer 2 nodes (total output in this case)
+
+    output[0] += sigmoid(layer1[i, 0] * weight2[i])
