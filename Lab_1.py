@@ -17,13 +17,14 @@ class NeuralNetwork():  # class for related functions
     def sigmoid_derivative(self, x):
         return x * (1 - x)
 
-    def train(self, Input_layer, output_layer, training_iterations):
+    def train(self, input_layer, output_layer, training_iterations):
         for i in range(training_iterations):
-            output = self.think(Input_layer)
+            output = self.think(input_layer)
             error = output_layer - output
-            weight_adjustments = np.dot(Input_layer.T, error * self.sigmoid_derivative(output))
+            weight_adjustments = np.dot(input_layer.T, error * self.sigmoid_derivative(output))
             self.weights += weight_adjustments
-            print("\n", self.weights)
+
+
 
     def think(self, inputs):
         inputs = inputs.astype(float)
@@ -72,4 +73,8 @@ if 0:
             for j in range(size):  # Layer1
                 weight1[i, j] = learning_rate * layer1[j, 1] * training_inputs[0, 0, i]  # New weight1
 
-print("\n", NN.sigmoid(np.dot(training_inputs[0].T, training_outputs[0])))
+
+print("Weigths before training: ",NN.weights)
+NN.train(training_inputs[0],training_outputs[0],1000000)
+
+print("Weigths after training: ",NN.weights)
