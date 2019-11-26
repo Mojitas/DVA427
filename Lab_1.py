@@ -31,8 +31,14 @@ class NeuralNetwork():  # class for related functions
         output = self.sigmoid(np.dot(inputs, self.weights))
         return output
 
-    def compare(self,input_layer,output_layer): # func for comparing when training has been done
-
+    def compare(self, inputs, output):  # func for comparing when training has been done
+        inputs = inputs.astype(float)
+        outputs = self.sigmoid(np.dot(inputs, self.weights))
+        accuracy=0
+        for i in range(54):
+            if abs(output[i]-outputs[i]) < 0.01:
+                accuracy+=1
+        print("\nAccuracy is: ", accuracy/54)
 
 if __name__ == '__main__':  # typ våran main tror jag.
 
@@ -76,7 +82,10 @@ if 0:
                 weight1[i, j] = learning_rate * layer1[j, 1] * training_inputs[0, 0, i]  # New weight1
 
 
-print("Weigths before training: ",NN.weights)
-NN.train(training_inputs[0],training_outputs[0],1000000)
-
-print("Weigths after training: ",NN.weights)
+#print("Weigths before training: ",NN.weights)
+#NN.train(training_inputs[0],training_outputs[0],1000000)
+for i in range(16):
+    NN.train(training_inputs[i],training_outputs[i],10000)
+for i in range(16):
+    NN.compare(training_inputs[i],training_outputs[i])
+#print("Weigths after training: ",NN.weights)
