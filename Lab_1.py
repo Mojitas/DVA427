@@ -19,14 +19,14 @@ class NeuralNetwork():  # class for related functions
 
     def train(self, input_layer, output_layer, training_iterations):  #does training
         for i in range(training_iterations):
-            output = self.evaluate(input_layer)
+            output = self.think(input_layer)
             error = output_layer - output
             weight_adjustments = np.dot(input_layer.T, error * self.sigmoid_derivative(output))
             self.weights += weight_adjustments
 
 
 
-    def evaluate(self, inputs):
+    def think(self, inputs):
         inputs = inputs.astype(float)
         output = self.sigmoid(np.dot(inputs, self.weights))
         return output
@@ -38,7 +38,7 @@ class NeuralNetwork():  # class for related functions
         for i in range(54):
             if abs(output[i]-outputs[i]) < 0.01:
                 accuracy+=1
-        print("\nAccuracy is: ", accuracy/54)
+        return accuracy
 
 if __name__ == '__main__':  # typ våran main tror jag.
 
@@ -84,8 +84,11 @@ if 0:
 
 #print("Weigths before training: ",NN.weights)
 #NN.train(training_inputs[0],training_outputs[0],1000000)
+accuracy=0
 for i in range(16):
     NN.train(training_inputs[i],training_outputs[i],10000)
 for i in range(16):
-    NN.compare(training_inputs[i],training_outputs[i])
+  accuracy +=  NN.compare(training_inputs[i],training_outputs[i])
+
+print("Overall accuracy is: ", accuracy/(54*16))
 #print("Weigths after training: ",NN.weights)
