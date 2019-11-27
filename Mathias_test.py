@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import math
 import random
 
 # Data transfer stuff, changed to 19 inputs as referenced by the pdf
