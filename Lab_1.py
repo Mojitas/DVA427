@@ -39,11 +39,12 @@ class NeuralNetwork():  # class for related functions
         inputs = inputs.astype(float)
         outputs = self.think(inputs)
         accuracy=0
-        for i in range(115):
+        size= inputs.shape[0]
+        for i in range(size):
             if abs(output[i]-outputs[i]) < 0.1:
-                print("It was right once!\n")
                 accuracy += 1
-        return accuracy
+
+        return accuracy/size
 
 
 
@@ -89,10 +90,13 @@ if 0:
                 weight1[i, j] = learning_rate * layer1[j, 1] * DM.training_inputs[0, 0, i]  # New weight1
 
 else:
-    accuracy=0
-    for i in range(16):
-        NN.train(DM.training_inputs[i],DM.training_outputs[i],1500)
+    training_sessions=0
+    while True:
+        for i in range(16):
+            NN.train(DM.training_inputs[i],DM.training_outputs[i],100)
+            accuracy = NN.compare(DM.validation_data, DM.validation_result)
+            training_sessions+=100
+            if training_sessions%100000 == 10000:
+                print("stuff\n")
 
-    accuracy +=  NN.compare(DM.validation_data,DM.validation_result)
-
-    print("Overall accuracy is: ", accuracy/115)
+        print("Overall accuracy is: ", accuracy, training_sessions)
