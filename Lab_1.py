@@ -8,7 +8,10 @@ class NeuralNetwork():  # class for related functions
     # initialize the weigths
     def __init__(self):
         np.random.seed()
-        self.weights = 2 * np.random.random((19, 1)) -1     # range [-1,1]
+        self.weights = 2 * np.random.random((19, 1)) - 1
+        self.w1 = 2 * np.random.random((19, 9)) -1     # hidden layer 1
+        self.w2 = 2 * np.random.random((9,9)) - 1      # hidden layer 2
+        self.w3 = 2 * np.random.random((9,1)) - 1      # output layer
 
     # commit lots of math
     def sigmoid(self, x):
@@ -19,21 +22,24 @@ class NeuralNetwork():  # class for related functions
 
     def train(self, input_layer, output_layer, training_iterations):  #does training
         for i in range(training_iterations):
+
             output = self.think(input_layer)
             error = output_layer - output
             weight_adjustments = np.dot(input_layer.T, error * self.sigmoid_derivative(output))
             self.weights += weight_adjustments
+            print("\n",self.weights)
 
 
 
     def think(self, inputs):
         inputs = inputs.astype(float)
         output = self.sigmoid(np.dot(inputs, self.weights))
+
         return output
 
     def compare(self, inputs, output):  # func for comparing when training has been done
         inputs = inputs.astype(float)
-        outputs = self.sigmoid(np.dot(inputs, self.weights))
+        outputs = self.think(inputs)
         accuracy=0
         for i in range(54):
             if abs(output[i]-outputs[i]) < 0.01:
@@ -86,7 +92,7 @@ if 0:
 #NN.train(training_inputs[0],training_outputs[0],1000000)
 accuracy=0
 for i in range(16):
-    NN.train(training_inputs[i],training_outputs[i],10000)
+    NN.train(training_inputs[i],training_outputs[i],1)
 for i in range(16):
   accuracy +=  NN.compare(training_inputs[i],training_outputs[i])
 
