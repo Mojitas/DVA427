@@ -4,16 +4,16 @@ import math
 import random
 
 # Data transfer stuff, changed to 19 inputs as referenced by the pdf
-data_array = np.array(pd.read_csv("assignment1.txt"))  # Reads from file
-np.set_printoptions(formatter={'float': '{: 0.9f}'.format})  # formats to 3 decimal places
-#random.shuffle(data_array)  # randomises the data, unneccesary at first
+data_array = np.array(pd.read_csv("assignment1.txt", header=None), dtype=np.float128)  # Reads from file
+np.set_printoptions(formatter={'float': '{: 0.15f}'.format})  # formats to 3 decimal places
+random.shuffle(data_array)  # randomises the data, unneccesary at first
 training_inputs = np.zeros((16, 54, 19))  # global variables for the data
 validation_data = np.zeros((115, 19))
 test_data = np.zeros((172, 19))
 training_outputs = np.zeros((16, 54, 1))
 validation_result = np.zeros(115)
 test_result = np.zeros(172)
-
+np.random.seed()
 
 def data_segmentation():
     for i in range(16):  # transfers the training set
