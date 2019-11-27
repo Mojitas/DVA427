@@ -1,7 +1,7 @@
+import random
+import math
 import numpy as np
 import pandas as pd
-import math
-import random
 
 # Data transfer stuff, changed to 19 inputs as referenced by the pdf
 data_array = np.array(pd.read_csv("assignment1.txt", header=None), dtype=np.float128)  # Reads from file

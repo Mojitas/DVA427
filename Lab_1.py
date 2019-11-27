@@ -1,6 +1,5 @@
 from Mathias_test import *
-from Dan_test import *  # import the test stuff
-
+#from Dan_test import *
 # TODO: Det går att skriva saker som måste göras på detta sätt. Då dyker de up under TODO-fliken
 
 class NeuralNetwork():  # class for related functions
@@ -8,7 +7,7 @@ class NeuralNetwork():  # class for related functions
     # initialize the weigths
     def __init__(self):
         np.random.seed()
-        self.weights = 2 * np.random.random((19, 1)) - 1
+        self.weights = 2 * np.random.random((19, 1)) - 1 # original weights, too be removed soon
         self.w1 = 2 * np.random.random((19, 9)) -1     # hidden layer 1
         self.w2 = 2 * np.random.random((9,9)) - 1      # hidden layer 2
         self.w3 = 2 * np.random.random((9,1)) - 1      # output layer
@@ -46,7 +45,7 @@ class NeuralNetwork():  # class for related functions
                 accuracy+=1
         return accuracy
 
-if __name__ == '__main__':  # typ våran main tror jag.
+if __name__ == '__main__':
 
     data_segmentation()  # Imports and sorts data
     NN = NeuralNetwork()
@@ -87,14 +86,12 @@ if 0:
             for j in range(size):  # Layer1
                 weight1[i, j] = learning_rate * layer1[j, 1] * training_inputs[0, 0, i]  # New weight1
 
+else:
+    accuracy=0
+    for i in range(16):
+        NN.train(training_inputs[i],training_outputs[i],1)
+    for i in range(16):
+        accuracy +=  NN.compare(training_inputs[i],training_outputs[i])
 
-#print("Weigths before training: ",NN.weights)
-#NN.train(training_inputs[0],training_outputs[0],1000000)
-accuracy=0
-for i in range(16):
-    NN.train(training_inputs[i],training_outputs[i],1)
-for i in range(16):
-  accuracy +=  NN.compare(training_inputs[i],training_outputs[i])
-
-print("Overall accuracy is: ", accuracy/(54*16))
-#print("Weigths after training: ",NN.weights)
+    print("Overall accuracy is: ", accuracy/(54*16))
+    #print("Weigths after training: ",NN.weights)
