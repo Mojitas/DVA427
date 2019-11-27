@@ -6,7 +6,6 @@ class NeuralNetwork():  # class for related functions
 
     # initialize the weigths
     def __init__(self):
-        np.random.seed()
         self.weights = 2 * np.random.random((19, 1)) - 1 # original weights, too be removed soon
         self.w1 = 2 * np.random.random((19, 9)) -1     # hidden layer 1
         self.w2 = 2 * np.random.random((9,9)) - 1      # hidden layer 2
@@ -26,7 +25,7 @@ class NeuralNetwork():  # class for related functions
             error = output_layer - output
             weight_adjustments = np.dot(input_layer.T, error * self.sigmoid_derivative(output))
             self.weights += weight_adjustments
-            print("\n",self.weights)
+
 
 
 
@@ -40,14 +39,17 @@ class NeuralNetwork():  # class for related functions
         inputs = inputs.astype(float)
         outputs = self.think(inputs)
         accuracy=0
-        for i in range(54):
-            if abs(output[i]-outputs[i]) < 0.01:
-                accuracy+=1
+        for i in range(115):
+            if abs(output[i]-outputs[i]) < 0.1:
+                print("It was right once!\n")
+                accuracy += 1
         return accuracy
+
+
 
 if __name__ == '__main__':
 
-    data_segmentation()  # Imports and sorts data
+    DM.segmentation()  # Imports and sorts data
     NN = NeuralNetwork()
 
     size = 18
@@ -84,14 +86,13 @@ if 0:
 
         for i in range(size):  # Inputs
             for j in range(size):  # Layer1
-                weight1[i, j] = learning_rate * layer1[j, 1] * training_inputs[0, 0, i]  # New weight1
+                weight1[i, j] = learning_rate * layer1[j, 1] * DM.training_inputs[0, 0, i]  # New weight1
 
 else:
     accuracy=0
     for i in range(16):
-        NN.train(training_inputs[i],training_outputs[i],1)
-    for i in range(16):
-        accuracy +=  NN.compare(training_inputs[i],training_outputs[i])
+        NN.train(DM.training_inputs[i],DM.training_outputs[i],1500)
 
-    print("Overall accuracy is: ", accuracy/(54*16))
-    #print("Weigths after training: ",NN.weights)
+    accuracy +=  NN.compare(DM.validation_data,DM.validation_result)
+
+    print("Overall accuracy is: ", accuracy/115)
