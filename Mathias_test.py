@@ -58,8 +58,8 @@ class dataManagement():
         print("\nData has been managed\n")
 
 DM=dataManagement() # Slippa skriva långa grejer
-DM.segmentation()
-print(DM.training_inputs[0,0])
+#DM.segmentation()
+#print(DM.training_inputs[0,0])
 #x = np.array([[0,1,2,3,4,5,6,7,8,9]])
 #for i in range(2,10):
 #    print("x: ", x[:,i],x.shape)
