@@ -8,7 +8,7 @@ def sigmoid(x):
 
 if __name__ == '__main__':  # typ våran main tror jag.
 
-    data_segmentation()
+    DM.segmentation()
 
     size = 18
     amount = 16 * 54
@@ -19,7 +19,7 @@ if __name__ == '__main__':  # typ våran main tror jag.
 
     print(weight2)
 
-    inputs = training_inputs
+    inputs = DM.training_inputs
 
     s1 = (size, 3)
     layer1 = np.zeros(s1)  # 0 = value, 1 = error, 2 = w0i
@@ -49,9 +49,9 @@ if __name__ == '__main__':  # typ våran main tror jag.
 
         output = sigmoid(sum2)
 
-        output_error = output * (1 - output) * (training_outputs[(math.floor(R / 54)), R % 54] - output)
+        output_error = output * (1 - output) * (DM.training_outputs[(math.floor(R / 54)), R % 54] - output)
         print({math.floor(R / 54)}, {R % 54})
-        print("Output: %5f target: %5f error: %5f" %(output, training_outputs[math.floor(R / 54), R % 54], output_error))
+        print("Output: %5f target: %5f error: %5f" %(output, DM.training_outputs[math.floor(R / 54), R % 54], output_error))
 
         # The floor function is used due to the training data being split in groups of 54
 
@@ -78,7 +78,7 @@ for R in range(115):
         sum1 = layer1[i, 2]  # Constant weight
 
         for j in range(size):  # Summing all inputs TO an node
-            sum1 += validation_data[R, j] * weight1[j, i]
+            sum1 += DM.validation_data[R, j] * weight1[j, i]
 
         layer1[i, 0] = sigmoid(sum1)  # Value of node
 

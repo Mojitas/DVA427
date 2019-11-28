@@ -27,6 +27,13 @@ class NeuralNetwork():  # class for related functions
             self.weights += weight_adjustments
 
 
+    def forward(self,input_layer): # functions that uses more layers
+        l1 = np.dot(input_layer, self.w1)
+        print("\nl1: ",l1)
+        l2 = np.dot(l1, self.w2)
+        print("\nl2: ",l2)
+        output = np.dot(l2, self.w3)
+        print("\noutput: ",output)
 
 
     def think(self, inputs):
@@ -63,7 +70,6 @@ if __name__ == '__main__':
     layer1 = np.zeros((size, 3))  # 0 = value, 1 = delta, 2 = w0i
     outputs = np.zeros((2, 1))
 
-    # Ser om jag får samma resultat med matrismultiplikation
 if 0:
     for R in range(1):
         for i in range(size):  # Setting W0i
@@ -91,12 +97,13 @@ if 0:
 
 else:
     training_sessions=0
-    while True:
+    NN.forward(DM.training_inputs[0,0])
+    while 0:
         for i in range(16):
             NN.train(DM.training_inputs[i],DM.training_outputs[i],100)
             accuracy = NN.compare(DM.validation_data, DM.validation_result)
             training_sessions+=100
-            if training_sessions%100000 == 10000:
+            if training_sessions%10000 == 0:
                 print("stuff\n")
 
         print("Overall accuracy is: ", accuracy, training_sessions)
