@@ -10,6 +10,7 @@ class NeuralNetwork():  # class for related functions
         self.w1 = 2 * np.random.random((19, 9)) -1     # hidden layer 1
         self.w2 = 2 * np.random.random((9,9)) - 1      # hidden layer 2
         self.w3 = 2 * np.random.random((9,1)) - 1      # output layer
+        self.learning_rate = 0.1
 
     # commit lots of math
     def sigmoid(self, x):
@@ -26,21 +27,33 @@ class NeuralNetwork():  # class for related functions
             weight_adjustments = np.dot(input_layer.T, self.sigmoid_derivative(output) * error)
             self.weights += weight_adjustments
 
-
-    def forward(self,input_layer): # functions that uses more layers
-        l1 = np.dot(input_layer, self.w1)
-        print("\nl1: ",l1)
-        l2 = np.dot(l1, self.w2)
-        print("\nl2: ",l2)
-        output = np.dot(l2, self.w3)
-        print("\noutput: ",output)
-
-
+        # think returns the result of one input
     def think(self, inputs):
         inputs = inputs.astype(float)
         output = self.sigmoid(np.dot(inputs, self.weights))
-
         return output
+
+    def forward(self,input_layer): # functions that uses more layers
+        input_layer = input_layer.astype(float)
+        l1 = np.dot(input_layer, self.w1)
+        l2 = np.dot(l1, self.w2)
+        output = np.dot(l2, self.w3)
+        return self.sigmoid(output)
+
+    def backwards(self,input_layer, output_layer, training_iterations):
+
+        output = self.forward(input_layer)
+        out_error = output_layer - output
+        delta_1=out_error*self.sigmoid_derivative(output)
+        self.w3 += self.learning_rate*delta_1*output
+
+        delta_2= self.sigmoid_derivative(output)*delta_1*
+        self.w2 =
+
+        delta_3=self.sigmoid_derivative(output)*(delta_2*
+        self.w1 =
+
+
 
     def compare(self, inputs, output):  # func for comparing when training has been done
         inputs = inputs.astype(float)
