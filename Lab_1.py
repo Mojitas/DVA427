@@ -23,7 +23,7 @@ class NeuralNetwork():  # class for related functions
 
             output = self.think(input_layer)
             error = output_layer - output
-            weight_adjustments = np.dot(input_layer.T, error * self.sigmoid_derivative(output))
+            weight_adjustments = np.dot(input_layer.T, self.sigmoid_derivative(output) * error)
             self.weights += weight_adjustments
 
 
@@ -98,12 +98,13 @@ if 0:
 else:
     training_sessions=0
     NN.forward(DM.training_inputs[0,0])
-    while 0:
-        for i in range(16):
-            NN.train(DM.training_inputs[i],DM.training_outputs[i],100)
-            accuracy = NN.compare(DM.validation_data, DM.validation_result)
-            training_sessions+=100
-            if training_sessions%10000 == 0:
-                print("stuff\n")
 
-        print("Overall accuracy is: ", accuracy, training_sessions)
+
+    while 0:
+        i=10
+
+        NN.train(DM.training_inputs, DM.training_outputs, i)
+        accuracy = NN.compare(DM.validation_data, DM.validation_result)
+        training_sessions+=i
+
+        print("Overall accuracy is: {}\n training: {}".format(accuracy, training_sessions))
