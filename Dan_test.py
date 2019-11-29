@@ -14,10 +14,8 @@ if __name__ == '__main__':  # typ våran main tror jag.
     amount = 16 * 54
     rate = 0.2
 
-    weight1 = (2 * np.random.random((size, size)) - 1)/20
-    weight2 = (2 * np.random.random(size) - 1)/20
-
-    print(weight2)
+    weight1 = (2 * np.random.random((size, size)) - 1)
+    weight2 = (2 * np.random.random(size) - 1)
 
     inputs = DM.training_inputs
 
@@ -29,45 +27,46 @@ if __name__ == '__main__':  # typ våran main tror jag.
     for i in range(size):  # Setting W0i
         layer1[i, 2] = (2 * np.random.random_sample() - 1)/20
 
-    for R in range(amount):
+    for A in range(1000):
+        for R in range(amount):
 
-        for i in range(size):  # Calculating output for layer 1 nodes
-            sum1 = 0
-            sum1 += layer1[i, 2]  # Constant weight
+            for i in range(size):  # Calculating output for layer 1 nodes
+                sum1 = 0
+                sum1 += layer1[i, 2]  # Constant weight
 
-            for j in range(size):  # Summing all inputs TO an node
-                sum1 += inputs[0, 0, j] * weight1[j, i]
+                for j in range(size):  # Summing all inputs TO an node
+                    sum1 += inputs[0, 0, j] * weight1[j, i]
 
-            layer1[i, 0] = sigmoid(sum1)  # Value of node
+                layer1[i, 0] = sigmoid(sum1)  # Value of node
 
-        sum2 = 0
-        sum2 += output_w0
+            sum2 = 0
+            sum2 += output_w0
 
-        for i in range(size):  # Calculating output for layer 2 nodes (total output in this case)
+            for i in range(size):  # Calculating output for layer 2 nodes (total output in this case)
 
-            sum2 += layer1[i, 0] * weight2[i]
+                sum2 += layer1[i, 0] * weight2[i]
 
-        output = sigmoid(sum2)
+            output = sigmoid(sum2)
 
-        output_error = output * (1 - output) * (DM.training_outputs[(math.floor(R / 54)), R % 54] - output)
-        print({math.floor(R / 54)}, {R % 54})
-        print("Output: %5f target: %5f error: %5f" %(output, DM.training_outputs[math.floor(R / 54), R % 54], output_error))
+            output_error = output * (1 - output) * (DM.training_outputs[(math.floor(R / 54)), R % 54] - output)
+            #print({math.floor(R / 54)}, {R % 54})
+            #print("Output: %5f target: %5f error: %5f" %(output, DM.training_outputs[math.floor(R / 54), R % 54], output_error))
 
-        # The floor function is used due to the training data being split in groups of 54
+            # The floor function is used due to the training data being split in groups of 54
 
-        output_w0 += rate * output_error
+            output_w0 += rate * output_error
 
-        for i in range(size):
-            layer1[i, 1] = layer1[i, 0] * (1 - layer1[i, 0]) * weight2[i] * output_error  # Error for layer1 i
-            # print(layer1[i,1])
-            layer1[i, 2] += rate * layer1[i, 1]  # W0i for Layer1 nodes
-            weight2[i] += rate * output_error * layer1[i, 0]  # New weights for layer2
-            #print("Layer 1: %5f, change in weight: %f, new weight: %5f" %(layer1[i, 0], rate * output_error * layer1[i, 0], weight2[i]))
+            for i in range(size):
+                layer1[i, 1] = layer1[i, 0] * (1 - layer1[i, 0]) * weight2[i] * output_error  # Error for layer1 i
+                # print(layer1[i,1])
+                layer1[i, 2] += rate * layer1[i, 1]  # W0i for Layer1 nodes
+                weight2[i] += rate * output_error * layer1[i, 0]  # New weights for layer2
+                #print("Layer 1: %5f, change in weight: %f, new weight: %5f" %(layer1[i, 0], rate * output_error * layer1[i, 0], weight2[i]))
 
-        for i in range(size):  # Inputs
-            for j in range(size):  # Layer1
-                weight1[i, j] = rate * layer1[j, 1] * inputs[R % 16, math.floor(R / 16), i]  # New weight1
-        #print(weight2[i])
+            for i in range(size):  # Inputs
+                for j in range(size):  # Layer1
+                    weight1[i, j] = rate * layer1[j, 1] * inputs[R % 16, math.floor(R / 16), i]  # New weight1
+            print(weight2[i])
 
 
 for R in range(115):
@@ -79,6 +78,8 @@ for R in range(115):
 
         for j in range(size):  # Summing all inputs TO an node
             sum1 += DM.validation_data[R, j] * weight1[j, i]
+
+
 
         layer1[i, 0] = sigmoid(sum1)  # Value of node
 
@@ -92,4 +93,4 @@ for R in range(115):
     output = sigmoid(sum2)
 
     #print(output)
-    #print(validation_result[R])
+    #print(DM.validation_result[R])
