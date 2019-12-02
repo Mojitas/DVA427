@@ -26,12 +26,10 @@ class NeuralNetwork():  # class for related functions
 
     def forward(self, input_layer):  # functions that uses more layers
         input_layer = input_layer.astype(float)
-        print(input_layer.shape)
+
         self.l1 = self.sigmoid(np.dot(input_layer, self.w1))
         self.l2 = self.sigmoid(np.dot(self.l1, self.w2))
-        output = np.dot(self.l2, self.w3)
-        print(self.l1.shape)
-        self.l2 = self.sigmoid(np.dot(self.l1, self.w2))
+
         output = np.dot(self.l2, self.w3)
         return self.sigmoid(output)
 
@@ -39,24 +37,29 @@ class NeuralNetwork():  # class for related functions
 
         output = self.forward(input_layer)
         out_error = output_layer - output
-        delta_1 = out_error * self.sigmoid_derivative(output)
-        print("delta 1: {}\noutput: {}\nw3: {}".format(delta_1.shape, output.shape, self.w3.shape))
-        self.w3 += self.learning_rate * output * delta_1
+
         delta_1 = out_error*self.sigmoid_derivative(output)
-        self.w3 += self.learning_rate*self.l2*delta_1
-        self.bias3 = self.learning_rate * delta_1
+        print("shape of l2: {}\nshape of delta1: {}\nshape of w3: {}".format(self.l2.shape, delta_1.shape, self.w3.shape))
+        self.w3 += self.learning_rate*np.dot(self.l2.T,delta_1)
+        #self.bias3 = self.learning_rate * delta_1
+
 
         delta_2 = np.multiply(self.sigmoid_derivative(self.l2),self.w3.T)*delta_1
+        print("shape of l2: {}\nshape of delta2: {}\nshape of w2: {}".format(self.l2.shape, delta_2.shape, self.w2.shape))
         self.w2 += self.learning_rate*np.dot(self.l1.T,delta_2) #Kanske inte klar
-        self.bias2 = self.learning_rate * delta_2
+        #self.bias2 = self.learning_rate * delta_2
 
-        delta_3 = np.matmul(self.sigmoid_derivative(self.l1),self.w1) * delta_2    #TODO fixa den här
-        self.w1 += self.learning_rate*np.dot(self.l1.T,delta_3)     #Ska använda inputs
-        self.bias3 = self.learning_rate * delta_3
+
+
+        delta_3 = np.dot(self.sigmoid_derivative(self.l1),self.w2.T) * delta_2    #TODO fixa den här
+        print("\nshape of input: {}\nshape of delta3: {}\nshape of w1: {}".format(input_layer.shape, delta_3.shape,self.w1.shape))
+
+        self.w1 += self.learning_rate*np.dot(input_layer.T,delta_3)     #Ska använda inputs
+        #self.bias3 = self.learning_rate * delta_3
 
     def compare(self, inputs, output):  # func for comparing when training has been done
         inputs = inputs.astype(float)
-        outputs = self.think(inputs)
+        outputs = self.forward(inputs)
         accuracy = 0
         size = inputs.shape[0]
         for i in range(size):
@@ -67,17 +70,14 @@ class NeuralNetwork():  # class for related functions
 
 
 if __name__ == '__main__':
-    training_iterations = 100
     DM.segmentation()  # Imports and sorts data
     NN = NeuralNetwork()
 
-training_sessions = 0
-NN.forward(DM.training_inputs[0:1,:])
+    training_sessions = 0
+    iterations = 2
 
-
-while 0:
-    i=10
-
-    NN.train(DM.training_inputs, DM.training_outputs, i)
-    accuracy = NN.compare(DM.validation_data, DM.validation_result)
-    print("Overall accuracy is: {}\n training: {}".format(accuracy, training_sessions))
+    for i in range(iterations):
+        NN.backwards(DM.training_inputs, DM.training_outputs, 1)
+        accuracy = NN.compare(DM.validation_data, DM.validation_result)
+        training_sessions+=1
+        print("Overall accuracy is: {}\n training: {}".format(accuracy, training_sessions))
