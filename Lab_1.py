@@ -6,11 +6,13 @@ class NeuralNetwork():  # class for related functions
 
     # initialize the weigths
     def __init__(self):
-        self.weights = 2 * np.random.random((19, 1)) - 1 # original weights, too be removed soon
+       #self.weights = 2 * np.random.random((19, 1)) - 1 # original weights, too be removed soon
         self.w1 = 2 * np.random.random((19, 9)) -1     # hidden layer 1
         self.w2 = 2 * np.random.random((9,9)) - 1      # hidden layer 2
         self.w3 = 2 * np.random.random((9,1)) - 1      # output layer
         self.learning_rate = 0.1
+        self.l1 = np.zeros((1,9))
+        self.l2 = np.zeros((1,9))
 
     # commit lots of math
     def sigmoid(self, x):
@@ -35,8 +37,8 @@ class NeuralNetwork():  # class for related functions
 
     def forward(self,input_layer): # functions that uses more layers
         input_layer = input_layer.astype(float)
-        l1 = np.dot(input_layer, self.w1)
-        l2 = np.dot(l1, self.w2)
+        self.l1 = self.sigmoid(np.dot(input_layer, self.w1))
+        self.l2 = self.sigmoid(np.dot(l1, self.w2))
         output = np.dot(l2, self.w3)
         return self.sigmoid(output)
 
@@ -44,14 +46,15 @@ class NeuralNetwork():  # class for related functions
 
         output = self.forward(input_layer)
         out_error = output_layer - output
-        delta_1=out_error*self.sigmoid_derivative(output)
-        self.w3 += self.learning_rate*delta_1*output
+        delta_1 = out_error*self.sigmoid_derivative(output)
+        self.w3 += self.learning_rate*output*delta_1
 
-        delta_2= self.sigmoid_derivative(output)*delta_1*
-        self.w2 =
+        delta_2 = np.dot(self.sigmoid_derivative(self.l2),self.w2)*delta_1
+        self.w2 +=  self.learning_rate*np.dot(self.l2.T,delta_2)
 
-        delta_3=self.sigmoid_derivative(output)*(delta_2*
-        self.w1 =
+        x = np.dot(self.w1,delta_2)
+        delta_3 = np.dot(self.sigmoid_derivative(self.l1),x.T)
+        self.w1 += self.learning_rate*np.dot(self.l1.T,delta_3)
 
 
 
