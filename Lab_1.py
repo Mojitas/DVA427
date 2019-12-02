@@ -23,7 +23,7 @@ class NeuralNetwork():  # class for related functions
         return 1 / (1 + np.exp(-x))
 
     def sigmoid_derivative(self, x):
-        return x * (1 - x)
+        return x * (1 - x) #
 
     def train(self, input_layer, output_layer, training_iterations):  #does training
         for i in range(training_iterations):
