@@ -45,8 +45,10 @@ class NeuralNetwork():  # class for related functions
         self.w3 += self.learning_rate*self.l2*delta_1
         self.bias3 = self.learning_rate * delta_1
 
-        delta_2 = np.multiply(self.sigmoid_derivative(self.l2),self.w3.T)*delta_1
+        # Allt är rätt hit tror jag
+        delta_2 = np.multiply(self.l2,self.w3.T)*delta_1   #Vi tar ju redan sigmoid när vi sätter l2 i forward
         self.w2 += self.learning_rate*np.dot(self.l1.T,delta_2) #Kanske inte klar
+        print(np.dot(self.l1.T,delta_2))
         self.bias2 = self.learning_rate * delta_2
 
         delta_3 = np.matmul(self.sigmoid_derivative(self.l1),self.w1) * delta_2    #TODO fixa den här
@@ -71,7 +73,7 @@ if __name__ == '__main__':
     NN = NeuralNetwork()
 
 training_sessions = 0
-NN.forward(DM.training_inputs[0,:])
+NN.forward(DM.training_inputs[0, :])
 
 
 while 0:
