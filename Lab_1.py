@@ -39,9 +39,9 @@ class NeuralNetwork():  # class for related functions
             #print("Output is: ",output)
             delta_1 = out_error*self.sigmoid_derivative(output)
             #print("shape of l2: {}\nshape of delta1: {}\nshape of w3: {}".format(self.l2.shape, delta_1.shape, self.w3.shape))
-            self.w3 += self.learning_rate*np.dot(self.l2.T,-delta_1)
+            self.w3 += self.learning_rate*np.dot(self.l2.T,delta_1)
             #self.bias3 = self.learning_rate * delta_1
-            delta_2 = np.multiply(self.sigmoid_derivative(self.l2),self.w3.T)*delta_1
+            delta_2 = np.multiply(self.sigmoid_derivative(self.l2),self.w3.T)*-delta_1
             #print("shape of l2: {}\nshape of delta2: {}\nshape of w2: {}".format(self.l2.shape, delta_2.shape, self.w2.shape))
             self.w2 += self.learning_rate*np.dot(self.l1.T,delta_2) #Kanske inte klar
             #self.bias2 = self.learning_rate * delta_2

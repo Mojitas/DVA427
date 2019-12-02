@@ -53,8 +53,5 @@ class dataManagement():
         print("\nData has been managed\n")
 
 DM=dataManagement() # Slippa skriva långa grejer
-accuracy=1
-training_sessions=0
-print("Overall accuracy is: {}\n traning: {}".format(accuracy, training_sessions))
 
 
