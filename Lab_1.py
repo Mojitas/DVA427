@@ -14,6 +14,10 @@ class NeuralNetwork():  # class for related functions
         self.l1 = np.zeros((1,9))
         self.l2 = np.zeros((1,9))
 
+        self.bias1 = 2 * np.random.random(9,1) - 1     #Bias for hidden layer 1
+        self.bias2 = 2 * np.random.random(9,1) - 1     #Bias for hidden layer 2
+        self.bias3 = 2 * np.random.random(1,1) - 1     #Bias for output layer
+
     # commit lots of math
     def sigmoid(self, x):
         return 1 / (1 + np.exp(-x))
@@ -48,6 +52,7 @@ class NeuralNetwork():  # class for related functions
         out_error = output_layer - output
         delta_1 = out_error*self.sigmoid_derivative(output)
         self.w3 += self.learning_rate*output*delta_1
+        self.bias3 = self.learning_rate * delta_1
 
         delta_2 = np.dot(self.sigmoid_derivative(self.l2),self.w2)*delta_1
         self.w2 +=  self.learning_rate*np.dot(self.l2.T,delta_2)
@@ -76,51 +81,15 @@ if __name__ == '__main__':
     DM.segmentation()  # Imports and sorts data
     NN = NeuralNetwork()
 
-    size = 18
-    amount = 16 * 54
-    layers = 2
-    learning_rate = 0.1
-
-    weight1 = 2 * np.random.random((size, size)) - 1
-    weight2 = 2 * np.random.random(size) - 1
-    layer1 = np.zeros((size, 3))  # 0 = value, 1 = delta, 2 = w0i
-    outputs = np.zeros((2, 1))
-
-if 0:
-    for R in range(1):
-        for i in range(size):  # Setting W0i
-            layer1[i, 2] = 2 * np.random.random_sample() - 1
-
-        for i in range(size):  # Calculating output for layer 1 nodes
-
-            layer1[i, 0] += NN.sigmoid(training_inputs[0, 0, i] * weight1[i, 0])
-
-        for i in range(size):  # Calculating output for layer 2 nodes (total output in this case)
-
-            outputs[0] = NN.sigmoid(layer1[i, 0] * weight2[i])
-
-        outputs[1] = outputs[0] * (1 - outputs[0]) * (training_outputs[0, 0] - outputs[0])  # Delta for output
-
-        for i in range(size):
-            layer1[i, 1] = layer1[i, 0] * (1 - layer1[i, 0]) * weight2[i] * outputs[1]  # Delta for layer1 i
-            layer1[i, 2] += learning_rate * layer1[i, 1]  # W0i for Layer1 nodes
-            weight2[i] += learning_rate * outputs[1] * layer1[i, 0]  # New weights for layer2
-            print(weight2[i])
-
-        for i in range(size):  # Inputs
-            for j in range(size):  # Layer1
-                weight1[i, j] = learning_rate * layer1[j, 1] * DM.training_inputs[0, 0, i]  # New weight1
-
-else:
-    training_sessions=0
-    NN.forward(DM.training_inputs[0,0])
+training_sessions = 0
+NN.forward(DM.training_inputs[0, 0])
 
 
-    while 0:
-        i=10
+while 0:
+    i=10
 
-        NN.train(DM.training_inputs, DM.training_outputs, i)
-        accuracy = NN.compare(DM.validation_data, DM.validation_result)
-        training_sessions+=i
+    NN.train(DM.training_inputs, DM.training_outputs, i)
+    accuracy = NN.compare(DM.validation_data, DM.validation_result)
+    training_sessions+=i
 
-        print("Overall accuracy is: {}\n training: {}".format(accuracy, training_sessions))
+    print("Overall accuracy is: {}\n training: {}".format(accuracy, training_sessions))

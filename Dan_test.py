@@ -12,7 +12,7 @@ if __name__ == '__main__':  # typ våran main tror jag.
 
     size = 18
     amount = 16 * 54
-    rate = 0.2
+    rate = 0.05
 
     weight1 = (2 * np.random.random((size, size)) - 1)
     weight2 = (2 * np.random.random(size) - 1)
@@ -27,7 +27,7 @@ if __name__ == '__main__':  # typ våran main tror jag.
     for i in range(size):  # Setting W0i
         layer1[i, 2] = (2 * np.random.random_sample() - 1)/20
 
-    for A in range(1000):
+    for A in range(100):
         for R in range(amount):
 
             for i in range(size):  # Calculating output for layer 1 nodes
@@ -35,7 +35,7 @@ if __name__ == '__main__':  # typ våran main tror jag.
                 sum1 += layer1[i, 2]  # Constant weight
 
                 for j in range(size):  # Summing all inputs TO an node
-                    sum1 += inputs[0, 0, j] * weight1[j, i]
+                    sum1 += inputs[0, j] * weight1[j, i]
 
                 layer1[i, 0] = sigmoid(sum1)  # Value of node
 
@@ -48,7 +48,7 @@ if __name__ == '__main__':  # typ våran main tror jag.
 
             output = sigmoid(sum2)
 
-            output_error = output * (1 - output) * (DM.training_outputs[(math.floor(R / 54)), R % 54] - output)
+            output_error = output * (1 - output) * (DM.training_outputs[R] - output)
             #print({math.floor(R / 54)}, {R % 54})
             #print("Output: %5f target: %5f error: %5f" %(output, DM.training_outputs[math.floor(R / 54), R % 54], output_error))
 
@@ -65,7 +65,7 @@ if __name__ == '__main__':  # typ våran main tror jag.
 
             for i in range(size):  # Inputs
                 for j in range(size):  # Layer1
-                    weight1[i, j] = rate * layer1[j, 1] * inputs[R % 16, math.floor(R / 16), i]  # New weight1
+                    weight1[i, j] = rate * layer1[j, 1] * inputs[R, i]  # New weight1
             print(weight2[i])
 
 
