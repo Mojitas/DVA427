@@ -26,6 +26,7 @@ class NeuralNetwork():  # class for related functions
 
     def forward(self, input_layer):  # functions that uses more layers
         input_layer = input_layer.astype(float)
+        print(input_layer.shape)
         self.l1 = self.sigmoid(np.dot(input_layer, self.w1))
         self.l2 = self.sigmoid(np.dot(self.l1, self.w2))
         output = np.dot(self.l2, self.w3)
@@ -71,7 +72,7 @@ if __name__ == '__main__':
     NN = NeuralNetwork()
 
 training_sessions = 0
-NN.forward(DM.training_inputs[0,:])
+NN.forward(DM.training_inputs[0:1,:])
 
 
 while 0:
