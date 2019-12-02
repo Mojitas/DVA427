@@ -12,6 +12,10 @@ class NeuralNetwork():  # class for related functions
         self.w3 = 2 * np.random.random((9,1)) - 1      # output layer
         self.learning_rate = 0.1
 
+        self.bias1 = 2 * np.random.random(9,1) - 1     #Bias for hidden layer 1
+        self.bias2 = 2 * np.random.random(9,1) - 1     #Bias for hidden layer 2
+        self.bias3 = 2 * np.random.random(1,1) - 1     #Bias for output layer
+
     # commit lots of math
     def sigmoid(self, x):
         return 1 / (1 + np.exp(-x))
@@ -35,9 +39,9 @@ class NeuralNetwork():  # class for related functions
 
     def forward(self,input_layer): # functions that uses more layers
         input_layer = input_layer.astype(float)
-        l1 = np.dot(input_layer, self.w1)
-        l2 = np.dot(l1, self.w2)
-        output = np.dot(l2, self.w3)
+        l1 = np.dot(input_layer, self.w1) + self.bias1
+        l2 = np.dot(l1, self.w2) + self.bias2
+        output = np.dot(l2, self.w3) + self.bias3
         return self.sigmoid(output)
 
     def backwards(self,input_layer, output_layer, training_iterations):
@@ -46,8 +50,10 @@ class NeuralNetwork():  # class for related functions
         out_error = output_layer - output
         delta_1=out_error*self.sigmoid_derivative(output)
         self.w3 += self.learning_rate*delta_1*output
+        self.bias3 = self.learning_rate * delta_1
 
-        delta_2= self.sigmoid_derivative(output)*delta_1*
+
+        delta_2=self.sigmoid_derivative(output)*delta_1*
         self.w2 =
 
         delta_3=self.sigmoid_derivative(output)*(delta_2*
