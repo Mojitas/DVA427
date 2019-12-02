@@ -54,10 +54,10 @@ class NeuralNetwork():  # class for related functions
         self.w3 += self.learning_rate*output*delta_1
         self.bias3 = self.learning_rate * delta_1
 
-        delta_2 = np.dot(self.sigmoid_derivative(self.l2),self.w2)*delta_1
+        delta_2 = np.dot(self.sigmoid_derivative(self.l2),self.w3)*delta_1
         self.w2 +=  self.learning_rate*np.dot(self.l2.T,delta_2)
 
-        x = np.dot(self.w1,delta_2)
+        x = np.dot(self.w2,delta_2)
         delta_3 = np.dot(self.sigmoid_derivative(self.l1),x.T)
         self.w1 += self.learning_rate*np.dot(self.l1.T,delta_3)
 
