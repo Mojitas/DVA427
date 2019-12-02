@@ -14,9 +14,9 @@ class NeuralNetwork():  # class for related functions
         self.l1 = np.zeros((1,9))
         self.l2 = np.zeros((1,9))
 
-        self.bias1 = 2 * np.random.random(9,1) - 1     #Bias for hidden layer 1
-        self.bias2 = 2 * np.random.random(9,1) - 1     #Bias for hidden layer 2
-        self.bias3 = 2 * np.random.random(1,1) - 1     #Bias for output layer
+        self.bias1 = 2 * np.random.random((1, 9)) - 1     #Bias for hidden layer 1
+        self.bias2 = 2 * np.random.random((1, 9)) - 1     #Bias for hidden layer 2
+        self.bias3 = 2 * np.random.random((1, 1)) - 1     #Bias for output layer
 
     # commit lots of math
     def sigmoid(self, x):
@@ -42,8 +42,9 @@ class NeuralNetwork():  # class for related functions
     def forward(self,input_layer): # functions that uses more layers
         input_layer = input_layer.astype(float)
         self.l1 = self.sigmoid(np.dot(input_layer, self.w1))
-        self.l2 = self.sigmoid(np.dot(l1, self.w2))
-        output = np.dot(l2, self.w3)
+        print(self.l1.shape)
+        self.l2 = self.sigmoid(np.dot(self.l1, self.w2))
+        output = np.dot(self.l2, self.w3)
         return self.sigmoid(output)
 
     def backwards(self,input_layer, output_layer, training_iterations):
@@ -51,15 +52,16 @@ class NeuralNetwork():  # class for related functions
         output = self.forward(input_layer)
         out_error = output_layer - output
         delta_1 = out_error*self.sigmoid_derivative(output)
-        self.w3 += self.learning_rate*output*delta_1
+        self.w3 += self.learning_rate*self.l2*delta_1
         self.bias3 = self.learning_rate * delta_1
 
-        delta_2 = np.dot(self.sigmoid_derivative(self.l2),self.w2)*delta_1
-        self.w2 +=  self.learning_rate*np.dot(self.l2.T,delta_2)
+        delta_2 = np.multiply(self.sigmoid_derivative(self.l2),self.w3.T)*delta_1
+        self.w2 += self.learning_rate*np.dot(self.l1.T,delta_2) #Kanske inte klar
+        self.bias2 = self.learning_rate * delta_2
 
-        x = np.dot(self.w1,delta_2)
-        delta_3 = np.dot(self.sigmoid_derivative(self.l1),x.T)
-        self.w1 += self.learning_rate*np.dot(self.l1.T,delta_3)
+        delta_3 = np.matmul(self.sigmoid_derivative(self.l1),self.w1) * delta_2    #TODO fixa den här
+        self.w1 += self.learning_rate*np.dot(self.l1.T,delta_3)     #Ska använda inputs
+        self.bias3 = self.learning_rate * delta_3
 
 
 
@@ -82,7 +84,7 @@ if __name__ == '__main__':
     NN = NeuralNetwork()
 
 training_sessions = 0
-NN.forward(DM.training_inputs[0, 0])
+NN.forward(DM.training_inputs[0,:])
 
 
 while 0:
