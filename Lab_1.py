@@ -35,7 +35,6 @@ class NeuralNetwork():  # class for related functions
         for i in range(training_iterations):
             output = self.forward(input_layer)
             out_error = (output_layer - output)
-            #print("Output is: ",output)
             delta_1 = out_error*self.sigmoid_derivative(output)
             #print("shape of l2: {}\nshape of delta1: {}\nshape of w3: {}".format(self.l2.shape, delta_1.shape, self.w3.shape))
             self.bias3 = self.learning_rate * delta_1
@@ -50,9 +49,7 @@ class NeuralNetwork():  # class for related functions
             #delta_3 = np.dot(self.sigmoid_derivative(self.l1),self.w2.T) * delta_2
             #TODO Fixa denna for i: dot(sef.w2[i,:], delta2) sen multiply(sigmoid der l1, det)
             #print("\nshape of input: {}\nshape of delta3: {}\nshape of w1: {}".format(input_layer.shape, delta_3.shape,self.w1.shape))
-            downstream = np.zeros((9,1))
-            for i in range (9):
-                downstream = np.dot(self.w2[i,:], delta_2)
+            downstream = np.dot(self.w2, delta_2.T)
 
             delta_3 = np.multiply(NN.sigmoid_derivative(self.l1), downstream)
 
@@ -84,12 +81,12 @@ if __name__ == '__main__':
     iterations = 10000
     #group
     for i in range(iterations):
-        NN.backwards(DM.training_inputs[i%864:(i+1)%864], DM.training_outputs[i%864], 10) # TODO fixa så det går att skicka in olika storlekar, just nu blir formatet konstigt
+        NN.backwards(DM.training_inputs[i%864:(i+1)%864], DM.training_outputs[i%864:(i+1)%864], 10) # TODO fixa så det går att skicka in olika storlekar, just nu blir formatet konstigt
         #NN.backwards(DM.training_inputs[i,:], DM.training_outputs[i,:], 1)
 
         training_accuracy = NN.compare(DM.training_inputs,DM.training_outputs)
         validation_accuracy = NN.compare(DM.validation_data, DM.validation_result)
         test_accuracy = NN.compare(DM.test_data,DM.test_result)
         training_sessions+=1
-        if i % 100 == 0:
+        if i % 1 == 0:
             print("Training accuracy is: {}\nValidation accuracy is: {}\nTest accuracy is: {}\n training: {}".format(training_accuracy,validation_accuracy,test_accuracy, training_sessions))
