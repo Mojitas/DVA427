@@ -26,17 +26,17 @@ class NeuralNetwork():  # class for related functions
     def forward(self, input_layer):  # functions that uses more layers
 
         input_layer = input_layer.astype(float)
-        self.l1 = self.sigmoid(np.dot(input_layer, self.w1) + self.bias1) #+ self.bias1
-        self.l2 = self.sigmoid(np.dot(self.l1, self.w2) + self.bias2) #+ self.bias2
-        #print(self.bias3.shape)
-        return self.sigmoid(np.dot(self.l2, self.w3) )#+ self.bias3
+        self.l1 = self.sigmoid(np.dot(input_layer, self.w1)) #+ self.bias1
+        self.l2 = self.sigmoid(np.dot(self.l1, self.w2)) #+ self.bias2
+        #print(self.sigmoid(np.dot(self.l2, self.w3) + self.bias3).shape)
+        return self.sigmoid(np.dot(self.l2, self.w3))#+ self.bias3
 
     def backwards(self, input_layer, output_layer, training_iterations):
 
         for i in range(training_iterations):
             output = self.forward(input_layer)
-            print(output.shape)
             out_error = (output_layer - output)
+
             #print("Output is: ",output)
             delta_1 = out_error*self.sigmoid_derivative(output)
             #print("shape of l2: {}\nshape of delta1: {}\nshape of w3: {}".format(self.l2.shape, delta_1.shape, self.w3.shape))
@@ -91,6 +91,6 @@ if __name__ == '__main__':
         training_accuracy = NN.compare(DM.training_inputs,DM.training_outputs)
         validation_accuracy = NN.compare(DM.validation_data, DM.validation_result)
         test_accuracy = NN.compare(DM.test_data,DM.test_result)
-        training_sessions+=1
+        training_sessions += 1
         if i % 100 == 0:
             print("Training accuracy is: {}\nValidation accuracy is: {}\nTest accuracy is: {}\n training: {}".format(training_accuracy,validation_accuracy,test_accuracy, training_sessions))
