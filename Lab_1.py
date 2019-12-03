@@ -29,6 +29,11 @@ class NeuralNetwork():  # class for related functions
     def sigmoid_derivative(self, x):
         return x * (1 - x)  #
 
+    def think(self,input_layer):
+        self.l1 = self.sigmoid(np.dot(input_layer, self.bw1) + self.bbias1)  #
+        self.l2 = self.sigmoid(np.dot(self.l1, self.bw2))  # + self.bias2
+        return self.sigmoid(np.dot(self.l2, self.bw3))  # + self.bias3
+
     def forward(self, input_layer):  # functions that uses more layers
 
         input_layer = input_layer.astype(float)
@@ -72,8 +77,7 @@ class NeuralNetwork():  # class for related functions
         accuracy = 0
         size = inputs.shape[0]
         for i in range(size):
-            #print("shape of output: {}\nshape of outputs: {}".format(output[i,:].shape,outputs[i,:].shape))
-            # TODO fixa rätt format
+
             if abs(output[i] - outputs[i]) < 0.5:
                 accuracy += 1
 
@@ -100,7 +104,7 @@ if __name__ == '__main__':
         if training_sessions % 100*batch_size == 0:
             print("Training accuracy is: ",training_accuracy)
             print("Validation accuracy is: ",validation_accuracy)
-            print("iterations : ",i*)
+            print("iterations : ",i)
 
         if best_accuracy<validation_accuracy:
             print("New best result!")
@@ -111,3 +115,4 @@ if __name__ == '__main__':
             NN.bw1=NN.w1
             NN.bw2=NN.w2
             NN.bw3=NN.w3
+
