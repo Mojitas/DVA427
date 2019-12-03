@@ -26,14 +26,16 @@ class NeuralNetwork():  # class for related functions
     def forward(self, input_layer):  # functions that uses more layers
 
         input_layer = input_layer.astype(float)
-        self.l1 = self.sigmoid(np.dot(input_layer, self.w1) ) #+ self.bias1
-        self.l2 = self.sigmoid(np.dot(self.l1, self.w2) ) #+ self.bias2
-        return self.sigmoid(np.dot(self.l2, self.w3) )  #+ self.bias3
+        self.l1 = self.sigmoid(np.dot(input_layer, self.w1) + self.bias1) #+ self.bias1
+        self.l2 = self.sigmoid(np.dot(self.l1, self.w2) + self.bias2) #+ self.bias2
+        #print(self.bias3.shape)
+        return self.sigmoid(np.dot(self.l2, self.w3) )#+ self.bias3
 
     def backwards(self, input_layer, output_layer, training_iterations):
 
         for i in range(training_iterations):
             output = self.forward(input_layer)
+            print(output.shape)
             out_error = (output_layer - output)
             #print("Output is: ",output)
             delta_1 = out_error*self.sigmoid_derivative(output)
@@ -83,7 +85,7 @@ if __name__ == '__main__':
     iterations = 10000
     #group
     for i in range(iterations):
-        NN.backwards(DM.training_inputs[i%864:(i+1)%864], DM.training_outputs[i%864], 10) # TODO fixa så det går att skicka in olika storlekar, just nu blir formatet konstigt
+        NN.backwards(DM.training_inputs[i%864:(i+1)%864], DM.training_outputs[i%864:(i+1)%864], 10) # TODO fixa så det går att skicka in olika storlekar, just nu blir formatet konstigt
         #NN.backwards(DM.training_inputs[i,:], DM.training_outputs[i,:], 1)
 
         training_accuracy = NN.compare(DM.training_inputs,DM.training_outputs)
