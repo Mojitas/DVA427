@@ -82,7 +82,7 @@ if __name__ == '__main__':
     training_sessions = 0
     iterations = 10000
     #group
-    for i in range(850,iterations):
+    for i in range(iterations):
         NN.backwards(DM.training_inputs[i%864:(i+1)%864], DM.training_outputs[i%864], 10) # TODO fixa så det går att skicka in olika storlekar, just nu blir formatet konstigt
         #NN.backwards(DM.training_inputs[i,:], DM.training_outputs[i,:], 1)
 
