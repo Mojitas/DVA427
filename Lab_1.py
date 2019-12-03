@@ -18,12 +18,12 @@ class NeuralNetwork():  # class for related functions
         self.bias2 = 2 * np.random.random((1, 9)) - 1  # Bias for hidden layer 2
         self.bias3 = 2 * np.random.random((1, 1)) - 1  # Bias for output layer
 
-        self.bw1 = 0
-        self.bw2 = 0
-        self.bw3 = 0
-        self.bbias1 = 0
-        self.bbias2 = 0
-        self.bbias3 = 0
+        self.best_w1 = 0
+        self.best_w2 = 0
+        self.best_w3 = 0
+        self.best_bias1 = 0
+        self.best_bias2 = 0
+        self.best_bias3 = 0
 
     # commit lots of math
     def sigmoid(self, x):
@@ -33,9 +33,9 @@ class NeuralNetwork():  # class for related functions
         return x * (1 - x)  #
 
     def think(self, input_layer):
-        self.l1 = self.sigmoid(np.dot(input_layer, self.bw1) + self.bbias1)  #
-        self.l2 = self.sigmoid(np.dot(self.l1, self.bw2))  # + self.bbias2
-        return self.sigmoid(np.dot(self.l2, self.bw3))  # + self.bbias3
+        self.l1 = self.sigmoid(np.dot(input_layer, self.best_w1) + self.best_bias1)  #
+        self.l2 = self.sigmoid(np.dot(self.l1, self.best_w2))  # + self.bbias2
+        return self.sigmoid(np.dot(self.l2, self.best_w3))  # + self.bbias3
 
     def forward(self, input_layer):  # functions that uses more layers
 
@@ -112,19 +112,17 @@ if __name__ == '__main__':
         if best_accuracy < validation_accuracy:
             best_accuracy = validation_accuracy
             print("New best result: ", best_accuracy)
-            NN.bw1 = NN.w1
-            NN.bw2 = NN.w2
-            NN.bw3 = NN.w3
-            NN.bbias1 = NN.bias1
-            NN.bbias2 = NN.bias2
-            NN.bbias3 = NN.bias3
+            NN.best_w1 = NN.w1
+            NN.best_w2 = NN.w2
+            NN.best_w3 = NN.w3
+            NN.best_bias1 = NN.bias1
+            NN.best_bias2 = NN.bias2
+            NN.best_bias3 = NN.bias3
 
         training_iterations += batch_size
-        if training_iterations == iterations*batch_size:
+        if training_iterations == iterations * batch_size:
             print("Training accuracy is: ", training_accuracy)
             print("Validation accuracy is: ", validation_accuracy)
             print("iterations : ", i)
-
-
 
     print("Best result: ", NN.compare(DM.validation_data, DM.validation_result, 1))
