@@ -26,9 +26,9 @@ class NeuralNetwork():  # class for related functions
     def forward(self, input_layer):  # functions that uses more layers
 
         input_layer = input_layer.astype(float)
-        self.l1 = self.sigmoid(np.dot(input_layer, self.w1) + self.bias1)
-        self.l2 = self.sigmoid(np.dot(self.l1, self.w2) + self.bias2)
-        return self.sigmoid(np.dot(self.l2, self.w3) + self.bias3)
+        self.l1 = self.sigmoid(np.dot(input_layer, self.w1) ) #+ self.bias1
+        self.l2 = self.sigmoid(np.dot(self.l1, self.w2) ) #+ self.bias2
+        return self.sigmoid(np.dot(self.l2, self.w3) )  #+ self.bias3
 
     def backwards(self, input_layer, output_layer, training_iterations):
 
@@ -50,7 +50,7 @@ class NeuralNetwork():  # class for related functions
             delta_3 = np.dot(self.sigmoid_derivative(self.l1),self.w2.T) * delta_2
             #print("\nshape of input: {}\nshape of delta3: {}\nshape of w1: {}".format(input_layer.shape, delta_3.shape,self.w1.shape))
             self.bias3 = self.learning_rate * delta_3
-            print("shape of input layer: ",input_layer.shape)
+            #print("shape of input layer: ",input_layer.shape)
             self.w1 += self.learning_rate*np.dot(input_layer.T,delta_3)     #Ska använda inputs
 
 
@@ -60,7 +60,7 @@ class NeuralNetwork():  # class for related functions
         accuracy = 0
         size = inputs.shape[0]
         for i in range(size):
-            print("shape of output: {}\nshape of outputs: {}".format(output[i,:].shape,outputs[i,:].shape))
+            #print("shape of output: {}\nshape of outputs: {}".format(output[i,:].shape,outputs[i,:].shape))
             # TODO fixa rätt format
             if abs(output[i] - outputs[i]) < 0.5:
                 accuracy += 1
@@ -73,15 +73,15 @@ if __name__ == '__main__':
     NN = NeuralNetwork()
 
     training_sessions = 0
-    iterations = 1000
+    iterations = 10000
     #group
     for i in range(iterations):
-        NN.backwards(DM.training_inputs, DM.training_outputs, 1) # TODO fixa så det går att skicka in olika storlekar, just nu blir formatet konstigt
+        NN.backwards(DM.training_inputs[i%864:(i+1)%864], DM.training_outputs[i%864], 10) # TODO fixa så det går att skicka in olika storlekar, just nu blir formatet konstigt
         #NN.backwards(DM.training_inputs[i,:], DM.training_outputs[i,:], 1)
 
         training_accuracy = NN.compare(DM.training_inputs,DM.training_outputs)
         validation_accuracy = NN.compare(DM.validation_data, DM.validation_result)
         test_accuracy = NN.compare(DM.test_data,DM.test_result)
         training_sessions+=1
-        if i % 1000 == 0:
+        if i % 100 == 0:
             print("Training accuracy is: {}\nValidation accuracy is: {}\nTest accuracy is: {}\n training: {}".format(training_accuracy,validation_accuracy,test_accuracy, training_sessions))

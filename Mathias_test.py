@@ -54,3 +54,4 @@ class dataManagement():
 DM=dataManagement() # Slippa skriva långa grejer
 
 
+print("Hello butt world!")
