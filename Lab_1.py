@@ -26,9 +26,13 @@ class NeuralNetwork():  # class for related functions
     def forward(self, input_layer):  # functions that uses more layers
 
         input_layer = input_layer.astype(float)
+        print(input_layer)
         self.l1 = self.sigmoid(np.dot(input_layer, self.w1)) #+ self.bias1
+        print(self.w1[:, 0])
+        print(self.w1[:, 0].shape)
+        print(np.multiply(self.w1[:, 0], input_layer))
+        print(self.l1)
         self.l2 = self.sigmoid(np.dot(self.l1, self.w2)) #+ self.bias2
-        #print(self.sigmoid(np.dot(self.l2, self.w3) + self.bias3).shape)
         return self.sigmoid(np.dot(self.l2, self.w3))#+ self.bias3
 
     def backwards(self, input_layer, output_layer, training_iterations):
@@ -82,15 +86,15 @@ if __name__ == '__main__':
     NN = NeuralNetwork()
 
     training_sessions = 0
-    iterations = 10000
+    iterations = 1
     #group
     for i in range(iterations):
-        NN.backwards(DM.training_inputs[i%864:(i+1)%864], DM.training_outputs[i%864:(i+1)%864], 10) # TODO fixa så det går att skicka in olika storlekar, just nu blir formatet konstigt
+        NN.backwards(DM.training_inputs[i%864:(i+1)%864], DM.training_outputs[i%864:(i+1)%864], 1) # TODO fixa så det går att skicka in olika storlekar, just nu blir formatet konstigt
         #NN.backwards(DM.training_inputs[i,:], DM.training_outputs[i,:], 1)
 
-        training_accuracy = NN.compare(DM.training_inputs,DM.training_outputs)
-        validation_accuracy = NN.compare(DM.validation_data, DM.validation_result)
-        test_accuracy = NN.compare(DM.test_data,DM.test_result)
+        #training_accuracy = NN.compare(DM.training_inputs,DM.training_outputs)
+        #validation_accuracy = NN.compare(DM.validation_data, DM.validation_result)
+        #test_accuracy = NN.compare(DM.test_data,DM.test_result)
         training_sessions += 1
-        if i % 100 == 0:
-            print("Training accuracy is: {}\nValidation accuracy is: {}\nTest accuracy is: {}\n training: {}".format(training_accuracy,validation_accuracy,test_accuracy, training_sessions))
+        #if i % 100 == 0:
+            #print("Training accuracy is: {}\nValidation accuracy is: {}\nTest accuracy is: {}\n training: {}".format(training_accuracy,validation_accuracy,test_accuracy, training_sessions))
