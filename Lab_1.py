@@ -27,19 +27,18 @@ class NeuralNetwork():  # class for related functions
 
         input_layer = input_layer.astype(float)
 
+        print(self.bias3.shape)
+
         self.l1 = self.sigmoid(np.dot(input_layer, self.w1)) #+ self.bias1
-        print(input_layer)
-        print(self.w1.T[0])
-        print(np.multiply(self.w1.T[0], input_layer))
-        print(self.l1)
         self.l2 = self.sigmoid(np.dot(self.l1, self.w2)) #+ self.bias2
-        return self.sigmoid(np.dot(self.l2, self.w3))#+ self.bias3
+        return self.sigmoid(np.dot(self.l2, self.w3) + self.bias3)
 
     def backwards(self, input_layer, output_layer, training_iterations):
 
         for i in range(training_iterations):
             output = self.forward(input_layer)
             out_error = (output_layer - output)
+            print(output.shape)
 
             #print("Output is: ",output)
             delta_1 = out_error*self.sigmoid_derivative(output)
