@@ -36,34 +36,34 @@ class NeuralNetwork():  # class for related functions
         self.l2 = self.sigmoid(np.dot(self.l1, self.w2)) #+ self.bias2
         return self.sigmoid(np.dot(self.l2, self.w3))#+ self.bias3
 
-    def backwards(self, input_layer, output_layer, training_iterations):
+    def backwards(self, input_layer, output_layer):
 
-        for i in range(training_iterations):
-            output = self.forward(input_layer)
-            out_error = (output_layer - output)
 
-            #print("Output is: ",output)
-            delta_1 = out_error*self.sigmoid_derivative(output)
-            #print("shape of l2: {}\nshape of delta1: {}\nshape of w3: {}".format(self.l2.shape, delta_1.shape, self.w3.shape))
-            self.bias3 = self.learning_rate * delta_1
-            #print("Shape of bias3: {}\nShape of w3: {}".format(self.bias3.shape,self.w3.shape))
-            self.w3 += self.learning_rate*np.dot(self.l2.T,delta_1)
+        output = self.forward(input_layer)
+        out_error = (output_layer - output)
 
-            delta_2 = np.multiply(self.sigmoid_derivative(self.l2),self.w3.T)*delta_1
-            #print("shape of l2: {}\nshape of delta2: {}\nshape of w2: {}".format(self.l2.shape, delta_2.shape, self.w2.shape))
-            self.bias2 = self.learning_rate * delta_2
-            self.w2 += self.learning_rate*np.dot(self.l1.T,delta_2) #Kanske inte klar
+        #print("Output is: ",output)
+        delta_1 = out_error*self.sigmoid_derivative(output)
+        #print("shape of l2: {}\nshape of delta1: {}\nshape of w3: {}".format(self.l2.shape, delta_1.shape, self.w3.shape))
+        self.bias3 = self.learning_rate * delta_1
+        #print("Shape of bias3: {}\nShape of w3: {}".format(self.bias3.shape,self.w3.shape))
+        self.w3 += self.learning_rate*np.dot(self.l2.T,delta_1)
 
-            #delta_3 = np.dot(self.sigmoid_derivative(self.l1),self.w2.T) * delta_2
-            #TODO Fixa denna for i: dot(sef.w2[i,:], delta2) sen multiply(sigmoid der l1, det)
-            #print("\nshape of input: {}\nshape of delta3: {}\nshape of w1: {}".format(input_layer.shape, delta_3.shape,self.w1.shape))
-            downstream = np.dot(self.w2, delta_2.T)
+        delta_2 = np.multiply(self.sigmoid_derivative(self.l2),self.w3.T)*delta_1
+        #print("shape of l2: {}\nshape of delta2: {}\nshape of w2: {}".format(self.l2.shape, delta_2.shape, self.w2.shape))
+        self.bias2 = self.learning_rate * delta_2
+        self.w2 += self.learning_rate*np.dot(self.l1.T,delta_2) #Kanske inte klar
 
-            delta_3 = np.multiply(NN.sigmoid_derivative(self.l1).T, downstream)
+        #delta_3 = np.dot(self.sigmoid_derivative(self.l1),self.w2.T) * delta_2
+        #TODO Fixa denna for i: dot(sef.w2[i,:], delta2) sen multiply(sigmoid der l1, det)
+        #print("\nshape of input: {}\nshape of delta3: {}\nshape of w1: {}".format(input_layer.shape, delta_3.shape,self.w1.shape))
+        downstream = np.dot(self.w2, delta_2.T)
 
-            self.bias3 = self.learning_rate * delta_3
-            #print("shape of input layer: ",input_layer.shape)
-            self.w1 += self.learning_rate*np.dot(input_layer.T,delta_3.T)     #Ska använda inputs
+        delta_3 = np.multiply(NN.sigmoid_derivative(self.l1).T, downstream)
+
+        self.bias3 = self.learning_rate * delta_3
+        #print("shape of input layer: ",input_layer.shape)
+        self.w1 += self.learning_rate*np.dot(input_layer.T,delta_3.T)     #Ska använda inputs
 
 
     def compare(self, inputs, output):  # func for comparing when training has been done
@@ -83,26 +83,31 @@ class NeuralNetwork():  # class for related functions
 if __name__ == '__main__':
     DM.segmentation()  # Imports and sorts data
     NN = NeuralNetwork()
-    batch_size=10  # Hur många exempel som vi tränar på i taget
-    training_sessions = 0  # Hur många exempel som vi har tränat på
     iterations = 500  # Stoppvillkor
+    batch_size=10  # Hur många exempel som vi tränar på i taget
+
+    training_sessions = 0  # Hur många exempel som vi har tränat på
+
     best_accuracy=0     # Bästa resultatet
     training_accuracy=0
     validation_accuracy=0
     for i in range(iterations):
-        NN.backwards(DM.training_inputs[i%864:(i+batch_size)%864], DM.training_outputs[i%864:(i+batch_size)%864], 1)
+        NN.backwards(DM.training_inputs[i%864:(i+batch_size)%864], DM.training_outputs[i%864:(i+batch_size)%864])
         training_accuracy = NN.compare(DM.training_inputs,DM.training_outputs)
         validation_accuracy = NN.compare(DM.validation_data, DM.validation_result)
 
         training_sessions += batch_size
-        if training_sessions % 1000*batch_size == 0:
-            print("Training accuracy is: \n".format(training_accuracy,validation_accuracy,training_sessions))
-            print("Validation accuracy is: \n",)
-    if i == 100 and best_accuracy<validation_accuracy:
-        best_accuracy=validation_accuracy
-        NN.bbias1=NN.bias1
-        NN.bbias2=NN.bias2
-        NN.bbias3=NN.bias3
-        NN.bw1=NN.w1
-        NN.bw2=NN.w2
-        NN.bw3=NN.w3
+        if training_sessions % 100*batch_size == 0:
+            print("Training accuracy is: ",training_accuracy)
+            print("Validation accuracy is: ",validation_accuracy)
+            print("iterations : ",i*)
+
+        if best_accuracy<validation_accuracy:
+            print("New best result!")
+            best_accuracy=validation_accuracy
+            NN.bbias1=NN.bias1
+            NN.bbias2=NN.bias2
+            NN.bbias3=NN.bias3
+            NN.bw1=NN.w1
+            NN.bw2=NN.w2
+            NN.bw3=NN.w3
