@@ -47,8 +47,16 @@ class NeuralNetwork():  # class for related functions
             self.bias2 = self.learning_rate * delta_2
             self.w2 += self.learning_rate*np.dot(self.l1.T,delta_2) #Kanske inte klar
 
-            delta_3 = np.dot(self.sigmoid_derivative(self.l1),self.w2.T) * delta_2
+            #delta_3 = np.dot(self.sigmoid_derivative(self.l1),self.w2.T) * delta_2
+            #TODO Fixa denna for i: dot(sef.w2[i,:], delta2) sen multiply(sigmoid der l1, det)
             #print("\nshape of input: {}\nshape of delta3: {}\nshape of w1: {}".format(input_layer.shape, delta_3.shape,self.w1.shape))
+            downstream = np.zeros((9,1))
+            for i in range (9):
+                downstream = np.dot(self.w2[i,:], delta_2)
+
+            delta_3 = np.multiply(NN.sigmoid_derivative(self.l1), downstream)
+
+
             self.bias3 = self.learning_rate * delta_3
             #print("shape of input layer: ",input_layer.shape)
             self.w1 += self.learning_rate*np.dot(input_layer.T,delta_3)     #Ska använda inputs
