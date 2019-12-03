@@ -50,14 +50,7 @@ class NeuralNetwork():  # class for related functions
             #delta_3 = np.dot(self.sigmoid_derivative(self.l1),self.w2.T) * delta_2
             #TODO Fixa denna for i: dot(sef.w2[i,:], delta2) sen multiply(sigmoid der l1, det)
             #print("\nshape of input: {}\nshape of delta3: {}\nshape of w1: {}".format(input_layer.shape, delta_3.shape,self.w1.shape))
-            downstream = np.zeros((9,1))
-
-            for j in range (9):
-                print(downstream[j])
-                downstream[j] = np.dot(self.w2[j, :], delta_2.T)
-                print(downstream[j])
-
-
+            downstream = np.dot(self.w2, delta_2.T)
 
             delta_3 = np.multiply(NN.sigmoid_derivative(self.l1).T, downstream)
 

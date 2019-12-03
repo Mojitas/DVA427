@@ -52,6 +52,3 @@ class dataManagement():
         print("\nData has been managed\n")
 
 DM=dataManagement() # Slippa skriva långa grejer
-
-
-print("Hello butt world!")
