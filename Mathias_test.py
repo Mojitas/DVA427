@@ -47,8 +47,13 @@ class dataManagement():
         # transfers test set
         self.test_data = data_array[979:1151, 0:19]
         self.test_result = data_array[979:1151, 19:20]
-
         self.data_normalization()
         print("\nData has been managed\n")
 
 DM=dataManagement() # Slippa skriva långa grejer
+
+"""
+x=np.zeros((2,2))
+y=np.array([1,2])
+print(x+y)
+"""

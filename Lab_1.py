@@ -9,8 +9,8 @@ class NeuralNetwork():  # class for related functions
         self.w2 = 2 * np.random.random((9, 9)) - 1  # weight matrix 2
         self.w3 = 2 * np.random.random((9, 1)) - 1  # weight matrix 3
         self.learning_rate = 0.1
-        self.l1 = np.zeros((0, 0))  #hidden layer 1
-        self.l2 = np.zeros((0, 0))  # hidden layer 2
+        self.l1 = np.zeros((1, 9))  #hidden layer 1
+        self.l2 = np.zeros((1, 9))  # hidden layer 2
 
         self.bias1 = 2 * np.random.random((1, 9)) - 1  # Bias for hidden layer 1
         self.bias2 = 2 * np.random.random((1, 9)) - 1  # Bias for hidden layer 2
@@ -26,16 +26,14 @@ class NeuralNetwork():  # class for related functions
     def forward(self, input_layer):  # functions that uses more layers
 
         input_layer = input_layer.astype(float)
-        self.l1 = self.sigmoid(np.dot(input_layer, self.w1) + self.bias1) #+ self.bias1
-        self.l2 = self.sigmoid(np.dot(self.l1, self.w2) + self.bias2) #+ self.bias2
-        #print(self.bias3.shape)
-        return self.sigmoid(np.dot(self.l2, self.w3) )#+ self.bias3
+        self.l1 = self.sigmoid(np.dot(input_layer, self.w1) + self.bias1) #
+        self.l2 = self.sigmoid(np.dot(self.l1, self.w2) ) #+ self.bias2
+        return self.sigmoid(np.dot(self.l2, self.w3) )  #+ self.bias3
 
     def backwards(self, input_layer, output_layer, training_iterations):
 
         for i in range(training_iterations):
             output = self.forward(input_layer)
-            print(output.shape)
             out_error = (output_layer - output)
             #print("Output is: ",output)
             delta_1 = out_error*self.sigmoid_derivative(output)
@@ -55,8 +53,6 @@ class NeuralNetwork():  # class for related functions
             downstream = np.dot(self.w2, delta_2.T)
 
             delta_3 = np.multiply(NN.sigmoid_derivative(self.l1).T, downstream)
-
-
 
             self.bias3 = self.learning_rate * delta_3
             #print("shape of input layer: ",input_layer.shape)
@@ -85,12 +81,12 @@ if __name__ == '__main__':
     iterations = 10000
     #group
     for i in range(iterations):
-        NN.backwards(DM.training_inputs[i%864:(i+1)%864], DM.training_outputs[i%864:(i+1)%864], 10) # TODO fixa så det går att skicka in olika storlekar, just nu blir formatet konstigt
+        NN.backwards(DM.training_inputs, DM.training_outputs, 1) # TODO fixa så det går att skicka in olika storlekar, just nu blir formatet konstigt
         #NN.backwards(DM.training_inputs[i,:], DM.training_outputs[i,:], 1)
 
         training_accuracy = NN.compare(DM.training_inputs,DM.training_outputs)
         validation_accuracy = NN.compare(DM.validation_data, DM.validation_result)
         test_accuracy = NN.compare(DM.test_data,DM.test_result)
         training_sessions+=1
-        if i % 100 == 0:
+        if i % 1000 == 0:
             print("Training accuracy is: {}\nValidation accuracy is: {}\nTest accuracy is: {}\n training: {}".format(training_accuracy,validation_accuracy,test_accuracy, training_sessions))
