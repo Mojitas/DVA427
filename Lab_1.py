@@ -51,15 +51,21 @@ class NeuralNetwork():  # class for related functions
             #TODO Fixa denna for i: dot(sef.w2[i,:], delta2) sen multiply(sigmoid der l1, det)
             #print("\nshape of input: {}\nshape of delta3: {}\nshape of w1: {}".format(input_layer.shape, delta_3.shape,self.w1.shape))
             downstream = np.zeros((9,1))
-            for i in range (9):
-                downstream = np.dot(self.w2[i,:], delta_2)
 
-            delta_3 = np.multiply(NN.sigmoid_derivative(self.l1), downstream)
+            for j in range (9):
+                print(downstream[j])
+                downstream[j] = np.dot(self.w2[j, :], delta_2.T)
+                print(downstream[j])
+
+
+
+            delta_3 = np.multiply(NN.sigmoid_derivative(self.l1).T, downstream)
+
 
 
             self.bias3 = self.learning_rate * delta_3
             #print("shape of input layer: ",input_layer.shape)
-            self.w1 += self.learning_rate*np.dot(input_layer.T,delta_3)     #Ska använda inputs
+            self.w1 += self.learning_rate*np.dot(input_layer.T,delta_3.T)     #Ska använda inputs
 
 
     def compare(self, inputs, output):  # func for comparing when training has been done
@@ -83,7 +89,7 @@ if __name__ == '__main__':
     training_sessions = 0
     iterations = 10000
     #group
-    for i in range(iterations):
+    for i in range(850,iterations):
         NN.backwards(DM.training_inputs[i%864:(i+1)%864], DM.training_outputs[i%864], 10) # TODO fixa så det går att skicka in olika storlekar, just nu blir formatet konstigt
         #NN.backwards(DM.training_inputs[i,:], DM.training_outputs[i,:], 1)
 
