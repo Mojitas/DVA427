@@ -9,13 +9,19 @@ class NeuralNetwork():  # class for related functions
         self.w2 = 2 * np.random.random((9, 9)) - 1  # weight matrix 2
         self.w3 = 2 * np.random.random((9, 1)) - 1  # weight matrix 3
         self.learning_rate = 0.1
-        self.l1 = np.zeros((0, 0))  #hidden layer 1
-        self.l2 = np.zeros((0, 0))  # hidden layer 2
+        self.l1 = np.zeros((1, 9))  #hidden layer 1
+        self.l2 = np.zeros((1, 9))  # hidden layer 2
 
         self.bias1 = 2 * np.random.random((1, 9)) - 1  # Bias for hidden layer 1
         self.bias2 = 2 * np.random.random((1, 9)) - 1  # Bias for hidden layer 2
         self.bias3 = 2 * np.random.random((1, 1)) - 1  # Bias for output layer
 
+        self.bw1 = 0
+        self.bw2 = 0
+        self.bw3 = 0
+        self.bbias1 = 0
+        self.bbias2 = 0
+        self.bbias3 = 0
     # commit lots of math
     def sigmoid(self, x):
         return 1 / (1 + np.exp(-x))
@@ -26,19 +32,15 @@ class NeuralNetwork():  # class for related functions
     def forward(self, input_layer):  # functions that uses more layers
 
         input_layer = input_layer.astype(float)
-
-        print(self.bias3.shape)
-
-        self.l1 = self.sigmoid(np.dot(input_layer, self.w1)) #+ self.bias1
+        self.l1 = self.sigmoid(np.dot(input_layer, self.w1)+ self.bias1) #
         self.l2 = self.sigmoid(np.dot(self.l1, self.w2)) #+ self.bias2
-        return self.sigmoid(np.dot(self.l2, self.w3) + self.bias3)
+        return self.sigmoid(np.dot(self.l2, self.w3))#+ self.bias3
 
     def backwards(self, input_layer, output_layer, training_iterations):
 
         for i in range(training_iterations):
             output = self.forward(input_layer)
             out_error = (output_layer - output)
-            print(output.shape)
 
             #print("Output is: ",output)
             delta_1 = out_error*self.sigmoid_derivative(output)
@@ -58,8 +60,6 @@ class NeuralNetwork():  # class for related functions
             downstream = np.dot(self.w2, delta_2.T)
 
             delta_3 = np.multiply(NN.sigmoid_derivative(self.l1).T, downstream)
-
-
 
             self.bias3 = self.learning_rate * delta_3
             #print("shape of input layer: ",input_layer.shape)
@@ -83,17 +83,26 @@ class NeuralNetwork():  # class for related functions
 if __name__ == '__main__':
     DM.segmentation()  # Imports and sorts data
     NN = NeuralNetwork()
-
-    training_sessions = 0
-    iterations = 1
-    #group
+    batch_size=10  # Hur många exempel som vi tränar på i taget
+    training_sessions = 0  # Hur många exempel som vi har tränat på
+    iterations = 500  # Stoppvillkor
+    best_accuracy=0     # Bästa resultatet
+    training_accuracy=0
+    validation_accuracy=0
     for i in range(iterations):
-        NN.backwards(DM.training_inputs[i%864:(i+1)%864], DM.training_outputs[i%864:(i+1)%864], 1) # TODO fixa så det går att skicka in olika storlekar, just nu blir formatet konstigt
-        #NN.backwards(DM.training_inputs[i,:], DM.training_outputs[i,:], 1)
+        NN.backwards(DM.training_inputs[i%864:(i+batch_size)%864], DM.training_outputs[i%864:(i+batch_size)%864], 1)
+        training_accuracy = NN.compare(DM.training_inputs,DM.training_outputs)
+        validation_accuracy = NN.compare(DM.validation_data, DM.validation_result)
 
-        #training_accuracy = NN.compare(DM.training_inputs,DM.training_outputs)
-        #validation_accuracy = NN.compare(DM.validation_data, DM.validation_result)
-        #test_accuracy = NN.compare(DM.test_data,DM.test_result)
-        training_sessions += 1
-        #if i % 100 == 0:
-            #print("Training accuracy is: {}\nValidation accuracy is: {}\nTest accuracy is: {}\n training: {}".format(training_accuracy,validation_accuracy,test_accuracy, training_sessions))
+        training_sessions += batch_size
+        if training_sessions % 1000*batch_size == 0:
+            print("Training accuracy is: \n".format(training_accuracy,validation_accuracy,training_sessions))
+            print("Validation accuracy is: \n",)
+    if i == 100 and best_accuracy<validation_accuracy:
+        best_accuracy=validation_accuracy
+        NN.bbias1=NN.bias1
+        NN.bbias2=NN.bias2
+        NN.bbias3=NN.bias3
+        NN.bw1=NN.w1
+        NN.bw2=NN.w2
+        NN.bw3=NN.w3
