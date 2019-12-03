@@ -1,6 +1,5 @@
 from Mathias_test import *
 #from Dan_test import *
-# TODO: Det går att skriva saker som måste göras på detta sätt. Då dyker de up under TODO-fliken
 
 class NeuralNetwork():  # class for related functions
 
@@ -48,7 +47,7 @@ class NeuralNetwork():  # class for related functions
             self.bias2 = self.learning_rate * delta_2
             self.w2 += self.learning_rate*np.dot(self.l1.T,delta_2) #Kanske inte klar
 
-            delta_3 = np.dot(self.sigmoid_derivative(self.l1),self.w2.T) * delta_2    #TODO fixa den här
+            delta_3 = np.dot(self.sigmoid_derivative(self.l1),self.w2.T) * delta_2
             #print("\nshape of input: {}\nshape of delta3: {}\nshape of w1: {}".format(input_layer.shape, delta_3.shape,self.w1.shape))
             self.bias3 = self.learning_rate * delta_3
             print("shape of input layer: ",input_layer.shape)
@@ -62,6 +61,7 @@ class NeuralNetwork():  # class for related functions
         size = inputs.shape[0]
         for i in range(size):
             print("shape of output: {}\nshape of outputs: {}".format(output[i,:].shape,outputs[i,:].shape))
+            # TODO fixa rätt format
             if abs(output[i] - outputs[i]) < 0.5:
                 accuracy += 1
 
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     iterations = 1000
     #group
     for i in range(iterations):
-        NN.backwards(DM.training_inputs, DM.training_outputs, 1)
+        NN.backwards(DM.training_inputs, DM.training_outputs, 1) # TODO fixa så det går att skicka in olika storlekar, just nu blir formatet konstigt
         #NN.backwards(DM.training_inputs[i,:], DM.training_outputs[i,:], 1)
 
         training_accuracy = NN.compare(DM.training_inputs,DM.training_outputs)

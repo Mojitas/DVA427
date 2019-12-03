@@ -1,6 +1,5 @@
 from Mathias_test import *
 
-# TODO: Det går att skriva saker som måste göras på detta sätt. Då dyker de up under TODO-fliken
 
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
