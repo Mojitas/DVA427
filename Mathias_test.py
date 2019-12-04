@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 # Data transfer stuff, changed to 19 inputs as referenced by the pdf
 data_array = np.array(pd.read_csv("assignment1.txt", header=None), dtype=np.float128)  # Reads from file
-np.set_printoptions(formatter={'float': '{: 0.5f}'.format})  # formats to 3 decimal places
+np.set_printoptions(formatter={'float': '{: 0.5f}'.format})  # formats to 5 decimal places
 np.random.seed()
 random.shuffle(data_array)  # Shuffles data
 
@@ -53,7 +53,7 @@ class dataManagement():
 DM=dataManagement() # Slippa skriva långa grejer
 
 """
-x=np.zeros((2,2))
+x=np.ones((1,1))
 y=np.array([1,2])
 print(x+y)
 """
