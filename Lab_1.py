@@ -12,6 +12,7 @@ class NeuralNetwork():  # class for related functions
         self.w2 = 2 * np.random.random((9, 9)) - 1  # weight matrix 2
         self.w3 = 2 * np.random.random((9, 1)) - 1  # weight matrix 3
         self.learning_rate = 0.1
+
         self.l1 = np.zeros((1, 9))  # hidden layer 1
         self.l2 = np.zeros((1, 9))  # hidden layer 2
 
@@ -41,6 +42,7 @@ class NeuralNetwork():  # class for related functions
         return self.sigmoid(np.dot(self.l2, self.best_w3))  # + self.bbias3
 
     def forward(self, input_layer):  # Use when training
+
         input_layer = input_layer.astype(float)
         self.l1 = self.sigmoid(np.dot(input_layer, self.w1))  # + self.bias1
         self.l2 = self.sigmoid(np.dot(self.l1, self.w2))  # + self.bias2
@@ -49,21 +51,18 @@ class NeuralNetwork():  # class for related functions
     def backwards(self, input_layer, output_layer):
 
         output = self.forward(input_layer)
-        out_error = (output_layer - output)
+        error = (output_layer - output)
 
-        delta_1 = out_error * self.sigmoid_derivative(output)
-        self.bias1 = self.learning_rate * delta_1
+        delta_1 = error * self.sigmoid_derivative(output)
+        #self.bias1 = self.learning_rate * delta_1
         self.w3 += self.learning_rate * np.dot(self.l2.T, delta_1)
 
-        delta_2 = np.multiply(self.sigmoid_derivative(self.l2), self.w3.T) * delta_1
-        self.bias2 = self.learning_rate * delta_2
+        delta_2 = error * self.sigmoid_derivative(self.l2) * self.w3.T * delta_1
+        #self.bias2 = self.learning_rate * delta_2
         self.w2 += self.learning_rate * np.dot(self.l1.T, delta_2)
 
-        downstream = np.dot(self.w2, delta_2.T)
-        delta_3 = np.multiply(NN.sigmoid_derivative(self.l1).T, downstream)
-
-        self.bias1 = self.learning_rate * delta_3
-        # print("shape of input layer: ",input_layer.shape)
+        delta_3 = np.dot(error.T, np.dot(self.sigmoid_derivative(self.l1), np.dot(self.w2, delta_2.T)))
+        #self.bias1 = self.learning_rate * delta_3
         self.w1 += self.learning_rate * np.dot(input_layer.T, delta_3.T)
 
     def compare(self, inputs, output, mode):  # func for comparing when training has been done
@@ -89,8 +88,8 @@ if __name__ == '__main__':
     DM.segmentation()  # Imports and sorts data
     NN = NeuralNetwork()
 
-    iterations = 5000  # Stoppvillkor
-    batch_size = 16  # Hur många exempel som vi tränar på i taget
+    iterations = 20000  # Stoppvillkor
+    batch_size = 8  # Hur många exempel som vi tränar på i taget
     training_iterations = 0  # Hur många exempel som vi har tränat på
 
     best_accuracy = np.zeros([3])  # Bästa bedömningen
@@ -107,11 +106,11 @@ if __name__ == '__main__':
         validation_accuracy = NN.compare(DM.validation_data, DM.validation_result, 0)
         test_accuracy = NN.compare(DM.test_data, DM.test_result, 0)
 
-        if best_accuracy[2] < test_accuracy:
+        if best_accuracy[1] < validation_accuracy:
             best_accuracy[0] = training_accuracy
             best_accuracy[1] = validation_accuracy
             best_accuracy[2] = test_accuracy
-            print("New best validation accuracy: {}\nNew best test accuracy: {}".format(best_accuracy[1],
+            print("\nNew best validation accuracy: {}\nNew best test accuracy: {}".format(best_accuracy[1],
                                                                                         best_accuracy[2]))
             NN.best_w1 = NN.w1
             NN.best_w2 = NN.w2
@@ -121,6 +120,4 @@ if __name__ == '__main__':
             NN.best_bias3 = NN.bias3
 
 
-    print("New best accuracy: ", best_accuracy)
-    #print("Best result from validation set: ", NN.compare(DM.validation_data, DM.validation_result, 1))
-    print("Best result from test set: ", NN.compare(DM.test_data, DM.test_result, 1))
+    print("Confirm test: ",NN.compare(DM.test_data, DM.test_result, 1))
