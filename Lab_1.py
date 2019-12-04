@@ -97,7 +97,7 @@ if __name__ == '__main__':
     NN = NeuralNetwork()
 
     iterations = 5000  # Stoppvillkor
-    batch_size = 1  # Hur många exempel som vi tränar på i taget
+    batch_size = 8  # Hur många exempel som vi tränar på i taget
     training_iterations = 0  # Hur många exempel som vi har tränat på
 
     best_accuracy = 0  # Bästa bedömningen
