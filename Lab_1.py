@@ -38,10 +38,11 @@ class NeuralNetwork():  # class for related functions
         return self.sigmoid(np.dot(self.l2, self.best_w3))  # + self.bbias3
 
     def forward(self, input_layer):  # functions that uses more layers
-
+        print('test 1', self.l2.shape)
         input_layer = input_layer.astype(float)
-        self.l1 = self.sigmoid(np.dot(input_layer, self.w1)) #+ self.bias1
+        self.l1 = self.sigmoid(np.dot(input_layer, self.w1) + self.bias1) #
         self.l2 = self.sigmoid(np.dot(self.l1, self.w2) + self.bias2) #
+        print('test 2', self.l2.shape)
         return self.sigmoid(np.dot(self.l2, self.w3) + self.bias3)#
 
     def backwards(self, input_layer, output_layer):
@@ -71,7 +72,7 @@ class NeuralNetwork():  # class for related functions
 
         self.bias1 = self.learning_rate * delta_3
         # print("shape of input layer: ",input_layer.shape)
-        self.w1 += self.learning_rate * np.dot(input_layer.T, delta_3.T)  # Ska använda inputs
+        self.w1 += self.learning_rate * np.dot(input_layer.T, delta_3.T)
 
     def compare(self, inputs, output, mode):  # func for comparing when training has been done
         inputs = inputs.astype(float)
@@ -96,7 +97,7 @@ if __name__ == '__main__':
     NN = NeuralNetwork()
 
     iterations = 5000  # Stoppvillkor
-    batch_size = 10  # Hur många exempel som vi tränar på i taget
+    batch_size = 1  # Hur många exempel som vi tränar på i taget
     training_iterations = 0  # Hur många exempel som vi har tränat på
 
     best_accuracy = 0  # Bästa bedömningen
@@ -106,8 +107,8 @@ if __name__ == '__main__':
     for i in range(iterations):
         NN.backwards(DM.training_inputs[i % 864:(i + batch_size) % 864],
                      DM.training_outputs[i % 864:(i + batch_size) % 864])
-        training_accuracy = NN.compare(DM.training_inputs, DM.training_outputs, 0)
-        validation_accuracy = NN.compare(DM.validation_data, DM.validation_result, 0)
+        #training_accuracy = NN.compare(DM.training_inputs, DM.training_outputs, 0)
+        #validation_accuracy = NN.compare(DM.validation_data, DM.validation_result, 0)
 
         if best_accuracy < validation_accuracy:
             best_accuracy = validation_accuracy
