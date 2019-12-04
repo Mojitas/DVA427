@@ -94,7 +94,7 @@ if __name__ == '__main__':
     NN = NeuralNetwork()
     batch_size = 16  # Hur många exempel som vi tränar på i taget
     training_sessions = 0  # Hur många exempel som vi har tränat på
-    iterations = 20000  # Stoppvillkor
+    iterations = 150000  # Stoppvillkor
     best_accuracy=0     # Bästa resultatet
     training_accuracy=0
     validation_accuracy=0
@@ -106,12 +106,16 @@ if __name__ == '__main__':
         validation_accuracy = NN.compare(DM.validation_data, DM.validation_result)
 
         i += batch_size
-        if i % (128*batch_size) == 0:
+        if i % (512*batch_size) == 0:
 
-            print("Training accuracy is: \n".format(training_accuracy,validation_accuracy,training_sessions))
-            print(training_accuracy)
-            print("Validation accuracy is: \n",)
-            print(validation_accuracy)
+            print("Iteration: ", i)
+            print("Training accuracy is: ", training_accuracy)
+            #print(training_accuracy)
+            print("Validation accuracy is: ", validation_accuracy)
+            #print(validation_accuracy)
+
+    print('Test accuracy is:', NN.compare(DM.test_data, DM.test_result))
+
     if i == 100 and best_accuracy<validation_accuracy:
         best_accuracy=validation_accuracy
         NN.bbias1=NN.bias1
