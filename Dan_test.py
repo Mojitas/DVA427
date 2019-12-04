@@ -31,14 +31,11 @@ class NeuralNetwork():  # class for related functions
 
     def forward(self, input_layer):  # functions that uses more layers
 
-        #print('test 1', input_layer.shape)
-
         input_layer = input_layer.astype(float)
-        self.l1 = self.sigmoid(np.dot(input_layer, self.w1)) #+ self.bias1
-        #print('test 1.1', self.w1.shape)
-        self.l2 = self.sigmoid(np.dot(self.l1, self.w2) ) #+ self.bias2
-        #print('test 1.2', self.w2.shape)
-        return self.sigmoid(np.dot(self.l2, self.w3) )#+ self.bias3
+        self.l1 = self.sigmoid(np.dot(input_layer, self.w1) + self.bias1) #+ self.bias1
+        self.l2 = self.sigmoid(np.dot(self.l1, self.w2) + self.bias2) #
+
+        return self.sigmoid(np.dot(self.l2, self.w3) + self.bias3)#
 
     def backwards(self, input_layer, output_layer, training_iterations):
 
@@ -52,13 +49,14 @@ class NeuralNetwork():  # class for related functions
             #print("shape of l2: {}\nshape of delta1: {}\nshape of w3: {}".format(self.l2.shape, delta_1.shape, self.w3.shape))
 
             self.bias3 = self.learning_rate * delta_1
-            #print('test 2', self.bias1.shape)
+            self.bias3 = sum(self.bias3)/self.bias3.shape[0]
             #print("Shape of bias3: {}\nShape of w3: {}".format(self.bias3.shape,self.w3.shape))
             self.w3 += self.learning_rate*np.dot(self.l2.T,delta_1)
 
             delta_2 = np.multiply(self.sigmoid_derivative(self.l2),self.w3.T)*delta_1
             #print("shape of l2: {}\nshape of delta2: {}\nshape of w2: {}".format(self.l2.shape, delta_2.shape, self.w2.shape))
             self.bias2 = self.learning_rate * delta_2
+            self.bias2 = sum(self.bias2) / self.bias2.shape[0]
             self.w2 += self.learning_rate*np.dot(self.l1.T,delta_2) #Kanske inte klar
 
             #delta_3 = np.dot(self.sigmoid_derivative(self.l1),self.w2.T) * delta_2
@@ -69,7 +67,8 @@ class NeuralNetwork():  # class for related functions
             delta_3 = np.multiply(NN.sigmoid_derivative(self.l1).T, downstream)
             #print('delta_3', delta_3.shape)
 
-            self.bias1 = self.learning_rate * delta_3.T           #TODO DEN HAR SKA VARA BIAS 1!!!!!
+            self.bias1 = self.learning_rate * delta_3.T
+            self.bias1 = sum(self.bias1) / self.bias1.shape[0]
             #print("shape of input layer: ",input_layer.shape)
             self.w1 += self.learning_rate*np.dot(input_layer.T,delta_3.T)
 
@@ -93,25 +92,30 @@ class NeuralNetwork():  # class for related functions
 if __name__ == '__main__':
     DM.segmentation()  # Imports and sorts data
     NN = NeuralNetwork()
-    batch_size=1  # Hur många exempel som vi tränar på i taget
+    batch_size = 16  # Hur många exempel som vi tränar på i taget
     training_sessions = 0  # Hur många exempel som vi har tränat på
-    iterations = 20000  # Stoppvillkor
+    iterations = 150000  # Stoppvillkor
     best_accuracy=0     # Bästa resultatet
     training_accuracy=0
     validation_accuracy=0
 
-    for i in range(iterations):
-        NN.backwards(DM.training_inputs[i%864:(i%864 + 1)], DM.training_outputs[i%864:(i%864 + 1)], 1)
+    i = 0
+    while(i < iterations):
+        NN.backwards(DM.training_inputs[i%864:(i%864 + batch_size)], DM.training_outputs[i%864:(i%864 + batch_size)], 1)
         training_accuracy = NN.compare(DM.training_inputs,DM.training_outputs)
         validation_accuracy = NN.compare(DM.validation_data, DM.validation_result)
 
-        training_sessions += batch_size
-        if training_sessions % (200*batch_size) == 0:
+        i += batch_size
+        if i % (512*batch_size) == 0:
 
-            print("Training accuracy is: \n".format(training_accuracy,validation_accuracy,training_sessions))
-            print(training_accuracy)
-            print("Validation accuracy is: \n",)
-            print(validation_accuracy)
+            print("Iteration: ", i)
+            print("Training accuracy is: ", training_accuracy)
+            #print(training_accuracy)
+            print("Validation accuracy is: ", validation_accuracy)
+            #print(validation_accuracy)
+
+    print('Test accuracy is:', NN.compare(DM.test_data, DM.test_result))
+
     if i == 100 and best_accuracy<validation_accuracy:
         best_accuracy=validation_accuracy
         NN.bbias1=NN.bias1
