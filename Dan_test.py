@@ -36,9 +36,9 @@ class NeuralNetwork():  # class for related functions
         input_layer = input_layer.astype(float)
         self.l1 = self.sigmoid(np.dot(input_layer, self.w1)) #+ self.bias1
         #print('test 1.1', self.w1.shape)
-        self.l2 = self.sigmoid(np.dot(self.l1, self.w2) + self.bias2) #
+        self.l2 = self.sigmoid(np.dot(self.l1, self.w2) ) #+ self.bias2
         #print('test 1.2', self.w2.shape)
-        return self.sigmoid(np.dot(self.l2, self.w3) + self.bias3)#
+        return self.sigmoid(np.dot(self.l2, self.w3) )#+ self.bias3
 
     def backwards(self, input_layer, output_layer, training_iterations):
 

@@ -2,6 +2,7 @@ from Mathias_test import *
 
 
 # from Dan_test import *
+np.set_printoptions(formatter={'float': '{: 0.5f}'.format})
 
 class NeuralNetwork():  # class for related functions
 
@@ -14,11 +15,11 @@ class NeuralNetwork():  # class for related functions
         self.l1 = np.zeros((1, 9))  # hidden layer 1
         self.l2 = np.zeros((1, 9))  # hidden layer 2
 
-        self.bias1 = 2 * np.random.random((1, 9)) - 1  # Bias for hidden layer 1
-        self.bias2 = 2 * np.random.random((1, 9)) - 1  # Bias for hidden layer 2
-        self.bias3 = 2 * np.random.random((1, 1)) - 1  # Bias for output layer
+        self.bias1 = 2 * np.random.random((1, 9)) - 1  # Biases for the different layers
+        self.bias2 = 2 * np.random.random((1, 9)) - 1
+        self.bias3 = 2 * np.random.random((1, 1)) - 1
 
-        self.best_w1 = 0
+        self.best_w1 = 0        #Variables for the best result
         self.best_w2 = 0
         self.best_w3 = 0
         self.best_bias1 = 0
@@ -32,20 +33,18 @@ class NeuralNetwork():  # class for related functions
     def sigmoid_derivative(self, x):
         return x * (1 - x)  #
 
-    def think(self, input_layer):
+    def think(self, input_layer):       #Use when training is complete
 
         input_layer = input_layer.astype(float)
         self.l1 = self.sigmoid(np.dot(input_layer, self.best_w1))  # + self.best_bias1
         self.l2 = self.sigmoid(np.dot(self.l1, self.best_w2))  # + self.bbias2
         return self.sigmoid(np.dot(self.l2, self.best_w3))  # + self.bbias3
 
-    def forward(self, input_layer):  # functions that uses more layers
-        print('test 1', self.l2.shape)
+    def forward(self, input_layer):  # Use when training
         input_layer = input_layer.astype(float)
-        self.l1 = self.sigmoid(np.dot(input_layer, self.w1) + self.bias1) #
-        self.l2 = self.sigmoid(np.dot(self.l1, self.w2) + self.bias2) #
-        print('test 2', self.l2.shape)
-        return self.sigmoid(np.dot(self.l2, self.w3) + self.bias3)#
+        self.l1 = self.sigmoid(np.dot(input_layer, self.w1))  # + self.bias1
+        self.l2 = self.sigmoid(np.dot(self.l1, self.w2))  # + self.bias2
+        return self.sigmoid(np.dot(self.l2, self.w3))  # + self.bias3
 
     def backwards(self, input_layer, output_layer):
 
@@ -86,11 +85,12 @@ class NeuralNetwork():  # class for related functions
 
 if __name__ == '__main__':
 
+
     DM.segmentation()  # Imports and sorts data
     NN = NeuralNetwork()
 
     iterations = 5000  # Stoppvillkor
-    batch_size = 1  # Hur många exempel som vi tränar på i taget
+    batch_size = 16  # Hur många exempel som vi tränar på i taget
     training_iterations = 0  # Hur många exempel som vi har tränat på
 
     best_accuracy = np.zeros([3])  # Bästa bedömningen
@@ -100,16 +100,19 @@ if __name__ == '__main__':
 
     for i in range(iterations):
 
-        NN.backwards(DM.training_inputs[i % 864:(i + batch_size) % 864],
-                     DM.training_outputs[i % 864:(i + batch_size) % 864])
+        NN.backwards(DM.training_inputs[i * batch_size % 864:(i * batch_size + batch_size) % 864],
+                     DM.training_outputs[i * batch_size % 864:(i * batch_size + batch_size) % 864])
 
         training_accuracy = NN.compare(DM.training_inputs, DM.training_outputs, 0)
         validation_accuracy = NN.compare(DM.validation_data, DM.validation_result, 0)
-        test_accuracy = NN.compare(DM.test_data,DM.test_result,0)
+        test_accuracy = NN.compare(DM.test_data, DM.test_result, 0)
+
         if best_accuracy[2] < test_accuracy:
+            best_accuracy[0] = training_accuracy
             best_accuracy[1] = validation_accuracy
             best_accuracy[2] = test_accuracy
-            print("New best validation accuracy: {}\nNew best test accuracy: {}".format(best_accuracy[1],best_accuracy[2]))
+            print("New best validation accuracy: {}\nNew best test accuracy: {}".format(best_accuracy[1],
+                                                                                        best_accuracy[2]))
             NN.best_w1 = NN.w1
             NN.best_w2 = NN.w2
             NN.best_w3 = NN.w3
@@ -117,6 +120,7 @@ if __name__ == '__main__':
             NN.best_bias2 = NN.bias2
             NN.best_bias3 = NN.bias3
 
+
     print("New best accuracy: ", best_accuracy)
-    print("Best result from validation set: ", NN.compare(DM.validation_data, DM.validation_result, 1))
-    print("Best result from test set: ",NN.compare(DM.test_data,DM.test_result,1))
+    #print("Best result from validation set: ", NN.compare(DM.validation_data, DM.validation_result, 1))
+    print("Best result from test set: ", NN.compare(DM.test_data, DM.test_result, 1))
