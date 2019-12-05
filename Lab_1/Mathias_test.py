@@ -51,9 +51,3 @@ class dataManagement():
         print("\nData has been managed\n")
 
 DM=dataManagement() # Slippa skriva långa grejer
-
-"""
-x=np.ones((1,1))
-y=np.array([1,2])
-print(x+y)
-"""
