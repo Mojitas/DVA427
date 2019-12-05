@@ -41,7 +41,6 @@ class NeuralNetwork():  # class for related functions
 
         for i in range(training_iterations):
             output = self.forward(input_layer)
-            #print('test 1.5', output.shape)
             out_error = (output_layer - output)
 
             #print("Output is: ",output)
@@ -57,22 +56,16 @@ class NeuralNetwork():  # class for related functions
             #print("shape of l2: {}\nshape of delta2: {}\nshape of w2: {}".format(self.l2.shape, delta_2.shape, self.w2.shape))
             self.bias2 = self.learning_rate * delta_2
             self.bias2 = sum(self.bias2) / self.bias2.shape[0]
-            self.w2 += self.learning_rate*np.dot(self.l1.T,delta_2) #Kanske inte klar
+            self.w2 += self.learning_rate*np.dot(self.l1.T,delta_2)
 
-            #delta_3 = np.dot(self.sigmoid_derivative(self.l1),self.w2.T) * delta_2
-            #TODO Fixa denna for i: dot(sef.w2[i,:], delta2) sen multiply(sigmoid der l1, det)
             #print("\nshape of input: {}\nshape of delta3: {}\nshape of w1: {}".format(input_layer.shape, delta_3.shape,self.w1.shape))
             downstream = np.dot(self.w2, delta_2.T)
 
             delta_3 = np.multiply(NN.sigmoid_derivative(self.l1).T, downstream)
-            #print('delta_3', delta_3.shape)
 
             self.bias1 = self.learning_rate * delta_3.T
             self.bias1 = sum(self.bias1) / self.bias1.shape[0]
-            #print("shape of input layer: ",input_layer.shape)
             self.w1 += self.learning_rate*np.dot(input_layer.T,delta_3.T)
-
-            #print('test 3', self.bias1.shape)
 
 
     def compare(self, inputs, output):  # func for comparing when training has been done
@@ -83,7 +76,7 @@ class NeuralNetwork():  # class for related functions
         for i in range(size):
             #print("shape of output: {}\nshape of outputs: {}".format(output[i,:].shape,outputs[i,:].shape))
             # TODO fixa rätt format
-            if abs(output[i] - outputs[i]) < 0.5:
+            if output[i] - np.round(outputs[i], 0) == 0:
                 accuracy += 1
 
         return accuracy / size
@@ -94,33 +87,26 @@ if __name__ == '__main__':
     NN = NeuralNetwork()
     batch_size = 16  # Hur många exempel som vi tränar på i taget
     training_sessions = 0  # Hur många exempel som vi har tränat på
-    iterations = 150000  # Stoppvillkor
+    iterations = 6000  # Stoppvillkor
     best_accuracy=0     # Bästa resultatet
     training_accuracy=0
     validation_accuracy=0
 
+    j = 0
     i = 0
-    while(i < iterations):
+    while(j < iterations):
         NN.backwards(DM.training_inputs[i%864:(i%864 + batch_size)], DM.training_outputs[i%864:(i%864 + batch_size)], 1)
         training_accuracy = NN.compare(DM.training_inputs,DM.training_outputs)
         validation_accuracy = NN.compare(DM.validation_data, DM.validation_result)
 
+        j += 1
         i += batch_size
         if i % (512*batch_size) == 0:
 
-            print("Iteration: ", i)
+            print("Iteration: ", j)
             print("Training accuracy is: ", training_accuracy)
-            #print(training_accuracy)
             print("Validation accuracy is: ", validation_accuracy)
-            #print(validation_accuracy)
 
     print('Test accuracy is:', NN.compare(DM.test_data, DM.test_result))
 
-    if i == 100 and best_accuracy<validation_accuracy:
-        best_accuracy=validation_accuracy
-        NN.bbias1=NN.bias1
-        NN.bbias2=NN.bias2
-        NN.bbias3=NN.bias3
-        NN.bw1=NN.w1
-        NN.bw2=NN.w2
-        NN.bw3=NN.w3
+
