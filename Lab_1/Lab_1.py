@@ -94,16 +94,16 @@ if __name__ == '__main__':
     DM.segmentation()  # Imports and sorts data
     NN = NeuralNetwork()
 
-    iterations = 100  # Stoppvillkor
+    iterations = 10800  # Stoppvillkor
     batch_size = 8  # Hur många exempel som vi tränar på i taget
     training_iterations = 0  # Hur många exempel som vi har tränat på
-
     best_accuracy = np.zeros([3])  # Bästa bedömningen
 
     for i in range(iterations):
 
         NN.backwards(DM.training_inputs[i * batch_size % 864:(i * batch_size + batch_size) % 864],
                      DM.training_outputs[i * batch_size % 864:(i * batch_size + batch_size) % 864])
+
 
         NN.train_acc.append(NN.compare(DM.training_inputs, DM.training_outputs, 0))
         NN.val_acc.append(NN.compare(DM.validation_data, DM.validation_result, 0))
@@ -124,9 +124,12 @@ if __name__ == '__main__':
             NN.best_bias2 = NN.bias2
             NN.best_bias3 = NN.bias3
 
-    plt.plot([0:iterations], NN.train_acc)
-    plt.ylabel("Accuracy (%)")
-    plt.xlabel("Iterations")
+    plt.plot(range(iterations),NN.train_acc)
+    plt.plot(range(iterations),NN.val_acc)
+    plt.plot(range(iterations),NN.test_acc)
+    plt.legend(('Training','Valdiation','Testing'))
+    plt.ylabel("Accuracy")
+    plt.xlabel("Epocs")
     plt.show()
 
 
