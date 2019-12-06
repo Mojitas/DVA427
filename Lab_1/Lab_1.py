@@ -24,7 +24,7 @@ class NeuralNetwork():  # class for related functions
         self.test_acc=[]
         self.val_acc=[]
         self.epocs=[]
-        self.batch_size=8
+        self.batch_size = 1
 
     # commit lots of math
     def sigmoid(self, x):
@@ -57,12 +57,12 @@ class NeuralNetwork():  # class for related functions
         self.bias1 = self.learning_rate * delta_1
         self.w3 += self.learning_rate * np.dot(self.l2.T, delta_1)
 
-        delta_2 = error * self.sigmoid_derivative(self.l2) * self.w3.T * delta_1
+        delta_2 = self.sigmoid_derivative(self.l2) * self.w3.T * delta_1
         self.bias2 = self.learning_rate * delta_2
         self.w2 += self.learning_rate * np.dot(self.l1.T, delta_2)
 
         downstream = np.dot(self.w2, delta_2.T)
-        delta_3 = error * NN.sigmoid_derivative(self.l1).T * downstream
+        delta_3 = NN.sigmoid_derivative(self.l1).T * downstream
         self.bias1 = self.learning_rate * delta_3
         self.w1 += self.learning_rate * np.dot(input_layer.T, delta_3.T)
 
@@ -89,32 +89,31 @@ if __name__ == '__main__':
     DM.segmentation()  # Imports and sorts data
     NN = NeuralNetwork()
 
-    iterations = 1080  # Stoppvillkor
-    batch_size = NN.batch_size  # Hur många exempel som vi tränar på i taget
-    training_iterations = 0  # Hur många exempel som vi har tränat på
+    iterations = (int)(864/NN.batch_size*1000)  # Stoppvillkor
     best_accuracy = np.zeros([3])  # Bästa bedömningen
     epoc = -1
 
     for i in range(iterations):
 
-        NN.backwards(DM.training_inputs[i * batch_size % 864:(i * batch_size + batch_size) % 864],
-                     DM.training_outputs[i * batch_size % 864:(i * batch_size + batch_size) % 864])
+        NN.backwards(DM.training_inputs[i * NN.batch_size % 864:(i * NN.batch_size + NN.batch_size) % 864],
+                     DM.training_outputs[i * NN.batch_size % 864:(i * NN.batch_size + NN.batch_size) % 864])
 
-        if iterations % 864 == 0 or i == 0:
-
+        if (i % (864/NN.batch_size)) == 0:
             epoc+=1
             NN.epocs.append(epoc)
             NN.train_acc.append(NN.compare(DM.training_inputs, DM.training_outputs, 0))
             NN.val_acc.append(NN.compare(DM.validation_data, DM.validation_result, 0))
             NN.test_acc.append(NN.compare(DM.test_data, DM.test_result, 0))
 
+            """
         if best_accuracy[1] <  NN.val_acc[-1]:
 
             best_accuracy[0] = NN.train_acc[-1]
             best_accuracy[1] = NN.val_acc[-1]
             best_accuracy[2] = NN.test_acc[-1]
             print("\nNew best validation accuracy: {}\nNew best test accuracy: {}".format(best_accuracy[1],
-                                                                                        best_accuracy[2]))
+                                                                                  best_accuracy[2]))
+        """
 
     plt.plot(NN.epocs,NN.train_acc)
     plt.plot(NN.epocs,NN.val_acc)

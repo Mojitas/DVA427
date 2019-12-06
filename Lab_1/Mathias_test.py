@@ -54,3 +54,4 @@ class dataManagement():
 
 DM=dataManagement() # Slippa skriva långa grejer
 #
+print(1080%108)
