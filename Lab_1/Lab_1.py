@@ -27,6 +27,10 @@ class NeuralNetwork():  # class for related functions
         self.best_bias2 = 0
         self.best_bias3 = 0
 
+        self.train_acc=[]
+        self.test_acc=[]
+        self.val_acc=[]
+
     # commit lots of math
     def sigmoid(self, x):
         return 1 / (1 + np.exp(-x))
@@ -61,7 +65,9 @@ class NeuralNetwork():  # class for related functions
         #self.bias2 = self.learning_rate * delta_2
         self.w2 += self.learning_rate * np.dot(self.l1.T, delta_2)
 
-        delta_3 = np.dot(error.T, np.dot(self.sigmoid_derivative(self.l1), np.dot(self.w2, delta_2.T)))
+        downstream = np.dot(self.w2, delta_2.T)
+
+        delta_3 = np.multiply(NN.sigmoid_derivative(self.l1).T, downstream)
         #self.bias1 = self.learning_rate * delta_3
         self.w1 += self.learning_rate * np.dot(input_layer.T, delta_3.T)
 
@@ -88,28 +94,27 @@ if __name__ == '__main__':
     DM.segmentation()  # Imports and sorts data
     NN = NeuralNetwork()
 
-    iterations = 20000  # Stoppvillkor
+    iterations = 100  # Stoppvillkor
     batch_size = 8  # Hur många exempel som vi tränar på i taget
     training_iterations = 0  # Hur många exempel som vi har tränat på
 
     best_accuracy = np.zeros([3])  # Bästa bedömningen
-    training_accuracy = 0
-    validation_accuracy = 0
-    test_accuracy = 0
 
     for i in range(iterations):
 
         NN.backwards(DM.training_inputs[i * batch_size % 864:(i * batch_size + batch_size) % 864],
                      DM.training_outputs[i * batch_size % 864:(i * batch_size + batch_size) % 864])
 
-        training_accuracy = NN.compare(DM.training_inputs, DM.training_outputs, 0)
-        validation_accuracy = NN.compare(DM.validation_data, DM.validation_result, 0)
-        test_accuracy = NN.compare(DM.test_data, DM.test_result, 0)
+        NN.train_acc.append(NN.compare(DM.training_inputs, DM.training_outputs, 0))
+        NN.val_acc.append(NN.compare(DM.validation_data, DM.validation_result, 0))
+        NN.test_acc.append(NN.compare(DM.test_data, DM.test_result, 0))
 
-        if best_accuracy[1] < validation_accuracy:
-            best_accuracy[0] = training_accuracy
-            best_accuracy[1] = validation_accuracy
-            best_accuracy[2] = test_accuracy
+
+
+        if best_accuracy[1] < NN.val_acc[i]:
+            best_accuracy[0] = NN.train_acc[i]
+            best_accuracy[1] = NN.val_acc[i]
+            best_accuracy[2] = NN.test_acc[i]
             print("\nNew best validation accuracy: {}\nNew best test accuracy: {}".format(best_accuracy[1],
                                                                                         best_accuracy[2]))
             NN.best_w1 = NN.w1
@@ -119,5 +124,9 @@ if __name__ == '__main__':
             NN.best_bias2 = NN.bias2
             NN.best_bias3 = NN.bias3
 
+    plt.plot([0:iterations], NN.train_acc)
+    plt.ylabel("Accuracy (%)")
+    plt.xlabel("Iterations")
+    plt.show()
 
-    print("Confirm test: ",NN.compare(DM.test_data, DM.test_result, 1))
+
