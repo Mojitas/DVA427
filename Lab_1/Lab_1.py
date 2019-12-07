@@ -36,9 +36,9 @@ class NeuralNetwork():  # class for related functions
     def think(self, input_layer):       #Use when training is complete
 
         input_layer = input_layer.astype(float)
-        self.l1 = self.sigmoid(np.dot(input_layer, self.best_w1))  # + self.best_bias1
-        self.l2 = self.sigmoid(np.dot(self.l1, self.best_w2))  # + self.bbias2
-        return self.sigmoid(np.dot(self.l2, self.best_w3))  # + self.bbias3
+        self.l1 = self.sigmoid(np.dot(input_layer, self.best_w1) + self.best_bias1)  # + self.best_bias1
+        self.l2 = self.sigmoid(np.dot(self.l1, self.best_w2) + self.bias2)  # + self.bbias2
+        return self.sigmoid(np.dot(self.l2, self.best_w3) + self.bias3)  # + self.bbias2
 
     def forward(self, input_layer):  # Use when training
 
@@ -51,19 +51,22 @@ class NeuralNetwork():  # class for related functions
 
         output = self.forward(input_layer)
         error = (output_layer - output)
-        error = sum(error)/self.batch_size
+        #error = sum(error)/self.batch_size
 
         delta_1 = error * self.sigmoid_derivative(output)
-        self.bias1 = self.learning_rate * delta_1
+        self.bias3 = self.learning_rate * delta_1
+        self.bias3 = sum(self.bias3) / self.bias3.shape[0]
         self.w3 += self.learning_rate * np.dot(self.l2.T, delta_1)
 
-        delta_2 = self.sigmoid_derivative(self.l2) * self.w3.T * delta_1
+        delta_2 = (self.sigmoid_derivative(self.l2) * self.w3.T) * delta_1
         self.bias2 = self.learning_rate * delta_2
+        self.bias2 = sum(self.bias2) / self.bias2.shape[0]
         self.w2 += self.learning_rate * np.dot(self.l1.T, delta_2)
 
         downstream = np.dot(self.w2, delta_2.T)
         delta_3 = NN.sigmoid_derivative(self.l1).T * downstream
-        self.bias1 = self.learning_rate * delta_3
+        self.bias1 = self.learning_rate * delta_3.T
+        self.bias1 = sum(self.bias1) / self.bias1.shape[0]
         self.w1 += self.learning_rate * np.dot(input_layer.T, delta_3.T)
 
     def compare(self, inputs, output, mode):  # func for comparing when training has been done

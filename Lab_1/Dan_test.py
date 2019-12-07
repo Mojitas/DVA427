@@ -1,5 +1,6 @@
 from Mathias_test import *
-#from Dan_test import *
+
+# coding=utf-8
 
 class NeuralNetwork():  # class for related functions
 
@@ -92,12 +93,18 @@ if __name__ == '__main__':
     training_accuracy=0
     validation_accuracy=0
 
+    val_acc = np.zeros((6000, 1))
+    epochs = np.zeros((6000, 1))
+
     j = 0
     i = 0
     while(j < iterations):
         NN.backwards(DM.training_inputs[i%864:(i%864 + batch_size)], DM.training_outputs[i%864:(i%864 + batch_size)], 1)
         training_accuracy = NN.compare(DM.training_inputs,DM.training_outputs)
         validation_accuracy = NN.compare(DM.validation_data, DM.validation_result)
+
+        val_acc[j] = validation_accuracy
+        epochs[j] = i
 
         j += 1
         i += batch_size
@@ -106,6 +113,8 @@ if __name__ == '__main__':
             print("Iteration: ", j)
             print("Training accuracy is: ", training_accuracy)
             print("Validation accuracy is: ", validation_accuracy)
+
+    plt.plot(epochs, val_acc)
 
     print('Test accuracy is:', NN.compare(DM.test_data, DM.test_result))
 
