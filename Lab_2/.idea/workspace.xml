@@ -119,6 +119,7 @@
       <option name="presentableId" value="Default" />
       <updated>1575536655946</updated>
       <workItem from="1575536659026" duration="1472000" />
+      <workItem from="1575541017782" duration="5000" />
     </task>
     <task id="LOCAL−00001" summary="Lab 2!">
       <created>1575539184768</created>
@@ -137,7 +138,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

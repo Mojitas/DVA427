@@ -1,6 +1,8 @@
 import random
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+
 # Data transfer stuff, changed to 19 inputs as referenced by the pdf
 data_array = np.array(pd.read_csv("assignment1.txt", header=None), dtype=np.float128)  # Reads from file
 np.set_printoptions(formatter={'float': '{: 0.5f}'.format})  # formats to 5 decimal places
@@ -51,4 +53,3 @@ class dataManagement():
         print("\nData has been managed\n")
 
 DM=dataManagement() # Slippa skriva långa grejer
-#
