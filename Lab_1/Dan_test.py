@@ -1,6 +1,7 @@
+# coding=utf-8
+
 from Mathias_test import *
 
-# coding=utf-8
 
 class NeuralNetwork():  # class for related functions
 
@@ -45,7 +46,7 @@ class NeuralNetwork():  # class for related functions
             out_error = (output_layer - output)
 
             #print("Output is: ",output)
-            delta_1 = out_error*self.sigmoid_derivative(output)     #TODO Vi borde vända på delta_1 & delta_3
+            delta_1 = out_error*self.sigmoid_derivative(output)     #TODO Vi borde vanda pa delta_1 & delta_3
             #print("shape of l2: {}\nshape of delta1: {}\nshape of w3: {}".format(self.l2.shape, delta_1.shape, self.w3.shape))
 
             self.bias3 = self.learning_rate * delta_1
@@ -76,7 +77,7 @@ class NeuralNetwork():  # class for related functions
         size = inputs.shape[0]
         for i in range(size):
             #print("shape of output: {}\nshape of outputs: {}".format(output[i,:].shape,outputs[i,:].shape))
-            # TODO fixa rätt format
+            # TODO fixa rett format
             if output[i] - np.round(outputs[i], 0) == 0:
                 accuracy += 1
 
@@ -86,10 +87,10 @@ class NeuralNetwork():  # class for related functions
 if __name__ == '__main__':
     DM.segmentation()  # Imports and sorts data
     NN = NeuralNetwork()
-    batch_size = 16  # Hur många exempel som vi tränar på i taget
-    training_sessions = 0  # Hur många exempel som vi har tränat på
+    batch_size = 16  # Hur manga exempel som vi trenar pa i taget
+    training_sessions = 0  # Hur manga exempel som vi har trenat pa
     iterations = 6000  # Stoppvillkor
-    best_accuracy=0     # Bästa resultatet
+    best_accuracy=0     # Besta resultatet
     training_accuracy=0
     validation_accuracy=0
 
