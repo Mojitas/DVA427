@@ -40,7 +40,6 @@ class NeuralNetwork():  # class for related functions
         return self.sigmoid(np.dot(self.l2, self.w3) + self.bias3)#
 
     def backwards(self, input_layer, output_layer, training_iterations):
-
         for i in range(training_iterations):
             output = self.forward(input_layer)
             out_error = (output_layer - output)
