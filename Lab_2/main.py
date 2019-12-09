@@ -1,3 +1,3 @@
 from lib_lab_2 import *
 
-printbutt()
+print(data_array)
