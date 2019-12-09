@@ -9,9 +9,11 @@ np.set_printoptions(formatter={'float': '{: 0.5f}'.format})  # formats to 5 deci
 np.random.seed()
 random.shuffle(data_array)  # Shuffles data
 
+
 class dataManagement():
 
     def __init__(self): # Initialize the different arrays
+        self.training_data = np.zeros((864,20))
         self.training_inputs = np.zeros((864, 19))
         self.validation_data = np.zeros((115, 19))
         self.test_data = np.zeros((172, 19))
@@ -35,19 +37,25 @@ class dataManagement():
             self.validation_data[:, i] = (x2 - x_min) / (x_max - x_min)
             self.test_data[:, i] = (x3 - x_min) / (x_max - x_min)
 
+    def data_randomizing(self):
+
+        random.shuffle(self.training_data)
+        random.shuffle(self.validation_data)
+        random.shuffle(self.test_data)
 
     # Puts the different data in the arrays
     def segmentation(self):
 
 
-        self.training_inputs = data_array[0:864, 0:19]
-        self.training_outputs = data_array[0:864, 19:20]
+        self.training_data = data_array[0:864]
+        self.training_inputs = self.training_data[0:864, 0:19]
+        self.training_outputs = self.training_data[0:864, 19:20]
 
         # transfers validation set
-        self.validation_data = data_array[864:979, 0:19]
+        self.validation_data = data_array[864:979]
         self.validation_result = data_array[864:979, 19:20]
         # transfers test set
-        self.test_data = data_array[979:1151, 0:19]
+        self.test_data = data_array[979:1151]
         self.test_result = data_array[979:1151, 19:20]
         self.data_normalization()
         print("\nData has been managed\n")
