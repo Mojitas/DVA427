@@ -2,6 +2,7 @@ from lib_lab_2 import *
 
 
 # Math functions that returns how much it belongs to each classification
+
 def short(x):
     if x<0.6:
         return -5 * x / 3 + 1
