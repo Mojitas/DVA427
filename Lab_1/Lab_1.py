@@ -23,7 +23,8 @@ class NeuralNetwork():  # class for related functions
         self.train_acc=[]
         self.test_acc=[]
         self.val_acc=[]
-        self.epocs=[]
+        self.epoc_list=[]
+        self.epocs_to_run=500
         self.batch_size = 1
 
     # commit lots of math
@@ -43,9 +44,9 @@ class NeuralNetwork():  # class for related functions
     def forward(self, input_layer):  # Use when training
 
         input_layer = input_layer.astype(float)
-        self.l1 = self.sigmoid(np.dot(input_layer, self.w1))  # + self.bias1
-        self.l2 = self.sigmoid(np.dot(self.l1, self.w2))  # + self.bias2
-        return self.sigmoid(np.dot(self.l2, self.w3))  # + self.bias3
+        self.l1 = self.sigmoid(np.dot(input_layer, self.w1) )  #+ self.bias1
+        self.l2 = self.sigmoid(np.dot(self.l1, self.w2))  #+ self.bias2
+        return self.sigmoid(np.dot(self.l2, self.w3))  #+ self.bias3
 
     def backwards(self, input_layer, output_layer):
 
@@ -85,39 +86,29 @@ class NeuralNetwork():  # class for related functions
 
 if __name__ == '__main__':
 
-
     DM.segmentation()  # Imports and sorts data
     NN = NeuralNetwork()
 
-    iterations = (int)(864/NN.batch_size*1000)  # Stoppvillkor
+    iterations = (int)(864/NN.batch_size*NN.epocs_to_run)  # Stoppvillkor
     best_accuracy = np.zeros([3])  # Bästa bedömningen
     epoc = -1
 
     for i in range(iterations):
 
-        NN.backwards(DM.training_inputs[i * NN.batch_size % 864:(i * NN.batch_size + NN.batch_size) % 864],
-                     DM.training_outputs[i * NN.batch_size % 864:(i * NN.batch_size + NN.batch_size) % 864])
+        NN.backwards(DM.training_data[i * NN.batch_size % 864:(i * NN.batch_size + NN.batch_size) % 864,0:19],
+                     DM.training_data[i * NN.batch_size % 864:(i * NN.batch_size + NN.batch_size) % 864,19:20])
 
-        if (i % (864/NN.batch_size)) == 0:
+        if (i % (864/NN.batch_size)) == 0:  #once every epoc we plot the result
             epoc+=1
-            NN.epocs.append(epoc)
-            NN.train_acc.append(NN.compare(DM.training_inputs, DM.training_outputs, 0))
-            NN.val_acc.append(NN.compare(DM.validation_data, DM.validation_result, 0))
-            NN.test_acc.append(NN.compare(DM.test_data, DM.test_result, 0))
+            #DM.data_randomizing()
+            NN.epoc_list.append(epoc)
+            NN.train_acc.append(NN.compare(DM.training_data[:,0:19], DM.training_data[:,19:20], 0))
+            NN.val_acc.append(NN.compare(DM.validation_data[:,0:19], DM.validation_data[:,19:20], 0))
+            NN.test_acc.append(NN.compare(DM.test_data[:,0:19], DM.test_data[:,19:20], 0))
 
-            """
-        if best_accuracy[1] <  NN.val_acc[-1]:
-
-            best_accuracy[0] = NN.train_acc[-1]
-            best_accuracy[1] = NN.val_acc[-1]
-            best_accuracy[2] = NN.test_acc[-1]
-            print("\nNew best validation accuracy: {}\nNew best test accuracy: {}".format(best_accuracy[1],
-                                                                                  best_accuracy[2]))
-        """
-
-    plt.plot(NN.epocs,NN.train_acc)
-    plt.plot(NN.epocs,NN.val_acc)
-    plt.plot(NN.epocs,NN.test_acc)
+    plt.plot(NN.epoc_list, NN.train_acc)
+    plt.plot(NN.epoc_list, NN.val_acc)
+    plt.plot(NN.epoc_list, NN.test_acc)
     plt.legend(('Training','Valdiation','Testing'))
     plt.ylabel("Accuracy")
     plt.xlabel("Epocs")
