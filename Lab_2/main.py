@@ -40,14 +40,13 @@ if __name__ == '__main__':
     """ Classify all lines according to these paramaters and then check which it is most of.
     versicolor1: 
     (x1 == short or long) and (x2 == medium or long) and (x3 == medium or long) and (x4 == short)
-    
     versiolor2:
     (x1 == medium) and (x2 == short or medium) and (x3 == short) and (x4 == long)
-    
     setosa:
     (x3 == short or medium) and (x4 == short) 
-    
     virginica:
     (X2 == short or medium) and (x3 == long) (x4 == long)
     """
-    print(compute_flower(data_array[0]))
+    print(compute_flower(data_array[0])) ## changed lots of shit
+
+    print("Butt")
