@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f6bbb2ce-c9e1-4038-b5b8-b1ed71e39b36" name="Default Changelist" comment="" />
+    <list default="true" id="f6bbb2ce-c9e1-4038-b5b8-b1ed71e39b36" name="Default Changelist" comment="flower computing function.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,7 +157,7 @@
       <workItem from="1575536659026" duration="1472000" />
       <workItem from="1575541017782" duration="5000" />
       <workItem from="1575884269319" duration="5996000" />
-      <workItem from="1575896629054" duration="10418000" />
+      <workItem from="1575896629054" duration="11040000" />
     </task>
     <task id="LOCAL−00001" summary="Lab 2!">
       <created>1575539184768</created>
