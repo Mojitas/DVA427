@@ -111,13 +111,19 @@ def crossover(elite):
 
     np.random.shuffle(elite)
 
+    #print(elite[0, :])
+
     children = np.zeros((10, 54))
     children = children.astype(int)
 
-    for i in range(1):
+    for i in range(10):
         children[i] = cross(elite[i:i + 1, :], elite[19 - i:19 - i + 1, :])
 
+    #print(children[0])
+
+
     newpopulation = np.zeros((30, 54))
+    newpopulation = newpopulation.astype(int)
 
     newpopulation[0:20] = elite
     newpopulation[20:30] = children
@@ -132,21 +138,26 @@ def mutate(salesmen):
 
     for j in range(amount):
 
-        for i in range(7):   #Arbitrary amount of random mutations
+        for i in range(5):   #Arbitrary amount of random mutations
 
             random1 = rng.randint(0, 51)
             random2 = rng.randint(0, 51)
 
             temp = salesmen[j, random1]
             temp = temp.astype(int)
+
             salesmen[j, random1] = salesmen[j, random2]
-            salesmen[j, random2] = salesmen[j, temp]
+            salesmen[j, random2] = temp
+
+    salesmen[:, 52] = salesmen[:, 0]
 
     return salesmen
 
-if __name__ == '__main__':
 
-    iterations = 2
+
+def main():
+
+    iterations = 10000
 
     population = init()
 
@@ -154,11 +165,22 @@ if __name__ == '__main__':
 
         population = calculate(population)
 
-        if i % (1) == 0:
+        if i % 100 == 0:
             print("Longest path: ", max(population[:, 53]))
             print("Shortest path: ", min(population[:, 53]))
 
         elitepop = elitism(population)
-        print(population[:, 53])
+        population[:, :] = 0
+
         population = crossover(elitepop)
         population = mutate(population)
+
+        population[:, 53] = 0
+
+
+        #print(population[:, 53])
+
+
+if __name__ == '__main__':
+
+    main()
