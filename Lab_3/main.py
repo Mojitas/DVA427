@@ -116,13 +116,30 @@ def crossover(elite):
 
     return newpopulation
 
+def mutate(salesmen):
+
+    for j in range(amount):
+
+        for i in range(7):   #Arbitrary amount of random mutations
+
+            random1 = rng.randint(0, 52)
+            random2 = rng.randint(0, 52)
+
+            temp = salesmen[j, random1]
+            temp = temp.astype(int)
+            salesmen[j, random1] = salesmen[j, random2]
+            salesmen[j, random2] = salesmen[j, temp]
+
+    return salesmen
+
 if __name__ == '__main__':
 
     iterations = 1000
 
+    population = init()
+
     for i in range(iterations):
 
-        population = init()
         population = calculate(population)
 
         if i % (100) == 0:
@@ -131,3 +148,4 @@ if __name__ == '__main__':
 
         elitepop = elitism(population)
         population = crossover(elitepop)
+        population = mutate(population)
