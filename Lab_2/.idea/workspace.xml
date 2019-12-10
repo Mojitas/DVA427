@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f6bbb2ce-c9e1-4038-b5b8-b1ed71e39b36" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Lab_2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Lab_2.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dan.py" beforeDir="false" afterPath="$PROJECT_DIR$/Dan.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,10 +20,12 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="SIGN_OFF_COMMIT" value="true" />
   </component>
   <component name="ProjectId" id="1UYbpAY4mmhYHxKYAdCV2xWBNKV" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Lab_1/Lab_1.py" />
     <property name="node.js.detected.package.eslint" value="true" />
@@ -53,7 +48,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Dan">
+  <component name="RunManager" selected="Python.main">
     <configuration name="Dan" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Lab_2" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -61,7 +56,7 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="/usr/bin/python3.6" />
+      <option name="SDK_HOME" value="/usr/bin/python3.7" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -83,7 +78,7 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="/usr/bin/python3.6" />
+      <option name="SDK_HOME" value="/usr/bin/python3.7" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -105,7 +100,7 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="/usr/bin/python3.6" />
+      <option name="SDK_HOME" value="/usr/bin/python3.7" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -165,8 +160,8 @@
       <workItem from="1575536659026" duration="1472000" />
       <workItem from="1575541017782" duration="5000" />
       <workItem from="1575884269319" duration="5996000" />
-      <workItem from="1575896629054" duration="4614000" />
-      <workItem from="1575903054447" duration="1223000" />
+      <workItem from="1575896629054" duration="11040000" />
+      <workItem from="1575962806004" duration="7206000" />
     </task>
     <task id="LOCAL−00001" summary="Lab 2!">
       <created>1575539184768</created>
@@ -192,7 +187,49 @@
       <option name="presentableId" value="LOCAL−00004" />
       <updated>1575888242474</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL−00005" summary="Math functions!">
+      <created>1575902359731</created>
+      <option name="number" value="LOCAL−00005" />
+      <option name="presentableId" value="LOCAL−00005" />
+      <updated>1575902359731</updated>
+    </task>
+    <task id="LOCAL−00006" summary="description of the flowers">
+      <created>1575905022907</created>
+      <option name="number" value="LOCAL−00006" />
+      <option name="presentableId" value="LOCAL−00006" />
+      <updated>1575905022907</updated>
+    </task>
+    <task id="LOCAL−00007" summary="flower computing function.">
+      <created>1575907738096</created>
+      <option name="number" value="LOCAL−00007" />
+      <option name="presentableId" value="LOCAL−00007" />
+      <updated>1575907738096</updated>
+    </task>
+    <task id="LOCAL−00008" summary="flower computing function.">
+      <created>1575907925040</created>
+      <option name="number" value="LOCAL−00008" />
+      <option name="presentableId" value="LOCAL−00008" />
+      <updated>1575907925040</updated>
+    </task>
+    <task id="LOCAL−00009" summary="flower computing function.">
+      <created>1575963664899</created>
+      <option name="number" value="LOCAL−00009" />
+      <option name="presentableId" value="LOCAL−00009" />
+      <updated>1575963664899</updated>
+    </task>
+    <task id="LOCAL−00010" summary="Now it prints the right flower!">
+      <created>1575965341640</created>
+      <option name="number" value="LOCAL−00010" />
+      <option name="presentableId" value="LOCAL−00010" />
+      <updated>1575965341640</updated>
+    </task>
+    <task id="LOCAL−00011" summary="Sort of done I think">
+      <created>1575969048980</created>
+      <option name="number" value="LOCAL−00011" />
+      <option name="presentableId" value="LOCAL−00011" />
+      <updated>1575969048980</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -214,12 +251,16 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Lab 2!" />
     <MESSAGE value="Test update" />
-    <option name="LAST_COMMIT_MESSAGE" value="Test update" />
+    <MESSAGE value="Math functions!" />
+    <MESSAGE value="description of the flowers" />
+    <MESSAGE value="flower computing function." />
+    <MESSAGE value="Now it prints the right flower!" />
+    <MESSAGE value="Sort of done I think" />
+    <option name="LAST_COMMIT_MESSAGE" value="Sort of done I think" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Lab_2$main.coverage" NAME="main Coverage Results" MODIFIED="1575903434629" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Lab_2$Mathias.coverage" NAME="Mathias Coverage Results" MODIFIED="1575898276578" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Lab_2$lib_lab_2.coverage" NAME="lib_lab_2 Coverage Results" MODIFIED="1575899140884" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Lab_2$Dan.coverage" NAME="Dan Coverage Results" MODIFIED="1575903579933" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Lab_2$main.coverage" NAME="main Coverage Results" MODIFIED="1575968677469" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
