@@ -25,14 +25,14 @@ def long(x):
 
 def compute_flower(x):  # takes all four parameters of each flower
     x_temp = np.zeros((4, 1))
-    x_temp[0] = max(min(short(x[0]), long(x[0])), min(medium(x[1]), long(x[1])), min(medium(x[2]), long(x[2])),
+    x_temp[0] = min(max(short(x[0]), long(x[0])), max(medium(x[1]), long(x[1])), max(medium(x[2]), long(x[2])),
                     short(x[3]))    # rule 1
 
-    x_temp[1] = max(min(short(x[2]), medium(x[2])), short(x[3])) #rule 2
+    x_temp[1] = min(max(short(x[2]), medium(x[2])), short(x[3])) #rule 2
 
-    x_temp[2] = max(min(short(x[1]), medium(x[1])), long(x[2]), long(x[3])) #rule 3
+    x_temp[2] = min(max(short(x[1]), medium(x[1])), long(x[2]), long(x[3])) #rule 3
 
-    x_temp[3] = max(medium(x[0]), min(short(x[1]), medium(x[1])), short(x[2]), long(x[3])) # rule 4
+    x_temp[3] = min(medium(x[0]), max(short(x[1]), medium(x[1])), short(x[2]), long(x[3])) # rule 4
     return x_temp
 
 
