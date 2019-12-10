@@ -32,8 +32,6 @@ def calculate(salesmen):
 
     salesmen = salesmen.astype(int)
 
-    #print(salesmen[:, 53])
-
     for j in range(amount):
 
         for i in range(52):
@@ -67,8 +65,6 @@ def elitism(salesmen):
 
         elite[j] = salesmen[tempmini]
 
-        # print(elite)
-
         salesmen[tempmini, 53] = 100000
 
     return elite
@@ -76,17 +72,20 @@ def elitism(salesmen):
 
 def cross(parent1, parent2):
     child = np.zeros((1, 54))
+    child = child.astype(int)
 
     remaining = np.zeros((1, 54))
+    remaining = remaining.astype(int)
 
     for j in range(10):
+
 
         randomtemp = rng.randint(0, 49);
 
         for i in range(4):
             child[0, randomtemp + i] = parent1[0, randomtemp + i]
 
-        empty = 0
+    empty = 0
 
     for i in range(53):
 
@@ -96,7 +95,7 @@ def cross(parent1, parent2):
 
     j = 0
 
-    for i in range(53):
+    for i in range(52):
 
         if child[0, i] == 0:
 
@@ -109,17 +108,23 @@ def cross(parent1, parent2):
 
 
 def crossover(elite):
+
     np.random.shuffle(elite)
 
     children = np.zeros((10, 54))
+    children = children.astype(int)
 
-    for i in range(10):
+    for i in range(1):
         children[i] = cross(elite[i:i + 1, :], elite[19 - i:19 - i + 1, :])
 
     newpopulation = np.zeros((30, 54))
 
     newpopulation[0:20] = elite
     newpopulation[20:30] = children
+
+    newpopulation = newpopulation.astype(int)
+
+
 
     return newpopulation
 
@@ -141,7 +146,7 @@ def mutate(salesmen):
 
 if __name__ == '__main__':
 
-    iterations = 1000
+    iterations = 2
 
     population = init()
 
@@ -149,10 +154,11 @@ if __name__ == '__main__':
 
         population = calculate(population)
 
-        if i % (100) == 0:
+        if i % (1) == 0:
             print("Longest path: ", max(population[:, 53]))
             print("Shortest path: ", min(population[:, 53]))
 
         elitepop = elitism(population)
+        print(population[:, 53])
         population = crossover(elitepop)
         population = mutate(population)
