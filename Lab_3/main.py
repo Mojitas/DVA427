@@ -2,7 +2,7 @@ import numpy as np
 import random as rng
 import pandas as pd
 import math
-
+##
 amount = 30  # Something divisible by three
 
 data_array = np.array(pd.read_csv("berlin52.tsp", header=None))
