@@ -118,13 +118,16 @@ def crossover(elite):
 
 if __name__ == '__main__':
 
-    iterations = 100
+    iterations = 1000
 
     for i in range(iterations):
 
         population = init()
         population = calculate(population)
-        print("Longest path: ", max(population[:, 53]))
-        print("Shortest path: ", min(population[:, 53]))
+
+        if i % (100) == 0:
+            print("Longest path: ", max(population[:, 53]))
+            print("Shortest path: ", min(population[:, 53]))
+
         elitepop = elitism(population)
         population = crossover(elitepop)
