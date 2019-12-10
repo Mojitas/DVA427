@@ -28,14 +28,21 @@ def init():
 
 
 def calculate(salesmen):
+
+
+    salesmen = salesmen.astype(int)
+
+    #print(salesmen[:, 53])
+
     for j in range(amount):
 
         for i in range(52):
-            x1 = data_array[salesmen[j, i - 1] - 1, 1]
-            y1 = data_array[salesmen[j, i - 1] - 1, 2]
 
-            x2 = data_array[salesmen[j, i] - 1, 1]
-            y2 = data_array[salesmen[j, i] - 1, 2]
+            x1 = data_array[salesmen[j, i] - 1, 1]
+            y1 = data_array[salesmen[j, i] - 1, 2]
+
+            x2 = data_array[salesmen[j, i + 1] - 1, 1]
+            y2 = data_array[salesmen[j, i + 1] - 1, 2]
 
             distance = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
@@ -122,8 +129,8 @@ def mutate(salesmen):
 
         for i in range(7):   #Arbitrary amount of random mutations
 
-            random1 = rng.randint(0, 52)
-            random2 = rng.randint(0, 52)
+            random1 = rng.randint(0, 51)
+            random2 = rng.randint(0, 51)
 
             temp = salesmen[j, random1]
             temp = temp.astype(int)
