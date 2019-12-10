@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="f6bbb2ce-c9e1-4038-b5b8-b1ed71e39b36" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib_lab_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib_lab_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab_3/berlin52.tsp" beforeDir="false" afterPath="$PROJECT_DIR$/../Lab_3/berlin52.tsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Lab_3/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Lab_3/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,7 +29,7 @@
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Lab_1" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -163,7 +165,7 @@
       <workItem from="1575896629054" duration="11040000" />
       <workItem from="1575962806004" duration="7206000" />
       <workItem from="1575973584551" duration="673000" />
-      <workItem from="1575976784394" duration="319000" />
+      <workItem from="1575976784394" duration="2545000" />
     </task>
     <task id="LOCAL−00001" summary="Lab 2!">
       <created>1575539184768</created>
