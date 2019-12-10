@@ -22,6 +22,17 @@ def long(x):
     else:
         return 0
 
+""" Classify all lines according to these paramaters and then check which it is most of.
+versicolor1: 
+(x1 == short or long) and (x2 == medium or long) and (x3 == medium or long) and (x4 == short)
+versiolor2:
+(x1 == medium) and (x2 == short or medium) and (x3 == short) and (x4 == long)
+setosa:
+(x3 == short or medium) and (x4 == short) 
+virginica:
+(X2 == short or medium) and (x3 == long) (x4 == long)
+"""
+
 
 def compute_flower(x):  # takes all four parameters of one flower
     x_temp = np.zeros((4, 1))
@@ -36,44 +47,32 @@ def compute_flower(x):  # takes all four parameters of one flower
     return x_temp
 
 
-def classify(x): # classifies one flower
-    x_temp = compute_flower(x)
+def classify(x):  # classifies one flower
+    x_temp = compute_flower(x)  # computes stuff
     y_temp = max(x_temp)
-    if y_temp == x_temp[0] or y_temp == x_temp[3]: #Versicolor
+    if y_temp == x_temp[0] or y_temp == x_temp[3]:  # Versicolor
         return 2
 
-    elif y_temp == x_temp[1]:   #Setosa
+    elif y_temp == x_temp[1]:  # Setosa
         return 1
 
-    elif y_temp == x_temp[2]:   #virginica
+    elif y_temp == x_temp[2]:  # virginica
         return 3
 
-    else:      #error
+    else:  # error
         print("Butt happened!")
         return -1
 
 
-def compare(x): # Takes the whole data set and compares it to the output
+def compare(x):  # Takes the whole data set and compares it to the output
     accuracy = 0
     for i in range(x.shape[0]):
-        if classify(x[i,0:4]) == x[i,4]:
-            accuracy+=1
+        if classify(x[i, 0:4]) == x[i, 4]:
+            accuracy += 1
 
-    return accuracy/x.shape[0]
-
-
+    return accuracy / x.shape[0]
 
 
 if __name__ == '__main__':
-    """ Classify all lines according to these paramaters and then check which it is most of.
-    versicolor1: 
-    (x1 == short or long) and (x2 == medium or long) and (x3 == medium or long) and (x4 == short)
-    versiolor2:
-    (x1 == medium) and (x2 == short or medium) and (x3 == short) and (x4 == long)
-    setosa:
-    (x3 == short or medium) and (x4 == short) 
-    virginica:
-    (X2 == short or medium) and (x3 == long) (x4 == long)
-    """
     acc = compare(data_array)  ## changed lots of shit
     print("acc:", acc)

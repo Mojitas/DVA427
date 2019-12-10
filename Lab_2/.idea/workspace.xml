@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f6bbb2ce-c9e1-4038-b5b8-b1ed71e39b36" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mathias.py" beforeDir="false" afterPath="$PROJECT_DIR$/Mathias.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -26,6 +25,7 @@
   <component name="ProjectId" id="1UYbpAY4mmhYHxKYAdCV2xWBNKV" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Lab_1/Lab_1.py" />
     <property name="node.js.detected.package.eslint" value="true" />
@@ -161,7 +161,7 @@
       <workItem from="1575541017782" duration="5000" />
       <workItem from="1575884269319" duration="5996000" />
       <workItem from="1575896629054" duration="11040000" />
-      <workItem from="1575962806004" duration="5915000" />
+      <workItem from="1575962806004" duration="7206000" />
     </task>
     <task id="LOCAL−00001" summary="Lab 2!">
       <created>1575539184768</created>
@@ -223,7 +223,13 @@
       <option name="presentableId" value="LOCAL−00010" />
       <updated>1575965341640</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL−00011" summary="Sort of done I think">
+      <created>1575969048980</created>
+      <option name="number" value="LOCAL−00011" />
+      <option name="presentableId" value="LOCAL−00011" />
+      <updated>1575969048980</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -249,7 +255,8 @@
     <MESSAGE value="description of the flowers" />
     <MESSAGE value="flower computing function." />
     <MESSAGE value="Now it prints the right flower!" />
-    <option name="LAST_COMMIT_MESSAGE" value="Now it prints the right flower!" />
+    <MESSAGE value="Sort of done I think" />
+    <option name="LAST_COMMIT_MESSAGE" value="Sort of done I think" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Lab_2$Mathias.coverage" NAME="Mathias Coverage Results" MODIFIED="1575898276578" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
