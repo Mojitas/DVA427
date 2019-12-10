@@ -26,14 +26,34 @@ def long(x):
 def compute_flower(x):  # takes all four parameters of each flower
     x_temp = np.zeros((4, 1))
     x_temp[0] = min(max(short(x[0]), long(x[0])), max(medium(x[1]), long(x[1])), max(medium(x[2]), long(x[2])),
-                    short(x[3]))    # rule 1
+                    short(x[3]))  # rule 1 Versicolor 1
 
-    x_temp[1] = min(max(short(x[2]), medium(x[2])), short(x[3])) #rule 2
+    x_temp[1] = min(max(short(x[2]), medium(x[2])), short(x[3]))  # rule 2    Setosa
 
-    x_temp[2] = min(max(short(x[1]), medium(x[1])), long(x[2]), long(x[3])) #rule 3
+    x_temp[2] = min(max(short(x[1]), medium(x[1])), long(x[2]), long(x[3]))  # rule 3 Virginica
 
-    x_temp[3] = min(medium(x[0]), max(short(x[1]), medium(x[1])), short(x[2]), long(x[3])) # rule 4
+    x_temp[3] = min(medium(x[0]), max(short(x[1]), medium(x[1])), short(x[2]), long(x[3]))  # rule 4 Versicolor 2
     return x_temp
+
+
+def classify(x):
+    x_temp = compute_flower(x)
+    y_temp = max(x_temp)
+    if y_temp == x_temp[0] or y_temp == x_temp[3]:
+        print("Versicolor")
+
+    elif y_temp == x_temp[1]:
+        print("Setosa")
+
+    elif y_temp == x_temp[2]:
+        print("Virginica")
+
+    else:
+        print("Butt happened!")
+
+
+def compare():
+    print("Butt")
 
 
 if __name__ == '__main__':
@@ -47,6 +67,4 @@ if __name__ == '__main__':
     virginica:
     (X2 == short or medium) and (x3 == long) (x4 == long)
     """
-    print(compute_flower(data_array[0])) ## changed lots of shit
-
-    print("Butt")
+    classify(data_array[0])  ## changed lots of shit
