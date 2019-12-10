@@ -153,9 +153,7 @@ def mutate(salesmen):
 
     return salesmen
 
-
-
-def main():
+if __name__ == '__main__':
 
     iterations = 10000
 
@@ -176,11 +174,3 @@ def main():
         population = mutate(population)
 
         population[:, 53] = 0
-
-
-        #print(population[:, 53])
-
-
-if __name__ == '__main__':
-
-    main()
