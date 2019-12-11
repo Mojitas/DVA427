@@ -75,7 +75,7 @@ def cross(parent1, parent2):
     remaining = np.zeros((1, 54))  #
     remaining = remaining.astype(int)
 
-    randamount = rng.randint(10, 15)  # 15-20 gener
+    randamount = rng.randint(10, 15)  # 10-15 gener
     randompos = rng.randint(1, 52 - randamount)
 
     for i in range(randamount):
@@ -123,15 +123,13 @@ def mutate(salesmen):
 
         reverse = np.zeros((1, mutations))
 
-        random1 = rng.randint(1, 52 - mutations)  # Where the mutations happen
-
-        for i in range(mutations):      # loops for flipping the sequence
-            reverse[0, mutations - 1 - i] = salesmen[j, random1 + i]
+        randompos = rng.randint(1, 52 - mutations)
 
         for i in range(mutations):
-            salesmen[j, random1 + i] = reverse[0, i]
+            reverse[0, mutations - 1 - i] = salesmen[j, randompos + i]
 
-    salesmen[:, 52] = salesmen[:, 0] # start == finish
+        for i in range(mutations):
+            salesmen[j, randompos + i] = reverse[0, i]
 
     return salesmen
 
