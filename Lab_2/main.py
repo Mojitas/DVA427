@@ -60,7 +60,7 @@ def classify(x):  # classifies one flower
         return 3
 
     else:  # error
-        print("Butt happened!")
+        print("Something happened in classify!")
         return -1
 
 
@@ -74,5 +74,6 @@ def compare(x):  # Takes the whole data set and compares it to the output
 
 
 if __name__ == '__main__':
+
     acc = compare(data_array)  ## changed lots of shit
     print("acc:", acc)
