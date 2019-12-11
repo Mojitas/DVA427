@@ -66,14 +66,14 @@ def elitism(salesmen):
     return elite
 
 
-def cross(parent1, parent2):
+def cross(parent1, parent2):  # Make a new salesmen
     child = np.zeros((1, 54))
     child = child.astype(int)
 
     remaining = np.zeros((1, 54))
     remaining = remaining.astype(int)
 
-    for j in range(10):
+    for j in range(10):     # making of the new ones
 
         randomtemp = rng.randint(0, 49)
 
