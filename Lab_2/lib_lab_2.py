@@ -16,17 +16,11 @@ np.random.seed()
 
 class data_management():
 
-    #def __init__(self):
-
-    #def segmentation(self):
-
     def normalization(self):
         for i in range(4):
             xmax=max(data_array[:,i])
             xmin=min(data_array[:,i])
             data_array[:,i]=(data_array[:,i]-xmin)/(xmax-xmin)
-
-    #def randomizing(self):
 
 
 
