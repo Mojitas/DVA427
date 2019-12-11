@@ -139,9 +139,9 @@
     </configuration>
     <list>
       <item itemvalue="Python.Dan" />
+      <item itemvalue="Python.Mathias" />
       <item itemvalue="Python.lib_lab_2" />
       <item itemvalue="Python.main" />
-      <item itemvalue="Python.Mathias" />
     </list>
   </component>
   <component name="ServiceViewManager">
@@ -163,7 +163,7 @@
       <workItem from="1575896629054" duration="11040000" />
       <workItem from="1575962806004" duration="7206000" />
       <workItem from="1575973584551" duration="673000" />
-      <workItem from="1575976784394" duration="4630000" />
+      <workItem from="1575976784394" duration="4716000" />
     </task>
     <task id="LOCAL−00001" summary="Lab 2!">
       <created>1575539184768</created>

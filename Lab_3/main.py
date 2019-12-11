@@ -20,7 +20,7 @@ def init():  # starting conditions
     #salesmen = salesmen.astype(int)
 
     for i in range(amount):
-        rng.shuffle(salesmen[i, 0:52])  # shuffle order of the cities
+        rng.shuffle(salesmen[i, 1:52])  # shuffle order of the cities
 
     salesmen[:, 52] = salesmen[:, 0] # start is same as end
 
@@ -79,7 +79,7 @@ def cross(parent1, parent2):
         random1 = rng.randint(0, 49)
         randamount = rng.randint(1,10)
 
-        for i in range(randint):
+        for i in range(randamount):
             child[0, random1 + i] = parent1[0, random1 + i]
 
     empty = 0
@@ -106,11 +106,13 @@ def cross2(parent1, parent2):
     child = np.zeros((1, 54))
     child = child.astype(int)
 
+    child[0, 0] = 1
+
     remaining = np.zeros((1, 54))
     remaining = remaining.astype(int)
 
-    randamount = rng.randint(10, 25)
-    random1 = rng.randint(0, 52 - randamount)
+    randamount = rng.randint(15, 20)
+    random1 = rng.randint(1, 52 - randamount)
 
     for i in range(randamount):
         child[0, random1 + i] = parent1[0, random1 + i]
@@ -191,11 +193,11 @@ def mutate2(salesmen):
 
     for j in range(amount):
 
-        mutations = rng.randint(1, 9)
+        mutations = rng.randint(1, 8)
 
         reverse = np.zeros((1, mutations))
 
-        random1 = rng.randint(0, 52 - mutations)
+        random1 = rng.randint(1, 52 - mutations)
 
         for i in range(mutations):
 
