@@ -102,7 +102,7 @@ def cross(parent1, parent2):
     return child
 
 
-def crossover(elite):
+def crossover(elite):       # sends parents to cross2
     np.random.shuffle(elite)
 
     children = np.zeros((amount, 54))
