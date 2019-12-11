@@ -75,7 +75,7 @@ def cross(parent1, parent2):
     remaining = np.zeros((1, 54))  #
     remaining = remaining.astype(int)
 
-    randamount = rng.randint(10, 15)  # 15-20 gener
+    randamount = rng.randint(10, 15)  # 10-15 gener
     randompos = rng.randint(1, 52 - randamount)
 
     for i in range(randamount):  # Get
