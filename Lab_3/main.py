@@ -67,42 +67,6 @@ def elitism(salesmen):
 
 
 def cross(parent1, parent2):
-    child = np.zeros((1, 54))
-    child = child.astype(int)
-
-    remaining = np.zeros((1, 54))
-    remaining = remaining.astype(int)
-
-    for j in range(10):  # Repeats ten times
-
-        random1 = rng.randint(0, 49)
-        randamount = rng.randint(1, 10)
-
-        for i in range(randamount):
-            child[0, random1 + i] = parent1[0, random1 + i]
-
-    empty = 0
-
-    for i in range(53):
-
-        if parent2[0, i] not in child:
-            remaining[0, empty] = parent2[0, i]
-            empty += 1
-
-    j = 0
-
-    for i in range(52):
-
-        if child[0, i] == 0:
-            child[0, i] = remaining[0, j]
-            j += 1;
-
-    child[0, 52] = child[0, 0]
-
-    return child
-
-
-def cross2(parent1, parent2):
     child = np.zeros((1, 54))  # new salesmen
     child = child.astype(int)
 
@@ -111,11 +75,11 @@ def cross2(parent1, parent2):
     remaining = np.zeros((1, 54))  #
     remaining = remaining.astype(int)
 
-    randamount = rng.randint(10, 15)        # 15-20 gener
-    random1 = rng.randint(1, 52 - randamount)
+    randamount = rng.randint(10, 15)  # 15-20 gener
+    randompos = rng.randint(1, 52 - randamount)
 
-    for i in range(randamount):     # Get
-        child[0, random1 + i] = parent1[0, random1 + i]     # Get genes from parent
+    for i in range(randamount):  # Get
+        child[0, randompos + i] = parent1[0, randompos + i]  # Get genes from parent
 
     empty = 0
 
@@ -131,7 +95,7 @@ def cross2(parent1, parent2):
 
         if child[0, i] == 0:
             child[0, i] = remaining[0, j]
-            j += 1;
+            j += 1
 
     child[0, 52] = child[0, 0]
 
@@ -144,51 +108,15 @@ def crossover(elite):
     children = np.zeros((amount, 54))
     children = children.astype(int)
 
-    for i in range(25):
-        children[i] = cross2(elite[i:i + 1, :], elite[49 - i:49 - i + 1, :])
+    for j in range(4):
+        np.random.shuffle(elite)
+        for i in range(25):
+            children[25 * j + i] = cross(elite[i:i + 1, :], elite[49 - i:49 - i + 1, :])
 
-    np.random.shuffle(elite)
-
-    for i in range(25):
-        children[25 + i] = cross2(elite[i:i + 1, :], elite[49 - i:49 - i + 1, :])
-
-    for i in range(25):
-        children[50 + i] = cross2(elite[i:i + 1, :], elite[49 - i:49 - i + 1, :])
-
-    np.random.shuffle(elite)
-
-    for i in range(25):
-        children[75 + i] = cross2(elite[i:i + 1, :], elite[49 - i:49 - i + 1, :])
-
-    newpopulation = np.zeros((100, 54))
-
-    newpopulation = children
-
-    newpopulation = newpopulation.astype(int)
-
-    return newpopulation
+    return children
 
 
 def mutate(salesmen):
-    for j in range(amount):
-
-        for i in range(15):  # Arbitrary amount of random mutations
-
-            random1 = rng.randint(0, 51)
-            random2 = rng.randint(0, 51)
-
-            temp = salesmen[j, random1]
-            temp = temp.astype(int)
-
-            salesmen[j, random1] = salesmen[j, random2]
-            salesmen[j, random2] = temp
-
-    salesmen[:, 52] = salesmen[:, 0]
-
-    return salesmen
-
-
-def mutate2(salesmen):
     for j in range(amount):
 
         mutations = rng.randint(1, 7)
@@ -246,8 +174,7 @@ if __name__ == '__main__':
         population[:, :] = 0
 
         population = crossover(elitepop)
-        population = mutate2(population)
-        # population = mutate(population)
+        population = mutate(population)
 
         population[:, 53] = 0
 
