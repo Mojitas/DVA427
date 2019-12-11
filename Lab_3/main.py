@@ -123,9 +123,9 @@ def mutate(salesmen):
 
         reverse = np.zeros((1, mutations))
 
-        randompos = rng.randint(1, 52 - mutations)
+        randompos = rng.randint(1, 52 - mutations)      # where mutations happens
 
-        for i in range(mutations):
+        for i in range(mutations):      # Flips the mutation sequence
             reverse[0, mutations - 1 - i] = salesmen[j, randompos + i]
 
         for i in range(mutations):
