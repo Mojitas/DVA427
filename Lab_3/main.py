@@ -61,7 +61,7 @@ def elitism(salesmen):
 
         elite[j] = salesmen[tempmini]   # Then transfer to the elites
 
-        salesmen[tempmini, 53] = 100000     # Set to big value to solve some other problem I guess
+        salesmen[tempmini, 53] = 100000     # Set to big value to not find the same path again
 
 
 
@@ -109,7 +109,7 @@ def cross2(parent1, parent2):
     remaining = np.zeros((1, 54))
     remaining = remaining.astype(int)
 
-    randamount = rng.randint(5, 25)
+    randamount = rng.randint(10, 25)
     random1 = rng.randint(0, 52 - randamount)
 
     for i in range(randamount):
@@ -191,7 +191,7 @@ def mutate2(salesmen):
 
     for j in range(amount):
 
-        mutations = rng.randint(1, 8)
+        mutations = rng.randint(1, 9)
 
         reverse = np.zeros((1, mutations))
 
