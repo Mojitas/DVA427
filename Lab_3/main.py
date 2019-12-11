@@ -63,6 +63,21 @@ def elitism(salesmen):
 
     return elite
 
+def unelitism(salesmen):
+
+    unelite = np.zeros((50, 54))
+    unelite = unelite.astype(int)
+    counter = 0
+
+    for i in range(100):
+
+        if salesmen[i, 53] != 100000:
+
+            unelite[counter] = salesmen[i]
+            counter += 1
+
+    return unelite
+
 
 def cross(parent1, parent2):        # makes new salesmen
     child = np.zeros((1, 54))
@@ -73,8 +88,8 @@ def cross(parent1, parent2):        # makes new salesmen
     remaining = np.zeros((1, 54))  #
     remaining = remaining.astype(int)
 
-    randamount = rng.randint(10, 20)        # 10-15 genes
-    randompos = rng.randint(1, 52 - randamount)             # where the genes go
+    randamount = rng.randint(5, 10)  # 10-15 genes
+    randompos = rng.randint(1, 52 - randamount)
 
     for i in range(randamount):
         child[0, randompos + i] = parent1[0, randompos + i]  # Get genes from parent 1
@@ -100,15 +115,26 @@ def cross(parent1, parent2):        # makes new salesmen
     return child
 
 
-def crossover(elite):       # sends parents to cross to breed new children
+def crossover(elite, unelite):       # sends parents to cross2
     np.random.shuffle(elite)
+    np.random.shuffle(unelite)
+
     children = np.zeros((amount, 54))
     children = children.astype(int)
 
-    for j in range(4):      # 4 batches of 25 new salesmen since 50/2 = 25
-        np.random.shuffle(elite)
-        for i in range(25):
-            children[25 * j + i] = cross(elite[i:i + 1, :], elite[49 - i:49 - i + 1, :])
+    for i in range(amount):
+        prob = rng.randint(1, 10)
+        parent1 = rng.randint(1, 49)
+        parent2 = rng.randint(1, 49)
+
+        if prob < 8:
+            children[i] = cross(elite[parent1:parent1+1], elite[parent2:parent2+1])
+
+        elif prob == 8 or prob == 9:
+            children[i] = cross(unelite[parent1:parent1+1], elite[parent1:parent1+1])
+
+        elif prob == 10:
+            children[i] = cross(unelite[parent1:parent1+1], unelite[parent1:parent1+1])
 
     return children
 
@@ -148,10 +174,10 @@ if __name__ == '__main__':
 
         average2 += average
 
-        if R % 50 == 0:  # print every 50
+        if R % 25 == 0:  # print every 100
 
             if R != 0:
-                average2 = average2 / 50
+                average2 = average2 / 25
 
             print("Average path: ", average2)
 
@@ -160,16 +186,19 @@ if __name__ == '__main__':
             # print("Longest path: ", max(population[:, 53]))
             # print("Shortest path: ", min(population[:, 53]))
 
-        if R % 200 == 0:        # Print shortest path every 200 generation
+        if R % 100 == 0:
             print("Shortest found path: ", lowest)
 
         elitepop = elitism(population)
+        unelitepop = unelitism(population)
         population[:, :] = 0
 
-        population = crossover(elitepop)
+        population = crossover(elitepop, unelitepop)
         population = mutate(population)
 
         population[:, 53] = 0   # resets everyones path
+
+
 
     print("Shortest found path: ", lowest)
 
