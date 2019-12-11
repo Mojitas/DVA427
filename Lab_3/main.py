@@ -44,11 +44,11 @@ def calculate(salesmen):  # distance between two places
     return salesmen
 
 
-def elitism(salesmen):
-    elite = np.zeros((50, 54))  # Variable for choosing choosing who gets to live
+def ultraelitism(salesmen):
+    elite = np.zeros((5, 54))  # Variable for choosing choosing who gets to live
     elite = elite.astype(int)
 
-    for j in range(50):  # number of best ones to save
+    for j in range(5):  # number of best ones to save
 
         tempmin = min(salesmen[:, 53])  # check for shortest path
 
@@ -62,6 +62,27 @@ def elitism(salesmen):
         salesmen[tempmini, 53] = 100000  # Set to big value to not find the same path again
 
     return elite
+
+
+def elitism(salesmen):
+    elite = np.zeros((45, 54))  # Variable for choosing choosing who gets to live
+    elite = elite.astype(int)
+
+    for j in range(45):  # number of best ones to save
+
+        tempmin = min(salesmen[:, 53])  # check for shortest path
+
+        for i in range(amount):  # Check through all the salesmen
+
+            if tempmin == salesmen[i, 53]:  # If we got a match for good result
+                tempmini = i
+
+        elite[j] = salesmen[tempmini]  # Then transfer to the elites
+
+        salesmen[tempmini, 53] = 100000  # Set to big value to not find the same path again
+
+    return elite
+
 
 def unelitism(salesmen):
 
@@ -88,11 +109,10 @@ def cross(parent1, parent2):        # makes new salesmen
     remaining = np.zeros((1, 54))  #
     remaining = remaining.astype(int)
 
-    randamount = rng.randint(5, 10)  # 10-15 genes
+    randamount = rng.randint(10, 15)  # 10-15 genes
     randompos = rng.randint(1, 52 - randamount)
 
-    for i in range(randamount):
-        child[0, randompos + i] = parent1[0, randompos + i]  # Get genes from parent 1
+    child[0, randompos:randompos + randamount] = parent1[0, randompos:randompos + randamount]  # Get genes from parent
 
     empty = 0
 
@@ -115,44 +135,47 @@ def cross(parent1, parent2):        # makes new salesmen
     return child
 
 
-def crossover(elite, unelite):       # sends parents to cross2
+def crossover(ultraelite, elite, unelite):  # sends parents to cross2
     np.random.shuffle(elite)
     np.random.shuffle(unelite)
 
-    children = np.zeros((amount, 54))
+    children = np.zeros((95, 54))
     children = children.astype(int)
 
-    for i in range(amount):
+    for i in range(95):
         prob = rng.randint(1, 10)
-        parent1 = rng.randint(1, 49)
-        parent2 = rng.randint(1, 49)
+        parent1 = rng.randint(1, 44)
+        parent2 = rng.randint(1, 44)
 
         if prob < 8:
-            children[i] = cross(elite[parent1:parent1+1], elite[parent2:parent2+1])
+            children[i] = cross(elite[parent1:parent1 + 1], elite[parent2:parent2 + 1])
 
         elif prob == 8 or prob == 9:
-            children[i] = cross(unelite[parent1:parent1+1], elite[parent1:parent1+1])
+            children[i] = cross(unelite[parent1:parent1 + 1], elite[parent2:parent2 + 1])
 
         elif prob == 10:
-            children[i] = cross(unelite[parent1:parent1+1], unelite[parent1:parent1+1])
+            children[i] = cross(unelite[parent1:parent1 + 1], unelite[parent2:parent2 + 1])
 
-    return children
+    newpopulation = np.zeros((100, 54))
+    newpopulation = newpopulation.astype(int)
+
+    newpopulation[0:95] = children
+    newpopulation[95:100] = ultraelite
+
+    return newpopulation
 
 
 def mutate(salesmen):
     for j in range(amount):
+        mutations = rng.randint(1, 7)
 
-        mutations = rng.randint(1, 8)  # Selects how large mutations happen
+        randompos = rng.randint(1, 52 - mutations)
 
-        reverse = np.zeros((1, mutations))
+        reverse = salesmen[j, randompos:randompos + mutations]
 
-        randompos = rng.randint(1, 52 - mutations)      # where mutations happens
+        reverse = np.fliplr([reverse])[0]
 
-        for i in range(mutations):      # Flips the mutation sequence
-            reverse[0, mutations - 1 - i] = salesmen[j, randompos + i]
-
-        for i in range(mutations):
-            salesmen[j, randompos + i] = reverse[0, i]
+        salesmen[j, randompos:randompos + mutations] = reverse
 
     return salesmen
 
@@ -189,11 +212,12 @@ if __name__ == '__main__':
         if R % 100 == 0:
             print("Shortest found path: ", lowest)
 
+        ultraelitepop = ultraelitism(population)
         elitepop = elitism(population)
         unelitepop = unelitism(population)
         population[:, :] = 0
 
-        population = crossover(elitepop, unelitepop)
+        population = crossover(ultraelitepop, elitepop, unelitepop)
         population = mutate(population)
 
         population[:, 53] = 0   # resets everyones path
