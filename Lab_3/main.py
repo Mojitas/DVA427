@@ -108,18 +108,18 @@ def cross2(parent1, parent2):
 
     child[0, 0] = 1  # starting city
 
-    remaining = np.zeros((1, 54))  #
+    remaining = np.zeros((1, 54))  # rest of the genes
     remaining = remaining.astype(int)
 
-    randamount = rng.randint(10, 15)        # 15-20 gener
-    random1 = rng.randint(1, 52 - randamount)
+    randamount = rng.randint(10, 15)        # 10-15 gener
+    random1 = rng.randint(1, 52 - randamount)  # Where the mutation is
 
-    for i in range(randamount):     # Get
+    for i in range(randamount):     #
         child[0, random1 + i] = parent1[0, random1 + i]     # Get genes from parent
 
     empty = 0
 
-    for i in range(53):
+    for i in range(53):     #Picks out remaining genes
 
         if parent2[0, i] not in child:
             remaining[0, empty] = parent2[0, i]
@@ -127,7 +127,7 @@ def cross2(parent1, parent2):
 
     j = 0
 
-    for i in range(52):
+    for i in range(52):  #  fills up empty spaces with genes from parent 2
 
         if child[0, i] == 0:
             child[0, i] = remaining[0, j]
