@@ -4,7 +4,7 @@ import pandas as pd
 import math
 
 ##
-amount = 30  # Thirty salesmen in each generation
+amount = 100  # Thirty salesmen in each generation
 
 data_array = np.array(pd.read_csv("berlin52.tsp", header=None))
 data_array = data_array.astype(int)
@@ -20,7 +20,7 @@ def init():  # starting conditions
     #salesmen = salesmen.astype(int)
 
     for i in range(amount):
-        rng.shuffle(salesmen[i, 0:52])  # shuffle order of the cities
+        rng.shuffle(salesmen[i, 1:52])  # shuffle order of the cities
 
     salesmen[:, 52] = salesmen[:, 0] # start is same as end
 
@@ -30,9 +30,9 @@ def init():  # starting conditions
 def calculate(salesmen):  # distance between two places
     salesmen = salesmen.astype(int)
 
-    for j in range(amount):
+    for j in range(amount): # for all salesmen
 
-        for i in range(52):  # for all salesmen
+        for i in range(52):
             x1 = data_array[salesmen[j, i] - 1, 1]
             y1 = data_array[salesmen[j, i] - 1, 2]  # pick coordinates of a city from data_array
 
@@ -47,10 +47,10 @@ def calculate(salesmen):  # distance between two places
 
 
 def elitism(salesmen):
-    elite = np.zeros((20, 54))   # Variable for choosing choosing who gets to live
+    elite = np.zeros((50, 54))   # Variable for choosing choosing who gets to live
     elite = elite.astype(int)
 
-    for j in range(20):  # number of best ones to save
+    for j in range(50):  # number of best ones to save
 
         tempmin = min(salesmen[:, 53])  # check for shortest path
 
@@ -61,24 +61,61 @@ def elitism(salesmen):
 
         elite[j] = salesmen[tempmini]   # Then transfer to the elites
 
-        salesmen[tempmini, 53] = 100000     # Set to big value to solve some other problem I guess
+        salesmen[tempmini, 53] = 100000     # Set to big value to not find the same path again
+
+
 
     return elite
 
-
-def cross(parent1, parent2):  # Make a new salesmen
+def cross(parent1, parent2):
     child = np.zeros((1, 54))
     child = child.astype(int)
 
     remaining = np.zeros((1, 54))
     remaining = remaining.astype(int)
 
-    for j in range(10):     # making of the new ones
+    for j in range(10):     #Repeats ten times
 
-        randomtemp = rng.randint(0, 49)
+        random1 = rng.randint(0, 49)
+        randamount = rng.randint(1,10)
 
-        for i in range(4):
-            child[0, randomtemp + i] = parent1[0, randomtemp + i]
+        for i in range(randamount):
+            child[0, random1 + i] = parent1[0, random1 + i]
+
+    empty = 0
+
+    for i in range(53):
+
+        if parent2[0, i] not in child:
+            remaining[0, empty] = parent2[0, i]
+            empty += 1
+
+    j = 0
+
+    for i in range(52):
+
+        if child[0, i] == 0:
+            child[0, i] = remaining[0, j]
+            j += 1;
+
+    child[0, 52] = child[0, 0]
+
+    return child
+
+def cross2(parent1, parent2):
+    child = np.zeros((1, 54))
+    child = child.astype(int)
+
+    child[0, 0] = 1
+
+    remaining = np.zeros((1, 54))
+    remaining = remaining.astype(int)
+
+    randamount = rng.randint(15, 20)
+    random1 = rng.randint(1, 52 - randamount)
+
+    for i in range(randamount):
+        child[0, random1 + i] = parent1[0, random1 + i]
 
     empty = 0
 
@@ -102,23 +139,32 @@ def cross(parent1, parent2):  # Make a new salesmen
 
 
 def crossover(elite):
+
+
     np.random.shuffle(elite)
 
-    # print(elite[0, :])
-
-    children = np.zeros((10, 54))
+    children = np.zeros((amount, 54))
     children = children.astype(int)
 
-    for i in range(10):
-        children[i] = cross(elite[i:i + 1, :], elite[19 - i:19 - i + 1, :])
+    for i in range(25):
+        children[i] = cross2(elite[i:i + 1, :], elite[49 - i:49 - i + 1, :])
 
-    # print(children[0])
+    np.random.shuffle(elite)
 
-    newpopulation = np.zeros((30, 54))
-    newpopulation = newpopulation.astype(int)
+    for i in range(25):
+        children[25 + i] = cross2(elite[i:i + 1, :], elite[49 - i:49 - i + 1, :])
 
-    newpopulation[0:20] = elite
-    newpopulation[20:30] = children
+    for i in range(25):
+        children[50 + i] = cross2(elite[i:i + 1, :], elite[49 - i:49 - i + 1, :])
+
+    np.random.shuffle(elite)
+
+    for i in range(25):
+        children[75 + i] = cross2(elite[i:i + 1, :], elite[49 - i:49 - i + 1, :])
+
+    newpopulation = np.zeros((100, 54))
+
+    newpopulation = children
 
     newpopulation = newpopulation.astype(int)
 
@@ -128,7 +174,7 @@ def crossover(elite):
 def mutate(salesmen):
     for j in range(amount):
 
-        for i in range(5):  # Arbitrary amount of random mutations
+        for i in range(15):  # Arbitrary amount of random mutations
 
             random1 = rng.randint(0, 51)
             random2 = rng.randint(0, 51)
@@ -143,6 +189,28 @@ def mutate(salesmen):
 
     return salesmen
 
+def mutate2(salesmen):
+
+    for j in range(amount):
+
+        mutations = rng.randint(1, 8)
+
+        reverse = np.zeros((1, mutations))
+
+        random1 = rng.randint(1, 52 - mutations)
+
+        for i in range(mutations):
+
+            reverse[0, mutations - 1 - i] = salesmen[j, random1 + i]
+
+        for i in range(mutations):
+
+            salesmen[j, random1 + i] = reverse[0, i]
+
+    salesmen[:, 52] = salesmen[:, 0]
+
+    return salesmen
+
 
 if __name__ == '__main__':
 
@@ -150,18 +218,42 @@ if __name__ == '__main__':
 
     population = init()
 
-    for i in range(iterations):
+    lowest = 30000
+    average2 = 0
+
+    for R in range(iterations):
 
         population = calculate(population)
 
-        if i % 100 == 0:        # print every
-            print("Longest path: ", max(population[:, 53]))
-            print("Shortest path: ", min(population[:, 53]))
+        lowest = min(lowest, min(population[:, 53]))
+
+        average = sum(population[:, 53]) / 100
+
+        average2 += average
+
+        if R % 50 == 0:        # print every 100
+
+            if R != 0:
+                average2 = average2 / 50
+
+            print("Average path: ", average2)
+
+            average2 = 0
+
+            #print("Longest path: ", max(population[:, 53]))
+            #print("Shortest path: ", min(population[:, 53]))
+
+        if R % 200 == 0:
+
+            print("Shortest found path: ", lowest)
 
         elitepop = elitism(population)
         population[:, :] = 0
 
         population = crossover(elitepop)
-        population = mutate(population)
+        population = mutate2(population)
+        #population = mutate(population)
 
         population[:, 53] = 0
+
+    print("Shortest found path: ", lowest)
