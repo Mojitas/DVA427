@@ -7,6 +7,7 @@ import math
 amount = 100  # salesmen in each generation
 
 data_array = np.array(pd.read_csv("berlin52.tsp", header=None))
+np.set_printoptions(threshold=np.inf)
 data_array = data_array.astype(int)
 
 
@@ -15,9 +16,6 @@ def init():  # starting conditions
 
     for i in range(52):
         salesmen[:, i] = i + 1  # set cities in order for all the salesmen
-
-    # salesmen[:, 52] = 1     # actually redundant but left until further inspection
-    # salesmen = salesmen.astype(int)
 
     for i in range(amount):
         rng.shuffle(salesmen[i, 1:52])  # shuffle order of the cities
@@ -66,24 +64,24 @@ def elitism(salesmen):
     return elite
 
 
-def cross(parent1, parent2):
-    child = np.zeros((1, 54))  # new salesmen
+def cross(parent1, parent2):        # makes new salesmen
+    child = np.zeros((1, 54))
     child = child.astype(int)
 
-    child[0, 0] = 1  # starting city
+    child[0, 0] = 1         # starting city
 
     remaining = np.zeros((1, 54))  #
     remaining = remaining.astype(int)
 
-    randamount = rng.randint(10, 15)  # 10-15 gener
-    randompos = rng.randint(1, 52 - randamount)
+    randamount = rng.randint(10, 20)        # 10-15 genes
+    randompos = rng.randint(1, 52 - randamount)             # where the genes go
 
     for i in range(randamount):
         child[0, randompos + i] = parent1[0, randompos + i]  # Get genes from parent 1
 
     empty = 0
 
-    for i in range(53):         #Get remaining places
+    for i in range(53):         # Get remaining places
 
         if parent2[0, i] not in child:
             remaining[0, empty] = parent2[0, i]
@@ -102,13 +100,12 @@ def cross(parent1, parent2):
     return child
 
 
-def crossover(elite):       # sends parents to cross
+def crossover(elite):       # sends parents to cross to breed new children
     np.random.shuffle(elite)
-
     children = np.zeros((amount, 54))
     children = children.astype(int)
 
-    for j in range(4): # 4 batches of 25 new salesmen since 50/2 = 25
+    for j in range(4):      # 4 batches of 25 new salesmen since 50/2 = 25
         np.random.shuffle(elite)
         for i in range(25):
             children[25 * j + i] = cross(elite[i:i + 1, :], elite[49 - i:49 - i + 1, :])
@@ -119,7 +116,7 @@ def crossover(elite):       # sends parents to cross
 def mutate(salesmen):
     for j in range(amount):
 
-        mutations = rng.randint(1, 7)  # Selects how large mutations happen
+        mutations = rng.randint(1, 8)  # Selects how large mutations happen
 
         reverse = np.zeros((1, mutations))
 
@@ -136,8 +133,8 @@ def mutate(salesmen):
 
 if __name__ == '__main__':
 
-    iterations = 10000  # generations
-    population = init()  # sets the first generation
+    iterations = 2000  # number of generations
+    population = init()  # sets the first generation going
     lowest = 30000
     average2 = 0
 
@@ -151,7 +148,7 @@ if __name__ == '__main__':
 
         average2 += average
 
-        if R % 50 == 0:  # print every 100
+        if R % 50 == 0:  # print every 50
 
             if R != 0:
                 average2 = average2 / 50
@@ -163,7 +160,7 @@ if __name__ == '__main__':
             # print("Longest path: ", max(population[:, 53]))
             # print("Shortest path: ", min(population[:, 53]))
 
-        if R % 200 == 0:
+        if R % 200 == 0:        # Print shortest path every 200 generation
             print("Shortest found path: ", lowest)
 
         elitepop = elitism(population)
@@ -175,3 +172,6 @@ if __name__ == '__main__':
         population[:, 53] = 0   # resets everyones path
 
     print("Shortest found path: ", lowest)
+
+print(population[0:20])
+
