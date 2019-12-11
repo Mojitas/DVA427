@@ -138,19 +138,19 @@ def cross2(parent1, parent2):
     return child
 
 
-def crossover(elite):
+def crossover(elite):       # sends parents to cross2
     np.random.shuffle(elite)
 
     children = np.zeros((amount, 54))
     children = children.astype(int)
 
-    for i in range(25):
+    for i in range(25):     # we only get 25 children from our 50 parents and we need 100 new salesmen
         children[i] = cross2(elite[i:i + 1, :], elite[49 - i:49 - i + 1, :])
 
     np.random.shuffle(elite)
 
     for i in range(25):
-        children[25 + i] = cross2(elite[i:i + 1, :], elite[49 - i:49 - i + 1, :])
+        children[25 + i] = cross2(elite[i:i + 1, :], elite[49 - i:49 - i + 1, :]) # Takes children two by two
 
     for i in range(25):
         children[50 + i] = cross2(elite[i:i + 1, :], elite[49 - i:49 - i + 1, :])
@@ -188,7 +188,7 @@ def mutate(salesmen):
     return salesmen
 
 
-def mutate2(salesmen):
+def mutate2(salesmen):      # currently in use
     for j in range(amount):
 
         mutations = rng.randint(1, 7)
