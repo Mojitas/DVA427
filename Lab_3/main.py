@@ -78,12 +78,12 @@ def cross(parent1, parent2):
     randamount = rng.randint(10, 15)  # 15-20 gener
     randompos = rng.randint(1, 52 - randamount)
 
-    for i in range(randamount):  # Get
-        child[0, randompos + i] = parent1[0, randompos + i]  # Get genes from parent
+    for i in range(randamount):
+        child[0, randompos + i] = parent1[0, randompos + i]  # Get genes from parent 1
 
     empty = 0
 
-    for i in range(53):
+    for i in range(53):         #Get remaining places
 
         if parent2[0, i] not in child:
             remaining[0, empty] = parent2[0, i]
@@ -91,7 +91,7 @@ def cross(parent1, parent2):
 
     j = 0
 
-    for i in range(52):
+    for i in range(52):     # fill remaining places with genes from parent 2
 
         if child[0, i] == 0:
             child[0, i] = remaining[0, j]
@@ -102,13 +102,13 @@ def cross(parent1, parent2):
     return child
 
 
-def crossover(elite):       # sends parents to cross2
+def crossover(elite):       # sends parents to cross
     np.random.shuffle(elite)
 
     children = np.zeros((amount, 54))
     children = children.astype(int)
 
-    for j in range(4):
+    for j in range(4): # 4 batches of 25 new salesmen since 50/2 = 25
         np.random.shuffle(elite)
         for i in range(25):
             children[25 * j + i] = cross(elite[i:i + 1, :], elite[49 - i:49 - i + 1, :])
@@ -119,19 +119,19 @@ def crossover(elite):       # sends parents to cross2
 def mutate(salesmen):
     for j in range(amount):
 
-        mutations = rng.randint(1, 7)
+        mutations = rng.randint(1, 7)  # Selects how large mutations happen
 
         reverse = np.zeros((1, mutations))
 
-        random1 = rng.randint(1, 52 - mutations)
+        random1 = rng.randint(1, 52 - mutations)  # Where the mutations happen
 
-        for i in range(mutations):
+        for i in range(mutations):      # loops for flipping the sequence
             reverse[0, mutations - 1 - i] = salesmen[j, random1 + i]
 
         for i in range(mutations):
             salesmen[j, random1 + i] = reverse[0, i]
 
-    salesmen[:, 52] = salesmen[:, 0]
+    salesmen[:, 52] = salesmen[:, 0] # start == finish
 
     return salesmen
 
@@ -139,9 +139,7 @@ def mutate(salesmen):
 if __name__ == '__main__':
 
     iterations = 10000  # generations
-
-    population = init()
-
+    population = init()  # sets the first generation
     lowest = 30000
     average2 = 0
 
@@ -176,6 +174,6 @@ if __name__ == '__main__':
         population = crossover(elitepop)
         population = mutate(population)
 
-        population[:, 53] = 0
+        population[:, 53] = 0   # resets everyones path
 
     print("Shortest found path: ", lowest)
