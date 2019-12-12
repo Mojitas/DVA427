@@ -4,7 +4,6 @@ import pandas as pd
 import math
 import matplotlib.pyplot as plt
 
-##
 amount = 100  # salesmen in each generation
 
 data_array = np.array(pd.read_csv("berlin52.tsp", header=None))
@@ -79,7 +78,6 @@ def elitism(salesmen):
                 tempmini = i
 
         elite[j] = salesmen[tempmini]  # Then transfer to the elites
-
         salesmen[tempmini, 53] = 100000  # Set to big value to not find the same path again
 
     return elite
