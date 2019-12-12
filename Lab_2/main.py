@@ -22,17 +22,6 @@ def long(x):
     else:
         return 0
 
-""" Classify all lines according to these paramaters and then check which it is most of.
-versicolor1: 
-(x1 == short or long) and (x2 == medium or long) and (x3 == medium or long) and (x4 == short)
-versiolor2:
-(x1 == medium) and (x2 == short or medium) and (x3 == short) and (x4 == long)
-setosa:
-(x3 == short or medium) and (x4 == short) 
-virginica:
-(X2 == short or medium) and (x3 == long) (x4 == long)
-"""
-
 
 def compute_flower(x):  # takes all four parameters of one flower
     x_temp = np.zeros((4, 1))
@@ -74,6 +63,5 @@ def compare(x):  # Takes the whole data set and compares it to the output
 
 
 if __name__ == '__main__':
-
     acc = compare(data_array)  ## changed lots of shit
     print("acc:", acc)

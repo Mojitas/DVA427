@@ -85,7 +85,7 @@ def elitism(salesmen):
     return elite
 
 
-def unelitism(salesmen): #
+def unelitism(salesmen):  #
 
     unelite = np.zeros((50, 54))
     unelite = unelite.astype(int)
@@ -94,18 +94,17 @@ def unelitism(salesmen): #
     for i in range(100):
 
         if salesmen[i, 53] != 100000:
-
             unelite[counter] = salesmen[i]
             counter += 1
 
     return unelite
 
 
-def cross(parent1, parent2):        # makes new salesmen
+def cross(parent1, parent2):  # makes new salesmen
     child = np.zeros((1, 54))
     child = child.astype(int)
 
-    child[0, 0] = 1         # starting city
+    child[0, 0] = 1  # starting city
 
     remaining = np.zeros((1, 54))  #
     remaining = remaining.astype(int)
@@ -117,7 +116,7 @@ def cross(parent1, parent2):        # makes new salesmen
 
     empty = 0
 
-    for i in range(53):         # Get remaining places
+    for i in range(53):  # Get remaining places
 
         if parent2[0, i] not in child:
             remaining[0, empty] = parent2[0, i]
@@ -125,7 +124,7 @@ def cross(parent1, parent2):        # makes new salesmen
 
     j = 0
 
-    for i in range(52):     # fill remaining places with genes from parent 2
+    for i in range(52):  # fill remaining places with genes from parent 2
 
         if child[0, i] == 0:
             child[0, i] = remaining[0, j]
@@ -167,14 +166,13 @@ def crossover(ultraelite, elite, unelite):  # sends parents to cross2
 
 
 def mutate(salesmen):
-
     for j in range(amount):
         mutations = rnd.randint(1, 7)
         randompos = rnd.randint(1, 52 - mutations)
 
         reverse = salesmen[j, randompos:randompos + mutations]
 
-        reverse = np.flip([reverse])[0] # flip the sequence
+        reverse = np.flip([reverse])[0]  # flip the sequence
 
         salesmen[j, randompos:randompos + mutations] = reverse
 
@@ -183,33 +181,28 @@ def mutate(salesmen):
 
 if __name__ == '__main__':
 
-    iterations = 200  # number of generations
+    generations = 101  # number of generations
     population = init()  # sets the first generation going
     lowest = 30000
     average2 = 0
-    x_list = [] # these are for plots
+    x_list = []  # plot lists
     y_list = []
-    shortest_path = 0
+    best_salesman = 0
+    average = 0
 
-    for R in range(iterations):
+    for R in range(generations):
 
         population = calculate(population)
 
-        lowest = min(lowest, min(population[:, 53]))
-        shortest_path = np.where(population[:, 53] == lowest)
-        average = sum(population[:, 53]) / 100
+        lowest = min(lowest, min(population[:, 53]))  # assign the best one
+        best_salesman = np.where(population == lowest)  # Find the best one
+        average += sum(population[:, 53]) / 100
 
-        average2 += average
+        if R % 25 == 0 and R > 0:  # print every 25
 
-        if R % 25 == 0:  # print every 100
-
-            if R != 0:
-                average2 = average2 / 25
-
-            print("Average path: ", average2)
-
-            average2 = 0
-
+            average = average / 25
+            print("Average path: ", average)
+            average = 0
 
         if R % 100 == 0:
             print("Shortest found path: ", lowest)
@@ -218,17 +211,13 @@ if __name__ == '__main__':
         elitepop = elitism(population)
         unelitepop = unelitism(population)
 
-        population[:, :] = 0
-
         population = crossover(ultraelitepop, elitepop, unelitepop)
         population = mutate(population)
-        population[:, 53] = 0   # resets everyones path
+        population[:, 53] = 0  # resets everyones path
 
+    print("Shortest path: {}\n City list: {}".format(lowest, best_salesman))
 
-
-    print("Shortest found path: ", lowest)
-
-
+"""
 for i in range(52):
 
     x_list.append(data_array[shortest_path[i],1])
@@ -240,5 +229,4 @@ plt.ylabel("Y")
 plt.xlabel("X")
 plt.show()
 
-
-
+"""

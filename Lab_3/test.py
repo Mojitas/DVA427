@@ -6,7 +6,19 @@ import math
 ##
 population_amount = 100  # salesmen in each generation
 
+x=np.zeros((3,3))
+x[1,2]=5
+y=np.where(x==5)
 
+print(y[0])
+
+
+
+
+
+
+
+"""
 data_array = np.array(pd.read_csv("berlin52.tsp", header=None))
 np.set_printoptions(threshold=np.inf)
 data_array = data_array.astype(int)
@@ -227,3 +239,4 @@ if __name__ == '__main__':
 
 print(population[0:20])
 
+"""
