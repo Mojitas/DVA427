@@ -1,7 +1,8 @@
 import numpy as np
-import random as rng
+import random as rnd
 import pandas as pd
 import math
+import matplotlib.pyplot as plt
 
 ##
 amount = 100  # salesmen in each generation
@@ -18,7 +19,7 @@ def init():  # starting conditions
         salesmen[:, i] = i + 1  # set cities in order for all the salesmen
 
     for i in range(amount):
-        rng.shuffle(salesmen[i, 1:52])  # shuffle order of the cities
+        rnd.shuffle(salesmen[i, 1:52])  # shuffle order of the cities
 
     salesmen[:, 52] = salesmen[:, 0]  # start is same as end
 
@@ -84,7 +85,7 @@ def elitism(salesmen):
     return elite
 
 
-def unelitism(salesmen):
+def unelitism(salesmen): #
 
     unelite = np.zeros((50, 54))
     unelite = unelite.astype(int)
@@ -109,8 +110,8 @@ def cross(parent1, parent2):        # makes new salesmen
     remaining = np.zeros((1, 54))  #
     remaining = remaining.astype(int)
 
-    randamount = rng.randint(10, 15)  # 10-15 genes
-    randompos = rng.randint(1, 52 - randamount)
+    randamount = rnd.randint(10, 15)  # 10-15 genes
+    randompos = rnd.randint(1, 52 - randamount)
 
     child[0, randompos:randompos + randamount] = parent1[0, randompos:randompos + randamount]  # Get genes from parent
 
@@ -143,9 +144,9 @@ def crossover(ultraelite, elite, unelite):  # sends parents to cross2
     children = children.astype(int)
 
     for i in range(95):
-        prob = rng.randint(1, 10)
-        parent1 = rng.randint(1, 44)
-        parent2 = rng.randint(1, 44)
+        prob = rnd.randint(1, 10)
+        parent1 = rnd.randint(1, 44)
+        parent2 = rnd.randint(1, 44)
 
         if prob < 8:
             children[i] = cross(elite[parent1:parent1 + 1], elite[parent2:parent2 + 1])
@@ -166,14 +167,14 @@ def crossover(ultraelite, elite, unelite):  # sends parents to cross2
 
 
 def mutate(salesmen):
-    for j in range(amount):
-        mutations = rng.randint(1, 7)
 
-        randompos = rng.randint(1, 52 - mutations)
+    for j in range(amount):
+        mutations = rnd.randint(1, 7)
+        randompos = rnd.randint(1, 52 - mutations)
 
         reverse = salesmen[j, randompos:randompos + mutations]
 
-        reverse = np.fliplr([reverse])[0]
+        reverse = np.flip([reverse])[0] # flip the sequence
 
         salesmen[j, randompos:randompos + mutations] = reverse
 
@@ -182,17 +183,20 @@ def mutate(salesmen):
 
 if __name__ == '__main__':
 
-    iterations = 2000  # number of generations
+    iterations = 200  # number of generations
     population = init()  # sets the first generation going
     lowest = 30000
     average2 = 0
+    x_list = [] # these are for plots
+    y_list = []
+    shortest_path = 0
 
     for R in range(iterations):
 
         population = calculate(population)
 
         lowest = min(lowest, min(population[:, 53]))
-
+        shortest_path = np.where(population[:, 53] == lowest)
         average = sum(population[:, 53]) / 100
 
         average2 += average
@@ -206,8 +210,6 @@ if __name__ == '__main__':
 
             average2 = 0
 
-            # print("Longest path: ", max(population[:, 53]))
-            # print("Shortest path: ", min(population[:, 53]))
 
         if R % 100 == 0:
             print("Shortest found path: ", lowest)
@@ -215,16 +217,28 @@ if __name__ == '__main__':
         ultraelitepop = ultraelitism(population)
         elitepop = elitism(population)
         unelitepop = unelitism(population)
+
         population[:, :] = 0
 
         population = crossover(ultraelitepop, elitepop, unelitepop)
         population = mutate(population)
-
         population[:, 53] = 0   # resets everyones path
 
 
 
     print("Shortest found path: ", lowest)
 
-print(population[0:20])
+
+for i in range(52):
+
+    x_list.append(data_array[shortest_path[i],1])
+    y_list.append(data_array[shortest_path[i],2])
+
+plt.plot(x_list, y_list)
+plt.legend(('Best path'))
+plt.ylabel("Y")
+plt.xlabel("X")
+plt.show()
+
+
 
