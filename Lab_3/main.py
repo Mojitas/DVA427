@@ -44,7 +44,7 @@ def calculate(salesmen):  # distance between two places
     return salesmen
 
 
-def ultraelitism(salesmen):
+def ultra_elitism(salesmen):
     elite = np.zeros((5, 54))  # Variable for choosing choosing who gets to live
     elite = elite.astype(int)
 
@@ -83,7 +83,7 @@ def elitism(salesmen):
     return elite
 
 
-def unelitism(salesmen):  #
+def un_elitism(salesmen):  #
 
     unelite = np.zeros((50, 54))
     unelite = unelite.astype(int)
@@ -205,9 +205,9 @@ if __name__ == '__main__':
         if R % 100 == 0:
             print("Shortest found path: ", lowest)
 
-        ultraelitepop = ultraelitism(population)
+        ultraelitepop = ultra_elitism(population)
         elitepop = elitism(population)
-        unelitepop = unelitism(population)
+        unelitepop = un_elitism(population)
 
         population = crossover(ultraelitepop, elitepop, unelitepop)
         population = mutate(population)
