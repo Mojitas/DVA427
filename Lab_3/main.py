@@ -4,11 +4,16 @@ import pandas as pd
 import math
 import matplotlib.pyplot as plt
 
+###Globals###
 amount = 100  # salesmen in each generation
-
 data_array = np.array(pd.read_csv("berlin52.tsp", header=None))
-np.set_printoptions(threshold=np.inf)
+distance_array = np.zeros((52, 52))
+###
+
 data_array = data_array.astype(int)
+
+
+# np.set_printoptions(threshold=np.inf)
 
 
 def init():  # starting conditions
@@ -30,7 +35,7 @@ def calculate(salesmen):  # distance between two places
 
     for j in range(amount):  # for all salesmen
 
-        for i in range(52):
+        for i in range(52):  # dåligt
             x1 = data_array[salesmen[j, i] - 1, 1]
             y1 = data_array[salesmen[j, i] - 1, 2]  # pick coordinates of a city from data_array
 
@@ -177,9 +182,32 @@ def mutate(salesmen):
     return salesmen
 
 
-if __name__ == '__main__':
+# check how long the road for the salesmen is
+def distance_lookup(salesman):
+    for i in range(amount):
+        for j in range(51):
+            salesman[i, 53] += distance_array[salesman[i, j], salesman[i, j + 1]]
+    return salesman
 
-    generations = 101  # number of generations
+
+# Takes the distance arra
+def distance_calc(x):
+    for j in range(52):  # run once to check the distances between all cities
+
+        x1 = data_array[j, 1]  # compare every city to the rest
+        y1 = data_array[j, 2]
+
+        for i in range(52 - j):  # is for staying inside the matrix
+
+            x2 = data_array[i + j, 1]  # +j for only populate half of the matrix
+            y2 = data_array[i + j, 2]  # Since the values just are mirrored along the diagonal
+            x[j, i + j] = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+    x += x.T
+    return x
+
+
+if __name__ == '__main__':
+    generations = 1000  # number of generations
     population = init()  # sets the first generation going
     lowest = 30000
     average2 = 0
@@ -187,33 +215,34 @@ if __name__ == '__main__':
     y_list = []
     best_salesman = 0
     average = 0
+distance_array = distance_calc(distance_array)
 
-    for R in range(generations):
+for R in range(generations):
 
-        population = calculate(population)
+    population = distance_lookup(population)
 
-        lowest = min(lowest, min(population[:, 53]))  # assign the best one
-        best_salesman = np.where(population == lowest)  # Find the best one
-        average += sum(population[:, 53]) / 100
+    lowest = min(lowest, min(population[:, 53]))  # assign the best one
+    best_salesman = np.where(population == lowest)  # Find the best one
+    average += sum(population[:, 53]) / 100
 
-        if R % 25 == 0 and R > 0:  # print every 25
+    if R % 25 == 0 and R > 0:  # print every 25
 
-            average = average / 25
-            print("Average path: ", average)
-            average = 0
+        average = average / 25
+        print("Average path: ", average)
+        average = 0
 
-        if R % 100 == 0:
-            print("Shortest found path: ", lowest)
+    if R % 100 == 0:
+        print("Shortest found path: ", lowest)
 
-        ultraelitepop = ultra_elitism(population)
-        elitepop = elitism(population)
-        unelitepop = un_elitism(population)
+    ultraelitepop = ultra_elitism(population)
+    elitepop = elitism(population)
+    unelitepop = un_elitism(population)
 
-        population = crossover(ultraelitepop, elitepop, unelitepop)
-        population = mutate(population)
-        population[:, 53] = 0  # resets everyones path
+    population = crossover(ultraelitepop, elitepop, unelitepop)
+    population = mutate(population)
+    population[:, 53] = 0  # resets everyones path
 
-    print("Shortest path: {}\n City list: {}".format(lowest, best_salesman))
+print("Shortest path: {}\n City list: {}".format(lowest, best_salesman))
 
 """
 for i in range(52):
