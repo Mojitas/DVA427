@@ -206,7 +206,7 @@ if __name__ == '__main__':
     x_list = []  # plot lists
     y_list = []
     best_salesman = np.zeros((1, 54))
-    distance_array = distance_calc(distance_array)
+    distance_array = distance_calculations(distance_array)
 
 
     for j in range(generations):
