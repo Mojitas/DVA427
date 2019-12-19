@@ -29,25 +29,6 @@ def init():  # starting conditions
     return salesmen
 
 
-def calculate(salesmen):  # Very expensive in terms of time
-    salesmen = salesmen.astype(int)
-
-    for j in range(amount):  # for all salesmen
-
-        for i in range(52):  # dåligt
-            x1 = data_array[salesmen[j, i] - 1, 1]
-            y1 = data_array[salesmen[j, i] - 1, 2]  # pick coordinates of a city from data_array
-
-            x2 = data_array[salesmen[j, i + 1] - 1, 1]
-            y2 = data_array[salesmen[j, i + 1] - 1, 2]  # pick coordinates of the next city
-
-            distance = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)  # calculates the distance between the two cities
-
-            salesmen[j, 53] += distance  # adds it to the total distance
-
-    return salesmen
-
-
 def ultra_elitism(salesmen):
     elite = np.zeros((5, 54))  # Variable for choosing choosing who gets to live
     elite = elite.astype(int)
@@ -111,10 +92,10 @@ def cross(parent1, parent2):  # makes new salesmen
     remaining = np.zeros((1, 54))  #
     remaining = remaining.astype(int)
 
-    randamount = rnd.randint(10, 15)  # 10-15 genes
-    randompos = rnd.randint(1, 52 - randamount)
+    random_amount = rnd.randint(10, 15)  # 10-15 genes
+    random_position = rnd.randint(1, 52 - random_amount)
 
-    child[0, randompos:randompos + randamount] = parent1[0, randompos:randompos + randamount]  # Get genes from parent
+    child[0, random_position:random_position + random_amount] = parent1[0, random_position:random_position + random_amount]  # Get genes from parent
 
     empty = 0
 
@@ -158,25 +139,25 @@ def crossover(ultraelite, elite, unelite):  # sends parents to cross2
         elif prob == 10:
             children[i] = cross(unelite[parent1:parent1 + 1], unelite[parent2:parent2 + 1])
 
-    newpopulation = np.zeros((amount, 54))
-    newpopulation = newpopulation.astype(int)
+    new_population = np.zeros((amount, 54))
+    new_population = new_population.astype(int)
 
-    newpopulation[0:95] = children
-    newpopulation[95:100] = ultraelite
+    new_population[0:95] = children
+    new_population[95:amount] = ultraelite
 
-    return newpopulation
+    return new_population
 
 
 def mutate(salesmen):
     for j in range(amount):
         mutations = rnd.randint(1, 7)
-        randompos = rnd.randint(1, 52 - mutations)
+        random_position = rnd.randint(1, 52 - mutations)
 
-        reverse = salesmen[j, randompos:randompos + mutations]
+        reverse = salesmen[j, random_position:random_position + mutations]
 
         reverse = np.flip([reverse])[0]  # flip the sequence
 
-        salesmen[j, randompos:randompos + mutations] = reverse
+        salesmen[j, random_position:random_position + mutations] = reverse
 
     return salesmen
 
@@ -192,7 +173,7 @@ def distance_lookup(salesman):
 
 
 # Takes the distance array
-def distance_calc(x):
+def distance_calculations(x):
     for j in range(52):  # run once to check the distances between all cities
 
         x1 = data_array[j, 1]  # compare every city to the rest
@@ -206,6 +187,8 @@ def distance_calc(x):
     x += x.T
     return x
 
+
+#  plots stuff
 def plot_data(x,y):
     plt.plot(x, y)
     plt.legend(('Best path'))
