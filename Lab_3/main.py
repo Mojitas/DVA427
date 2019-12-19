@@ -7,9 +7,8 @@ import matplotlib.pyplot as plt
 ###Globals###
 amount = 100  # salesmen in each generation
 data_array = np.array(pd.read_csv("berlin52.tsp", header=None))
-distance_array = np.zeros((52, 52))
+distance_array = np.zeros((52, 52))  # List for distances
 ###
-
 data_array = data_array.astype(int)
 
 
@@ -30,7 +29,7 @@ def init():  # starting conditions
     return salesmen
 
 
-def calculate(salesmen):  # distance between two places
+def calculate(salesmen):  # Very expensive in terms of time
     salesmen = salesmen.astype(int)
 
     for j in range(amount):  # for all salesmen
@@ -184,13 +183,15 @@ def mutate(salesmen):
 
 # check how long the road for the salesmen is
 def distance_lookup(salesman):
+    salesman = salesman.astype(int)
     for i in range(amount):
-        for j in range(51):
-            salesman[i, 53] += distance_array[salesman[i, j], salesman[i, j + 1]]
+        for j in range(52):
+            salesman[i, 53] += distance_array[salesman[i, j] - 1, salesman[i, j + 1] - 1]
+
     return salesman
 
 
-# Takes the distance arra
+# Takes the distance array
 def distance_calc(x):
     for j in range(52):  # run once to check the distances between all cities
 
@@ -207,13 +208,14 @@ def distance_calc(x):
 
 
 if __name__ == '__main__':
-    generations = 1000  # number of generations
+    generations = 2000  # number of generations
     population = init()  # sets the first generation going
     lowest = 30000
+    index=0
     average2 = 0
     x_list = []  # plot lists
     y_list = []
-    best_salesman = 0
+    best_salesman = np.zeros((1,54))
     average = 0
 distance_array = distance_calc(distance_array)
 
@@ -221,18 +223,21 @@ for R in range(generations):
 
     population = distance_lookup(population)
 
-    lowest = min(lowest, min(population[:, 53]))  # assign the best one
-    best_salesman = np.where(population == lowest)  # Find the best one
-    average += sum(population[:, 53]) / 100
+    if lowest > min(population[:, 53]):
+        lowest = min(population[:, 53])  # assign the best one
+        index = np.where(population == lowest)  # Find index of best one
+        best_salesman = population[index[0]]
+    average += sum(population[:, 53]) / amount
 
-    if R % 25 == 0 and R > 0:  # print every 25
+    if R % 100 == 0 and R > 0:  # print every 25
 
-        average = average / 25
+        average = average / 100
+        print("Shortest so far: ", lowest)
         print("Average path: ", average)
         average = 0
 
     if R % 100 == 0:
-        print("Shortest found path: ", lowest)
+
 
     ultraelitepop = ultra_elitism(population)
     elitepop = elitism(population)
@@ -242,18 +247,14 @@ for R in range(generations):
     population = mutate(population)
     population[:, 53] = 0  # resets everyones path
 
-print("Shortest path: {}\n City list: {}".format(lowest, best_salesman))
+print("City list: {}".format(best_salesman))
 
-"""
-for i in range(52):
-
-    x_list.append(data_array[shortest_path[i],1])
-    y_list.append(data_array[shortest_path[i],2])
+for i in range(53):
+    x_list.append(data_array[best_salesman[0,i]-1, 1])
+    y_list.append(data_array[best_salesman[0,i]-1, 2])
 
 plt.plot(x_list, y_list)
 plt.legend(('Best path'))
 plt.ylabel("Y")
 plt.xlabel("X")
 plt.show()
-
-"""
