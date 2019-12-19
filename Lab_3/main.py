@@ -18,8 +18,8 @@ data_array = data_array.astype(int)
 def init():  # starting conditions
     salesmen = np.zeros((amount, 54))  # every salesman has a route of cities and total distance
 
-    for i in range(52):
-        salesmen[:, i] = i + 1  # set cities in order for all the salesmen
+    for i in range(1, 52):
+        salesmen[:, i] = i  # set cities in order for all the salesmen
 
     for i in range(amount):
         rnd.shuffle(salesmen[i, 1:52])  # shuffle order of the cities
@@ -158,7 +158,7 @@ def crossover(ultraelite, elite, unelite):  # sends parents to cross2
         elif prob == 10:
             children[i] = cross(unelite[parent1:parent1 + 1], unelite[parent2:parent2 + 1])
 
-    newpopulation = np.zeros((100, 54))
+    newpopulation = np.zeros((amount, 54))
     newpopulation = newpopulation.astype(int)
 
     newpopulation[0:95] = children
@@ -206,55 +206,53 @@ def distance_calc(x):
     x += x.T
     return x
 
+def plot_data(x,y):
+    plt.plot(x, y)
+    plt.legend(('Best path'))
+    plt.ylabel("Y")
+    plt.xlabel("X")
+    plt.show()
+
 
 if __name__ == '__main__':
-    generations = 2000  # number of generations
+
+    generations = 1000  # number of generations
     population = init()  # sets the first generation going
-    lowest = 30000
-    index=0
-    average2 = 0
+    shortest_path = 30000
+    shortest_index = 0
     x_list = []  # plot lists
     y_list = []
-    best_salesman = np.zeros((1,54))
-    average = 0
-distance_array = distance_calc(distance_array)
-
-for R in range(generations):
-
-    population = distance_lookup(population)
-
-    if lowest > min(population[:, 53]):
-        lowest = min(population[:, 53])  # assign the best one
-        index = np.where(population == lowest)  # Find index of best one
-        best_salesman = population[index[0]]
-    average += sum(population[:, 53]) / amount
-
-    if R % 100 == 0 and R > 0:  # print every 25
-
-        average = average / 100
-        print("Shortest so far: ", lowest)
-        print("Average path: ", average)
-        average = 0
-
-    if R % 100 == 0:
+    best_salesman = np.zeros((1, 54))
+    distance_array = distance_calc(distance_array)
 
 
-    ultraelitepop = ultra_elitism(population)
-    elitepop = elitism(population)
-    unelitepop = un_elitism(population)
+    for j in range(generations):
 
-    population = crossover(ultraelitepop, elitepop, unelitepop)
-    population = mutate(population)
-    population[:, 53] = 0  # resets everyones path
+        population = distance_lookup(population)
 
-print("City list: {}".format(best_salesman))
+        if shortest_path > min(population[:, 53]):
+            shortest_path = min(population[:, 53])  # assign the best one
+            shortest_index = np.where(population == shortest_path)  # Find index of best one
+            best_salesman = population[shortest_index[0]]
 
-for i in range(53):
-    x_list.append(data_array[best_salesman[0,i]-1, 1])
-    y_list.append(data_array[best_salesman[0,i]-1, 2])
 
-plt.plot(x_list, y_list)
-plt.legend(('Best path'))
-plt.ylabel("Y")
-plt.xlabel("X")
-plt.show()
+        if j % 20 == 0 and j > 0:  # print stuff
+
+            print("Shortest so far: ", shortest_path)
+            print("Average path: ", sum(population[:, 53]) / amount)
+
+
+        ultraelitepop = ultra_elitism(population)
+        elitepop = elitism(population)
+        unelitepop = un_elitism(population)
+        population = crossover(ultraelitepop, elitepop, unelitepop)
+        population = mutate(population)
+        population[:, 53] = 0  # resets everyones path
+
+    print("City list: {}".format(best_salesman))
+
+    for k in range(53):
+        x_list.append(data_array[best_salesman[0, k] - 1, 1])
+        y_list.append(data_array[best_salesman[0, k] - 1, 2])
+
+    plot_data(x_list,y_list)
