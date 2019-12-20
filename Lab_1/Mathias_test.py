@@ -45,8 +45,6 @@ class DataManagement:
 
     # Puts the different data in the arrays
     def segmentation(self):
-
-
         self.training_data = data_array[0:864]
         self.training_inputs = self.training_data[0:864, 0:19]
         self.training_outputs = self.training_data[0:864, 19:20]
