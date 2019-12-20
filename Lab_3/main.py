@@ -35,35 +35,34 @@ def ultra_elitism(salesmen):
 
     for j in range(5):  # number of best ones to save
 
-        tempmin = min(salesmen[:, 53])  # check for shortest path
+        temp_min = min(salesmen[:, 53])  # check for shortest path
 
         for i in range(amount):  # Check through all the salesmen
 
-            if tempmin == salesmen[i, 53]:  # If we got a match for good result
-                tempmini = i
+            if temp_min == salesmen[i, 53]:  # If we got a match for good result
+                temp_mini = i
 
-        elite[j] = salesmen[tempmini]  # Then transfer to the elites
-
-        salesmen[tempmini, 53] = 100000  # Set to big value to not find the same path again
+        elite[j] = salesmen[temp_mini]  # Then transfer to the elites
+        salesmen[temp_mini, 53] = 100000  # Set to big value to not find the same path again
 
     return elite
 
 
 def elitism(salesmen):
-    elite = np.zeros((45, 54))  # Variable for choosing choosing who gets to live
+    next_gen = 45  # salesmen in next generation
+    elite = np.zeros((next_gen, 54))  # Variable for choosing choosing who gets to live
     elite = elite.astype(int)
+    temp_min=0
 
-    for j in range(45):  # number of best ones to save
+    for i in range(next_gen):  # Find best paths of generation
 
-        tempmin = min(salesmen[:, 53])  # check for shortest path
+        temp_min = min(salesmen[:, 53])
 
-        for i in range(amount):  # Check through all the salesmen
-
-            if tempmin == salesmen[i, 53]:  # If we got a match for good result
-                tempmini = i
-
-        elite[j] = salesmen[tempmini]  # Then transfer to the elites
-        salesmen[tempmini, 53] = 100000  # Set to big value to not find the same path again
+        for j in range(amount):
+            if temp_min == salesmen[j, 53]:
+                elite[i] = salesmen[j]
+                salesmen[j, 53] = 100000
+                break       #stop if we found the right index and move on to the next.
 
     return elite
 
@@ -95,7 +94,8 @@ def cross(parent1, parent2):  # makes new salesmen
     random_amount = rnd.randint(10, 15)  # 10-15 genes
     random_position = rnd.randint(1, 52 - random_amount)
 
-    child[0, random_position:random_position + random_amount] = parent1[0, random_position:random_position + random_amount]  # Get genes from parent
+    child[0, random_position:random_position + random_amount] = parent1[0,
+                                                                random_position:random_position + random_amount]  # Get genes from parent
 
     empty = 0
 
@@ -189,7 +189,7 @@ def distance_calculations(x):
 
 
 #  plots stuff
-def plot_data(x,y):
+def plot_data(x, y):
     plt.plot(x, y)
     plt.legend(('Best path'))
     plt.ylabel("Y")
@@ -203,11 +203,10 @@ if __name__ == '__main__':
     population = init()  # sets the first generation going
     shortest_path = 30000
     shortest_index = 0
-    x_list = []  # plot lists
+    x_list = []  # plot coordinates lists
     y_list = []
     best_salesman = np.zeros((1, 54))
     distance_array = distance_calculations(distance_array)
-
 
     for j in range(generations):
 
@@ -218,12 +217,10 @@ if __name__ == '__main__':
             shortest_index = np.where(population == shortest_path)  # Find index of best one
             best_salesman = population[shortest_index[0]]
 
-
         if j % 20 == 0 and j > 0:  # print stuff
 
             print("Shortest so far: ", shortest_path)
             print("Average path: ", sum(population[:, 53]) / amount)
-
 
         ultraelitepop = ultra_elitism(population)
         elitepop = elitism(population)
@@ -238,4 +235,4 @@ if __name__ == '__main__':
         x_list.append(data_array[best_salesman[0, k] - 1, 1])
         y_list.append(data_array[best_salesman[0, k] - 1, 2])
 
-    plot_data(x_list,y_list)
+    plot_data(x_list, y_list)
