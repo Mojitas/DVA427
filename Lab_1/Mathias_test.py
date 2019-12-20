@@ -10,7 +10,7 @@ np.random.seed()
 random.shuffle(data_array)  # Shuffles data
 
 
-class dataManagement():
+class DataManagement:
 
     def __init__(self): # Initialize the different arrays
         self.training_data = np.zeros((864,20))

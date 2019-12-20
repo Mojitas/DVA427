@@ -10,7 +10,7 @@ data_array = np.array(pd.read_csv("berlin52.tsp", header=None))
 distance_array = np.zeros((52, 52))  # List for distances
 ###
 data_array = data_array.astype(int)
-
+distance_array = distance_array.astype((int))
 
 # np.set_printoptions(threshold=np.inf)
 
@@ -161,9 +161,9 @@ def mutate(salesmen):
 
     return salesmen
 
-
-# check how long the road for the salesmen is
-def distance_lookup(salesman):
+class Distances():
+    # check how long the road for the salesmen is
+    def distance_lookup(self,salesman):
     salesman = salesman.astype(int)
     for i in range(amount):
         for j in range(52):
@@ -172,8 +172,8 @@ def distance_lookup(salesman):
     return salesman
 
 
-# Takes the distance array
-def distance_calculations(x):
+    # Takes the distance array
+    def distance_calculations(self,x):
     for j in range(52):  # run once to check the distances between all cities
 
         x1 = data_array[j, 1]  # compare every city to the rest
