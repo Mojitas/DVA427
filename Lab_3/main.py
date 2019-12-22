@@ -30,12 +30,12 @@ class Genetics:
         self.unelite = np.zeros((50, 54))
 
     def dawn_of_time(self):
-        self.salesmen = np.zeros((amount, 54))  # every salesman has a route of cities and total distance
+        self.salesmen = np.zeros((self.amount, 54))  # every salesman has a route of cities and total distance
 
         for i in range(1, 52):
             self.salesmen[:, i] = i  # set cities in order for all the salesmen
 
-        for i in range(amount):
+        for i in range(self.amount):
             rnd.shuffle(self.salesmen[i, 1:52])  # shuffle order of the cities
 
         self.salesmen[:, 52] = self.salesmen[:, 0]  # start is same as end
@@ -57,7 +57,7 @@ class Genetics:
         self.uelite[j] = salesmen[temp_mini]  # Then transfer to the elites
         salesmen[temp_mini, 53] = 100000  # Set to big value to not find the same path again
 
-        return uelite
+        return self.uelite
 
     def elitism(self, salesmen):
 
@@ -74,7 +74,7 @@ class Genetics:
                     salesmen[j, 53] = 100000
                     break  # stop if we found the right index and move on to the next.
 
-        return elite
+        return self.elite
 
     def un_elitism(self, salesmen):  #
 
@@ -209,7 +209,7 @@ class Representation:
         plt.legend(('Best path'))
         plt.ylabel("Y")
         plt.xlabel("X")
-     plt.show()
+        plt.show()
 
 
 if __name__ == '__main__':

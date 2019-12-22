@@ -58,4 +58,4 @@ class DataManagement:
         self.data_normalization()
         print("\nData has been managed\n")
 
-DM=dataManagement() # Slippa skriva långa grejer
+DM=DataManagement() # Slippa skriva långa grejer
