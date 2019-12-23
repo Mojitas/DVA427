@@ -42,15 +42,12 @@ class Genetics:
         return self.salesmen
 
     def ultra_elitism(self, salesmen):
-        self.uelite[:, :] = 0
         self.uelite = self.uelite.astype(int)
 
         for i in range(5):  # number of best ones to save
 
             temp_min = min(salesmen[:, 53])  # check for shortest path
-
             for j in range(self.amount):  # Check through all the salesmen
-
                 if temp_min == salesmen[j, 53]:  # If we got a match for good result
                     self.uelite[i] = salesmen[j]  # Then transfer to the elites
                     salesmen[j, 53] = 100000  # Set to big value to not find the same path again
@@ -59,7 +56,6 @@ class Genetics:
 
     def elitism(self, salesmen):
 
-        self.elite[:, :] = 0
         self.elite = self.elite.astype(int)
 
         for i in range(self.next_gen):  # number of best ones to save
@@ -76,7 +72,6 @@ class Genetics:
 
     def un_elitism(self, salesmen):  #
 
-        self.unelite[:, :] = 0
         self.unelite = self.unelite.astype(int)
         counter = 0
 
@@ -100,7 +95,7 @@ class Genetics:
         remaining = np.zeros((1, 54))  #
         remaining = remaining.astype(int)
 
-        random_amount = random.randint(10, 15)  # 10-15 genes
+        random_amount = random.randint(10, 20)  # 10-15 genes
         random_position = random.randint(1, 52 - random_amount)
 
         self.child[0, random_position:random_position + random_amount] = parent1[0,
