@@ -111,23 +111,24 @@ def unelitism(salesmen): #
     return unelite
 
 
-def cross(parent1, parent2):        # makes new salesmen
+def cross(parent1, parent2):
     child = np.zeros((1, 54))
     child = child.astype(int)
 
-    child[0, 0] = 1         # starting city
-
-    remaining = np.zeros((1, 54))  #
+    remaining = np.zeros((1, 54))
     remaining = remaining.astype(int)
 
-    randamount = random.randint(10, 15)  # 10-15 genes
-    randompos = random.randint(1, 52 - randamount)
+    for j in range(10):     #Repeats ten times
 
-    child[0, randompos:randompos + randamount] = parent1[0, randompos:randompos + randamount]  # Get genes from parent
+        random1 = rng.randint(0, 49)
+        randamount = rng.randint(1,10)
+
+        for i in range(randint):
+            child[0, random1 + i] = parent1[0, random1 + i]
 
     empty = 0
 
-    for i in range(53):         # Get remaining places
+    for i in range(53):
 
         if parent2[0, i] not in child:
             remaining[0, empty] = parent2[0, i]
@@ -135,15 +136,48 @@ def cross(parent1, parent2):        # makes new salesmen
 
     j = 0
 
-    for i in range(52):     # fill remaining places with genes from parent 2
+    for i in range(52):
 
         if child[0, i] == 0:
             child[0, i] = remaining[0, j]
-            j += 1
+            j += 1;
 
     child[0, 52] = child[0, 0]
 
     return child
+    
+cross again
+self.child[:, :] = 0
+        self.child = self.child.astype(int)
+        self.child[0, 0] = 1  # starting city
+
+        remaining = np.zeros((1, 54))  #
+        remaining = remaining.astype(int)
+
+        random_amount = random.randint(10, 30)  # 10-15 genes
+        random_position = random.randint(1, 52 - random_amount)
+
+        self.child[0, random_position:random_position + random_amount] = parent1[0,
+                                                                         random_position:random_position + random_amount]  # Get genes from parent
+
+        empty = 0
+
+        for i in range(53):  # Get remaining places
+
+            if parent2[0, i] not in self.child:
+                remaining[0, empty] = parent2[0, i]
+                empty += 1
+
+        j = 0
+
+        for i in range(52):  # fill remaining places with genes from parent 2
+
+            if self.child[0, i] == 0:
+                self.child[0, i] = remaining[0, j]
+                j += 1
+
+        self.child[0, 52] = self.child[0, 0]
+        return self.child
 
 
 def crossover(ultraelite, elite, unelite):  # sends parents to cross2

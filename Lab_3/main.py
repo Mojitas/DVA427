@@ -10,6 +10,7 @@ distance_array = np.zeros((52, 52))  # List for distances
 ###
 data_array = data_array.astype(int)
 distance_array = distance_array.astype(int)
+random.seed()
 
 
 # np.set_printoptions(threshold=np.inf)
@@ -18,7 +19,7 @@ class Genetics:
 
     def __init__(self):  # starting conditions
         self.amount = 100  # salesmen in each generation
-        self.generations = 100
+        self.generations = 1000
         self.next_gen = 45  # salesmen in next generation
 
         self.best_salesman = np.zeros((1, 54))
@@ -86,39 +87,39 @@ class Genetics:
     def new_start(self):
         return
 
-    def cross(self, parent1, parent2):  # makes new salesmen
+    def cross(self, parent_1, parent_2):  # makes new salesmen
 
-        self.child[:, :] = 0
         self.child = self.child.astype(int)
-        self.child[0, 0] = 1  # starting city
-
-        remaining = np.zeros((1, 54))  #
+        remaining = np.zeros((1, 54))
         remaining = remaining.astype(int)
 
-        random_amount = random.randint(10, 20)  # 10-15 genes
-        random_position = random.randint(1, 52 - random_amount)
+        for j in range(10):  # Repeats ten times
 
-        self.child[0, random_position:random_position + random_amount] = parent1[0,
-                                                                         random_position:random_position + random_amount]  # Get genes from parent
+            random_one = random.randint(0, 49)  # where genes transfer
+            random_amount = random.randint(1, 10)  # how many genes
 
-        empty = 0
+            for i in range(random_amount):
+                self.child[0, random_one + i] = parent_1[0, random_one + i]
 
-        for i in range(53):  # Get remaining places
+            empty = 0
 
-            if parent2[0, i] not in self.child:
-                remaining[0, empty] = parent2[0, i]
-                empty += 1
+            for i in range(53):
 
-        j = 0
+                if parent_2[0, i] not in self.child:
+                    remaining[0, empty] = parent_2[0, i]
+                    empty += 1
 
-        for i in range(52):  # fill remaining places with genes from parent 2
+            j = 0
 
-            if self.child[0, i] == 0:
-                self.child[0, i] = remaining[0, j]
-                j += 1
+            for i in range(52):
 
-        self.child[0, 52] = self.child[0, 0]
-        return self.child
+                if self.child[0, i] == 0:
+                    self.child[0, i] = remaining[0, j]
+                    j += 1
+
+            self.child[0, 52] = self.child[0, 0]
+
+            return self.child
 
     def crossover(self, uelite, elite, unelite):  # sends parents to cross2
         np.random.shuffle(elite)
@@ -134,10 +135,10 @@ class Genetics:
             if prob < 8:
                 self.children[i] = self.cross(elite[parent1:parent1 + 1], elite[parent2:parent2 + 1])
 
-            elif prob == 8 or prob == 9:
+            elif 8 <= prob <= 9:
                 self.children[i] = self.cross(unelite[parent1:parent1 + 1], elite[parent2:parent2 + 1])
 
-            elif prob == 10:
+            else:
                 self.children[i] = self.cross(unelite[parent1:parent1 + 1], unelite[parent2:parent2 + 1])
 
         new_population = np.zeros((self.amount, 54))
@@ -208,6 +209,7 @@ class Representation:
         plt.xlabel("X")
         plt.show()
 
+
 Gen = Genetics()
 Dist = Distances()
 Rep = Representation()
@@ -229,8 +231,10 @@ if __name__ == '__main__':
                     shortest_index = l
 
             Gen.best_salesman = population[shortest_index]
-            print("New shortest path: {}\nBest salesman: {}\nShape: {}\nGeneration: {}".format(shortest_path, Gen.best_salesman,
-                                                                               Gen.best_salesman.shape,j))
+            print("New shortest path: {}\nBest salesman: {}\nShape: {}\nGeneration: {}".format(shortest_path,
+                                                                                               Gen.best_salesman,
+                                                                                               Gen.best_salesman.shape,
+                                                                                               j))
 
         ultraelitepop = Gen.ultra_elitism(population)
         elitepop = Gen.elitism(population)
@@ -240,7 +244,7 @@ if __name__ == '__main__':
         population[:, 53] = 0  # resets everyones path
 
     for m in range(53):
-        Rep.x_list.append(data_array[Gen.best_salesman[m]-1, 1])
-        Rep.y_list.append(data_array[Gen.best_salesman[m]-1, 2])
+        Rep.x_list.append(data_array[Gen.best_salesman[m] - 1, 1])
+        Rep.y_list.append(data_array[Gen.best_salesman[m] - 1, 2])
 
     Rep.plot_data(Rep.x_list, Rep.y_list)
