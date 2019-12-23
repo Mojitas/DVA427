@@ -5,15 +5,11 @@ import math
 import matplotlib.pyplot as plt
 
 ###Globals###
-
-
-
 data_array = np.array(pd.read_csv("berlin52.tsp", header=None))
 distance_array = np.zeros((52, 52))  # List for distances
 ###
 data_array = data_array.astype(int)
-distance_array = distance_array.astype((int))
-
+distance_array = distance_array.astype(int)
 
 # np.set_printoptions(threshold=np.inf)
 
@@ -21,7 +17,7 @@ class Genetics:
 
     def __init__(self):  # starting conditions
         self.amount = 100  # salesmen in each generation
-        self.generations = 1000
+        self.generations = 100
         self.next_gen = 45  # salesmen in next generation
         self.children = np.zeros((95, 54))
         self.child = np.zeros((1, 54))
@@ -61,20 +57,23 @@ class Genetics:
 
     def elitism(self, salesmen):
 
-        self.elite = self.elite.astype(int)
-        temp_min = 0
+        elite = np.zeros((45, 54))  # Variable for choosing choosing who gets to live
+        elite = elite.astype(int)
 
-        for i in range(self.next_gen):  # Find best paths of generation
+        for j in range(45):  # number of best ones to save
 
-            temp_min = min(salesmen[:, 53])
+            tempmin = min(salesmen[:, 53])  # check for shortest path
 
-            for j in range(self.amount):
-                if temp_min == salesmen[j, 53]:
-                    self.elite[i] = salesmen[j]
-                    salesmen[j, 53] = 100000
-                    break  # stop if we found the right index and move on to the next.
+            for i in range(self.amount):  # Check through all the salesmen
 
-        return self.elite
+                if tempmin == salesmen[i, 53]:  # If we got a match for good result
+                    tempmini = i
+
+            elite[j] = salesmen[tempmini]  # Then transfer to the elites
+
+            salesmen[tempmini, 53] = 100000  # Set to big value to not find the same path again
+
+        return elite
 
     def un_elitism(self, salesmen):  #
 
@@ -83,7 +82,7 @@ class Genetics:
 
         for i in range(100):
 
-            if salesmen[i, 53] != 100000:
+            if salesmen[i, 53] != 100000 and counter<50:
                 self.unelite[counter] = salesmen[i]
                 counter += 1
 
@@ -216,10 +215,10 @@ if __name__ == '__main__':
 
     Gen = Genetics()
     Dist = Distances()
-    Rep=Representation()
+    Rep = Representation()
 
     population = Gen.dawn_of_time()  # sets the first generation going
-    shortest_path = 30000
+    shortest_path = 40000
     shortest_index = 0
 
     best_salesman = np.zeros((1, 54))
@@ -228,16 +227,15 @@ if __name__ == '__main__':
     for j in range(Gen.generations):
 
         population = Dist.lookup(population)
-
         if shortest_path > min(population[:, 53]):
             shortest_path = min(population[:, 53])  # assign the best one
-            shortest_index = np.where(population == shortest_path)  # Find index of best one
+            print("New shortest path: ",shortest_path)
+            shortest_index = np.where(population[:,53] == shortest_path)  # Find index of best one
             best_salesman = population[shortest_index[0]]
 
         if j % 20 == 0 and j > 0:  # print stuff
 
-            print("Shortest so far: ", shortest_path)
-            print("Average path: ", sum(population[:, 53]) / Gen.amount)
+            print("Average path: ", sum(population[:, 53]) / population.shape[0])
 
         ultraelitepop = Gen.ultra_elitism(population)
         elitepop = Gen.elitism(population)
@@ -246,7 +244,7 @@ if __name__ == '__main__':
         population = Gen.mutate(population)
         population[:, 53] = 0  # resets everyones path
 
-    print("City list: {}".format(best_salesman))
+    print("Best salesman: {}".format(best_salesman.shape))
 
     for k in range(53):
         Rep.x_list.append(data_array[best_salesman[0, k] - 1, 1])
