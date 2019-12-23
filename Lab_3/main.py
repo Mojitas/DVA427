@@ -11,6 +11,7 @@ distance_array = np.zeros((52, 52))  # List for distances
 data_array = data_array.astype(int)
 distance_array = distance_array.astype(int)
 
+
 # np.set_printoptions(threshold=np.inf)
 
 class Genetics:
@@ -19,14 +20,15 @@ class Genetics:
         self.amount = 100  # salesmen in each generation
         self.generations = 100
         self.next_gen = 45  # salesmen in next generation
-        self.children = np.zeros((95, 54))
+
+        self.salesmen = np.zeros((self.amount, 54))  # every salesman has a route of cities and total distance
         self.child = np.zeros((1, 54))
-        self.uelite = np.zeros((5, 54))
+        self.children = np.zeros((95, 54))
         self.elite = np.zeros((self.next_gen, 54))
+        self.uelite = np.zeros((5, 54))
         self.unelite = np.zeros((50, 54))
 
     def dawn_of_time(self):
-        self.salesmen = np.zeros((self.amount, 54))  # every salesman has a route of cities and total distance
 
         for i in range(1, 52):
             self.salesmen[:, i] = i  # set cities in order for all the salesmen
@@ -39,6 +41,7 @@ class Genetics:
         return self.salesmen
 
     def ultra_elitism(self, salesmen):
+        self.unelite[:, :] = 0
         self.uelite = self.uelite.astype(int)
 
         for j in range(5):  # number of best ones to save
@@ -57,8 +60,8 @@ class Genetics:
 
     def elitism(self, salesmen):
 
-        elite = np.zeros((45, 54))  # Variable for choosing choosing who gets to live
-        elite = elite.astype(int)
+        self.elite[:, :] = 0
+        self.elite = self.elite.astype(int)
 
         for j in range(45):  # number of best ones to save
 
@@ -69,20 +72,21 @@ class Genetics:
                 if tempmin == salesmen[i, 53]:  # If we got a match for good result
                     tempmini = i
 
-            elite[j] = salesmen[tempmini]  # Then transfer to the elites
+            self.elite[j] = salesmen[tempmini]  # Then transfer to the elites
 
             salesmen[tempmini, 53] = 100000  # Set to big value to not find the same path again
 
-        return elite
+        return self.elite
 
     def un_elitism(self, salesmen):  #
 
+        self.unelite[:, :] = 0
         self.unelite = self.unelite.astype(int)
         counter = 0
 
         for i in range(100):
 
-            if salesmen[i, 53] != 100000 and counter<50:
+            if salesmen[i, 53] != 100000 and counter < 50:
                 self.unelite[counter] = salesmen[i]
                 counter += 1
 
@@ -93,6 +97,7 @@ class Genetics:
 
     def cross(self, parent1, parent2):  # makes new salesmen
 
+        self.child[:, :] = 0
         self.child = self.child.astype(int)
         self.child[0, 0] = 1  # starting city
 
@@ -103,7 +108,7 @@ class Genetics:
         random_position = rnd.randint(1, 52 - random_amount)
 
         self.child[0, random_position:random_position + random_amount] = parent1[0,
-                                                                    random_position:random_position + random_amount]  # Get genes from parent
+                                                                         random_position:random_position + random_amount]  # Get genes from parent
 
         empty = 0
 
@@ -128,6 +133,7 @@ class Genetics:
     def crossover(self, uelite, elite, unelite):  # sends parents to cross2
         np.random.shuffle(elite)
         np.random.shuffle(unelite)
+        self.children[:, :] = 0
         self.children = self.children.astype(int)
 
         for i in range(95):
@@ -165,13 +171,14 @@ class Genetics:
 
         return salesmen
 
+
 class Distances:
 
     def __init__(self):
-        self.x1=0
-        self.x2=0
-        self.y1=0
-        self.y2=0
+        self.x1 = 0
+        self.x2 = 0
+        self.y1 = 0
+        self.y2 = 0
 
     # check how long the road for the salesmen is
     def lookup(self, salesman):
@@ -197,13 +204,14 @@ class Distances:
         x += x.T
         return x
 
+
 class Representation:
     #  plots stuff
     def __init__(self):
         self.x_list = []  # plot coordinates lists
         self.y_list = []
 
-    def plot_data(self,x, y):
+    def plot_data(self, x, y):
         plt.plot(x, y)
         plt.legend(('Best path'))
         plt.ylabel("Y")
@@ -229,13 +237,13 @@ if __name__ == '__main__':
         population = Dist.lookup(population)
         if shortest_path > min(population[:, 53]):
             shortest_path = min(population[:, 53])  # assign the best one
-            print("New shortest path: ",shortest_path)
-            shortest_index = np.where(population[:,53] == shortest_path)  # Find index of best one
-            best_salesman = population[shortest_index[0]]
+            for l in range(100):
+                if shortest_path == population[l, 53]:
+                    shortest_index = l
 
-        if j % 20 == 0 and j > 0:  # print stuff
-
-            print("Average path: ", sum(population[:, 53]) / population.shape[0])
+            best_salesman = population[shortest_index]
+            print("New shortest path: {}\nBest salesman: {}\nShape: {}".format(shortest_path, best_salesman,
+                                                                               best_salesman.shape))
 
         ultraelitepop = Gen.ultra_elitism(population)
         elitepop = Gen.elitism(population)
@@ -243,8 +251,6 @@ if __name__ == '__main__':
         population = Gen.crossover(ultraelitepop, elitepop, unelitepop)
         population = Gen.mutate(population)
         population[:, 53] = 0  # resets everyones path
-
-    print("Best salesman: {}".format(best_salesman.shape))
 
     for k in range(53):
         Rep.x_list.append(data_array[best_salesman[0, k] - 1, 1])
