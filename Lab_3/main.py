@@ -49,11 +49,11 @@ class Genetics:
 
             temp_min = min(salesmen[:, 53])  # check for shortest path
 
-        for j in range(self.amount):  # Check through all the salesmen
+            for j in range(self.amount):  # Check through all the salesmen
 
-            if temp_min == salesmen[j, 53]:  # If we got a match for good result
-                self.uelite[i] = salesmen[j]  # Then transfer to the elites
-                salesmen[j, 53] = 100000  # Set to big value to not find the same path again
+                if temp_min == salesmen[j, 53]:  # If we got a match for good result
+                    self.uelite[i] = salesmen[j]  # Then transfer to the elites
+                    salesmen[j, 53] = 100000  # Set to big value to not find the same path again
 
         return self.uelite
 
