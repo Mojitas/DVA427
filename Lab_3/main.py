@@ -22,7 +22,7 @@ class Genetics:
         self.generations = 10000
         self.next_gen = 45  # salesmen in next generation
 
-        self.mutation_chance = 0.025
+        self.mutation_chance = 0.01
 
         self.best_salesman = np.zeros((1, 54))
         self.salesmen = np.zeros((self.amount, 54))  # every salesman has a route of cities and total distance
@@ -155,7 +155,7 @@ class Genetics:
         for j in range(self.amount):
 
             if np.random.rand(1) <= self.mutation_chance:
-                mutations = random.randint(1, 40)
+                mutations = random.randint(1, 50)
                 random_position = random.randint(1, 52 - mutations)
                 reverse = salesmen[j, random_position:random_position + mutations]
                 reverse = np.flip([reverse])[0]  # flip the sequence
