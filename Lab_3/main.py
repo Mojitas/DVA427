@@ -19,10 +19,10 @@ class Genetics:
 
     def __init__(self):  # starting conditions
         self.amount = 100  # salesmen in each generation
-        self.generations = 1000
+        self.generations = 10000
         self.next_gen = 45  # salesmen in next generation
 
-        self.mutation_chance = 0.05
+        self.mutation_chance = 0.025
 
         self.best_salesman = np.zeros((1, 54))
         self.salesmen = np.zeros((self.amount, 54))  # every salesman has a route of cities and total distance
@@ -154,16 +154,12 @@ class Genetics:
     def mutate(self, salesmen):
         for j in range(self.amount):
 
-            if np.random.rand(1)>self.mutation_chance:
-
-            mutations = random.randint(1, 7)
-            random_position = random.randint(1, 52 - mutations)
-
-            reverse = salesmen[j, random_position:random_position + mutations]
-
-            reverse = np.flip([reverse])[0]  # flip the sequence
-
-            salesmen[j, random_position:random_position + mutations] = reverse
+            if np.random.rand(1) <= self.mutation_chance:
+                mutations = random.randint(1, 40)
+                random_position = random.randint(1, 52 - mutations)
+                reverse = salesmen[j, random_position:random_position + mutations]
+                reverse = np.flip([reverse])[0]  # flip the sequence
+                salesmen[j, random_position:random_position + mutations] = reverse
 
         return salesmen
 
@@ -236,10 +232,7 @@ if __name__ == '__main__':
                     shortest_index = l
 
             Gen.best_salesman = population[shortest_index]
-            print("New shortest path: {}\nBest salesman: {}\nShape: {}\nGeneration: {}".format(shortest_path,
-                                                                                               Gen.best_salesman,
-                                                                                               Gen.best_salesman.shape,
-                                                                                               j))
+            print("\nNew shortest path: {}\nGeneration: {}".format(shortest_path,j))
 
         ultraelitepop = Gen.ultra_elitism(population)
         elitepop = Gen.elitism(population)
