@@ -22,6 +22,8 @@ class Genetics:
         self.generations = 1000
         self.next_gen = 45  # salesmen in next generation
 
+        self.mutation_chance = 0.05
+
         self.best_salesman = np.zeros((1, 54))
         self.salesmen = np.zeros((self.amount, 54))  # every salesman has a route of cities and total distance
         self.child = np.zeros((1, 54))
@@ -84,42 +86,42 @@ class Genetics:
 
         return self.unelite
 
-    def new_start(self):
+    def new_start(self):  # next gen
         return
 
     def cross(self, parent_1, parent_2):  # makes new salesmen
 
+        self.child[:, :] = 0
         self.child = self.child.astype(int)
-        remaining = np.zeros((1, 54))
+        self.child[0, 0] = 1  # starting city
+
+        remaining = np.zeros((1, 54))  #
         remaining = remaining.astype(int)
 
-        for j in range(10):  # Repeats ten times
+        random_amount = random.randint(10, 30)  # 10-15 genes
+        random_position = random.randint(1, 52 - random_amount)
 
-            random_one = random.randint(0, 49)  # where genes transfer
-            random_amount = random.randint(1, 10)  # how many genes
+        self.child[0, random_position:random_position + random_amount] = parent_1[0,
+                                                                         random_position:random_position + random_amount]  # Get genes from parent
 
-            for i in range(random_amount):
-                self.child[0, random_one + i] = parent_1[0, random_one + i]
+        empty = 0
 
-            empty = 0
+        for i in range(53):  # Get remaining places
 
-            for i in range(53):
+            if parent_2[0, i] not in self.child:
+                remaining[0, empty] = parent_2[0, i]
+                empty += 1
 
-                if parent_2[0, i] not in self.child:
-                    remaining[0, empty] = parent_2[0, i]
-                    empty += 1
+        j = 0
 
-            j = 0
+        for i in range(52):  # fill remaining places with genes from parent 2
 
-            for i in range(52):
+            if self.child[0, i] == 0:
+                self.child[0, i] = remaining[0, j]
+                j += 1
 
-                if self.child[0, i] == 0:
-                    self.child[0, i] = remaining[0, j]
-                    j += 1
-
-            self.child[0, 52] = self.child[0, 0]
-
-            return self.child
+        self.child[0, 52] = self.child[0, 0]
+        return self.child
 
     def crossover(self, uelite, elite, unelite):  # sends parents to cross2
         np.random.shuffle(elite)
@@ -151,6 +153,9 @@ class Genetics:
 
     def mutate(self, salesmen):
         for j in range(self.amount):
+
+            if np.random.rand(1)>self.mutation_chance:
+
             mutations = random.randint(1, 7)
             random_position = random.randint(1, 52 - mutations)
 

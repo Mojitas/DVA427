@@ -10,7 +10,7 @@ x=np.zeros((3))
 x[0]=10
 print(max(x))
 
-
+print(np.random.rand(1))
 
 
 
