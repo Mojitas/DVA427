@@ -245,4 +245,4 @@ if __name__ == '__main__':
         Rep.x_list.append(data_array[Gen.best_salesman[m] - 1, 1])
         Rep.y_list.append(data_array[Gen.best_salesman[m] - 1, 2])
 
-    Rep.plot_data(Rep.x_list, Rep.y_list)
+    Rep.plot_data(Rep.x_list, Rep.y_list) #
