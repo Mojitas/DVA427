@@ -19,8 +19,8 @@ class Genetics:
 
     def __init__(self):  # starting conditions
         self.amount = 100  # salesmen in each generation
-        self.generations = 2000
-        self.next_gen = 45  # salesmen in next generation
+        self.generations = 1000
+        self.next_gen = 45  # Number of elites
 
         self.mutation_chance = 0.05
 
@@ -135,10 +135,10 @@ class Genetics:
             parent2 = random.randint(1, 44)
             u_parent = random.randint(1,4)
 
-            if prob < 4:
+            if prob < 3:
                 self.children[i] = self.cross(elite[parent1:parent1 + 1], elite[parent2:parent2 + 1])
 
-            elif 4 <= prob <= 7:
+            elif 3 <= prob <= 6:
                 self.children[i] = self.cross(unelite[parent1:parent1 + 1], elite[parent2:parent2 + 1])
 
             else:
