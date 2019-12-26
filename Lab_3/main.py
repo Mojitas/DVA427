@@ -19,10 +19,10 @@ class Genetics:
 
     def __init__(self):  # starting conditions
         self.amount = 100  # salesmen in each generation
-        self.generations = 10000
+        self.generations = 2000
         self.next_gen = 45  # salesmen in next generation
 
-        self.mutation_chance = 0.01
+        self.mutation_chance = 0.05
 
         self.best_salesman = np.zeros((1, 54))
         self.salesmen = np.zeros((self.amount, 54))  # every salesman has a route of cities and total distance
@@ -133,15 +133,16 @@ class Genetics:
             prob = random.randint(1, 10)
             parent1 = random.randint(1, 44)
             parent2 = random.randint(1, 44)
+            u_parent = random.randint(1,4)
 
-            if prob < 8:
+            if prob < 4:
                 self.children[i] = self.cross(elite[parent1:parent1 + 1], elite[parent2:parent2 + 1])
 
-            elif 8 <= prob <= 9:
+            elif 4 <= prob <= 7:
                 self.children[i] = self.cross(unelite[parent1:parent1 + 1], elite[parent2:parent2 + 1])
 
             else:
-                self.children[i] = self.cross(unelite[parent1:parent1 + 1], unelite[parent2:parent2 + 1])
+                self.children[i] = self.cross(elite[parent1:parent1 + 1], uelite[u_parent:u_parent + 1])
 
         new_population = np.zeros((self.amount, 54))
         new_population = new_population.astype(int)
