@@ -135,10 +135,10 @@ class Genetics:
             parent2 = random.randint(1, 44)
             u_parent = random.randint(1,4)
 
-            if prob < 3:
+            if prob < 5:
                 self.children[i] = self.cross(elite[parent1:parent1 + 1], elite[parent2:parent2 + 1])
 
-            elif 3 <= prob <= 6:
+            elif 5 <= prob <= 6:
                 self.children[i] = self.cross(unelite[parent1:parent1 + 1], elite[parent2:parent2 + 1])
 
             else:
@@ -156,7 +156,8 @@ class Genetics:
         for j in range(self.amount):
 
             if np.random.rand(1) <= self.mutation_chance:
-                mutations = random.randint(1, 50)
+
+                mutations = random.randint(1, 49)
                 random_position = random.randint(1, 52 - mutations)
                 reverse = salesmen[j, random_position:random_position + mutations]
                 reverse = np.flip([reverse])[0]  # flip the sequence
