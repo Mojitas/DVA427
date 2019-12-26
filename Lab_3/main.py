@@ -19,7 +19,7 @@ class Genetics:
 
     def __init__(self):  # starting conditions
         self.amount = 100  # salesmen in each generation
-        self.generations = 1000
+        self.generations = 10000
         self.next_gen = 45  # Number of elites
 
         self.mutation_chance = 0.05
@@ -157,7 +157,7 @@ class Genetics:
 
             if np.random.rand(1) <= self.mutation_chance:
 
-                mutations = random.randint(1, 49)
+                mutations = random.randint(1, 30)
                 random_position = random.randint(1, 52 - mutations)
                 reverse = salesmen[j, random_position:random_position + mutations]
                 reverse = np.flip([reverse])[0]  # flip the sequence
@@ -242,6 +242,8 @@ if __name__ == '__main__':
         population = Gen.crossover(ultraelitepop, elitepop, unelitepop)
         population = Gen.mutate(population)
         population[:, 53] = 0  # resets everyones path
+        if j%1000 == 0 and j != 0:
+            Gen.mutation_chance+=0.05
 
     for m in range(53):
         Rep.x_list.append(data_array[Gen.best_salesman[m] - 1, 1])
