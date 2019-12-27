@@ -14,9 +14,8 @@ class Node:
     def __init__(self, value=None):
 
         self.value = value
-
-        self.connections = [] #Array med connections
-        self.weights = [] #Array med connectionsens weights
+        self.connections = []  # list with connections
+        self.weights = []  # list with connection weights
 
 
 list = [Node('F')]

@@ -3,6 +3,7 @@ import random
 import pandas as pd
 import math
 import matplotlib.pyplot as plt
+import time
 
 ###Globals###
 data_array = np.array(pd.read_csv("berlin52.tsp", header=None))
@@ -11,18 +12,16 @@ distance_array = np.zeros((52, 52))  # List for distances
 data_array = data_array.astype(int)
 distance_array = distance_array.astype(int)
 random.seed()
+np.set_printoptions(threshold=np.inf)
 
-
-# np.set_printoptions(threshold=np.inf)
 
 class Genetics:
 
     def __init__(self):  # starting conditions
         self.amount = 100  # salesmen in each generation
-        self.generations = 10000
+        self.generations = 1000
         self.next_gen = 45  # Number of elites
-
-        self.mutation_chance = 0.05
+        self.mutation_chance = 0.1
 
         self.best_salesman = np.zeros((1, 54))
         self.salesmen = np.zeros((self.amount, 54))  # every salesman has a route of cities and total distance
@@ -43,6 +42,16 @@ class Genetics:
         self.salesmen[:, 52] = self.salesmen[:, 0]  # start is same as end
 
         return self.salesmen
+
+    def new_start(self,population):
+
+        ultraelitepop = Gen.ultra_elitism(population)
+        elitepop = Gen.elitism(population)
+        unelitepop = Gen.un_elitism(population)
+        population = Gen.crossover(ultraelitepop, elitepop, unelitepop)
+        population = Gen.mutate(population)
+        population[:, 53] = 0  # resets everyones path
+        return  population
 
     def ultra_elitism(self, salesmen):
         self.uelite = self.uelite.astype(int)
@@ -85,9 +94,6 @@ class Genetics:
                 counter += 1
 
         return self.unelite
-
-    def new_start(self):  # next gen
-        return
 
     def cross(self, parent_1, parent_2):  # makes new salesmen
 
@@ -133,7 +139,7 @@ class Genetics:
             prob = random.randint(1, 10)
             parent1 = random.randint(1, 44)
             parent2 = random.randint(1, 44)
-            u_parent = random.randint(1,4)
+            u_parent = random.randint(1, 4)
 
             if prob < 5:
                 self.children[i] = self.cross(elite[parent1:parent1 + 1], elite[parent2:parent2 + 1])
@@ -156,7 +162,6 @@ class Genetics:
         for j in range(self.amount):
 
             if np.random.rand(1) <= self.mutation_chance:
-
                 mutations = random.randint(1, 30)
                 random_position = random.randint(1, 52 - mutations)
                 reverse = salesmen[j, random_position:random_position + mutations]
@@ -204,12 +209,14 @@ class Representation:
     def __init__(self):
         self.x_list = []  # plot coordinates lists
         self.y_list = []
+        self.gen_list = []
+        self.score_list = []
 
-    def plot_data(self, x, y):
+    def plot_data(self, x, y, x_label, y_label, title):
         plt.plot(x, y)
-        plt.legend(('Best path'))
-        plt.ylabel("Y")
-        plt.xlabel("X")
+        plt.ylabel(y_label)
+        plt.xlabel(x_label)
+        plt.title(title)
         plt.show()
 
 
@@ -217,36 +224,38 @@ Gen = Genetics()
 Dist = Distances()
 Rep = Representation()
 population = Gen.dawn_of_time()  # sets the first generation going
-distance_array = Dist.calculation(distance_array)
+Dist.calculation(distance_array)
 
 if __name__ == '__main__':
 
     shortest_path = 40000
     shortest_index = 0
 
+    start = time.time()  # Times the GA
     for j in range(Gen.generations):
 
-        population = Dist.lookup(population)
+        population = Dist.lookup(population)  # checks the length of everyones path
+
         if shortest_path > min(population[:, 53]):
             shortest_path = min(population[:, 53])  # assign the best one
             for l in range(100):
-                if shortest_path == population[l, 53]:
+                if shortest_path == population[l, 53]:  # find the best one
                     shortest_index = l
+                    break
 
             Gen.best_salesman = population[shortest_index]
-            print("\nNew shortest path: {}\nGeneration: {}".format(shortest_path,j))
+            Rep.score_list.append(shortest_path)
+            Rep.gen_list.append(j)
+            print("\nNew shortest path: {}\nGeneration: {}".format(shortest_path, j))
 
-        ultraelitepop = Gen.ultra_elitism(population)
-        elitepop = Gen.elitism(population)
-        unelitepop = Gen.un_elitism(population)
-        population = Gen.crossover(ultraelitepop, elitepop, unelitepop)
-        population = Gen.mutate(population)
-        population[:, 53] = 0  # resets everyones path
-        if j%1000 == 0 and j != 0:
-            Gen.mutation_chance+=0.05
+        population = Gen.new_start(population) # makes the next generation
 
-    for m in range(53):
+    end = time.time()  # Stops time
+
+    for m in range(53):     # Puts the best path in a list
         Rep.x_list.append(data_array[Gen.best_salesman[m] - 1, 1])
         Rep.y_list.append(data_array[Gen.best_salesman[m] - 1, 2])
 
-    Rep.plot_data(Rep.x_list, Rep.y_list) #
+    Rep.plot_data(Rep.x_list, Rep.y_list, "Distance(x)", "Distance(y)", "Best path")  # Plot the best path
+    Rep.plot_data(Rep.gen_list, Rep.score_list, "Generations", "Path length", "Evolution")  # plot evolution
+    print("Execution time of GA: ", end - start)
