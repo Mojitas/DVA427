@@ -4,6 +4,19 @@ import pandas as pd
 data_array = np.array(pd.read_csv("city 1.txt", header=None), dtype=(np.unicode_, 1))  # Reads from file
 
 
+path = []
+
+list = []
+
+for i in range(23):
+    list.append(path)
+
+
+
+list[0].append(5)
+list[8].append(15)
+print(list)
+
 class Graph:
 
     def __init__(self, nodes):
@@ -14,7 +27,6 @@ class Graph:
         self.graph.append([city1, city2, weigth])
 
     def printArr(self, dist):
-        print("Vertex Distance from Source")
         for i in range(self.Nodes):
             print(i, dist[i])
 
@@ -27,6 +39,7 @@ class Graph:
             for u, v, w in self.graph:
                 if dist[u] != [float("Inf")] and dist[u] + w < dist[v]:
                     dist[v] = dist[u] + w
+                    print("Distance to " + str(v) + " has been updated via " + str(u))
 
         self.printArr(dist)
 
