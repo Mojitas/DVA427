@@ -5,10 +5,10 @@ import math
 import matplotlib.pyplot as plt
 import time
 
-###Globals###
+# Globals #
 data_array = np.array(pd.read_csv("berlin52.tsp", header=None))
-distance_array = np.zeros((52, 52))  # List for distances
-###
+distance_array = np.zeros((52, 52))  # Array for distances
+###########
 data_array = data_array.astype(int)
 distance_array = distance_array.astype(int)
 random.seed()
@@ -19,9 +19,9 @@ class Genetics:
 
     def __init__(self):  # starting conditions
         self.amount = 100  # salesmen in each generation
-        self.generations = 1000
+        self.generations = 10000
         self.next_gen = 45  # Number of elites
-        self.mutation_chance = 0.1
+        self.mutation_chance = 0.04
 
         self.best_salesman = np.zeros((1, 54))
         self.salesmen = np.zeros((self.amount, 54))  # every salesman has a route of cities and total distance
@@ -43,7 +43,7 @@ class Genetics:
 
         return self.salesmen
 
-    def new_start(self,population):
+    def new_start(self, population):
 
         ultraelitepop = Gen.ultra_elitism(population)
         elitepop = Gen.elitism(population)
@@ -51,7 +51,7 @@ class Genetics:
         population = Gen.crossover(ultraelitepop, elitepop, unelitepop)
         population = Gen.mutate(population)
         population[:, 53] = 0  # resets everyones path
-        return  population
+        return population
 
     def ultra_elitism(self, salesmen):
         self.uelite = self.uelite.astype(int)
@@ -228,13 +228,14 @@ Dist.calculation(distance_array)
 
 if __name__ == '__main__':
 
-    shortest_path = 40000
+    shortest_path = 40000  # some high starting value
     shortest_index = 0
+    latest_improvement = 0
 
     start = time.time()  # Times the GA
     for j in range(Gen.generations):
 
-        population = Dist.lookup(population)  # checks the length of everyones path
+        population = Dist.lookup(population)  # checks the length of everyone's path
 
         if shortest_path > min(population[:, 53]):
             shortest_path = min(population[:, 53])  # assign the best one
@@ -246,16 +247,23 @@ if __name__ == '__main__':
             Gen.best_salesman = population[shortest_index]
             Rep.score_list.append(shortest_path)
             Rep.gen_list.append(j)
+            latest_improvement = j
             print("\nNew shortest path: {}\nGeneration: {}".format(shortest_path, j))
 
-        population = Gen.new_start(population) # makes the next generation
+        population = Gen.new_start(population)  # makes the next generation
+        if j - latest_improvement > 50 and shortest_path < 9000:  # stops faster
+            print("No improvements for 50 generations")
+            print("Final generation: ",j)
+            break
+        elif j - latest_improvement > 50 and Gen.mutation_chance < 0.2:  # increase mutation as we go along without improvement
+            Gen.mutation_chance += 0.005
 
     end = time.time()  # Stops time
 
-    for m in range(53):     # Puts the best path in a list
+    for m in range(53):  # Puts the best path in a list
         Rep.x_list.append(data_array[Gen.best_salesman[m] - 1, 1])
         Rep.y_list.append(data_array[Gen.best_salesman[m] - 1, 2])
 
-    Rep.plot_data(Rep.x_list, Rep.y_list, "Distance(x)", "Distance(y)", "Best path")  # Plot the best path
-    Rep.plot_data(Rep.gen_list, Rep.score_list, "Generations", "Path length", "Evolution")  # plot evolution
+    Rep.plot_data(Rep.x_list, Rep.y_list, "Distance(x)", "Distance(y)", "Best path")
+    Rep.plot_data(Rep.gen_list, Rep.score_list, "Generations", "Path length", "Evolution")
     print("Execution time of GA: ", end - start)
