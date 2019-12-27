@@ -254,6 +254,7 @@ if __name__ == '__main__':
         if j - latest_improvement > 50 and shortest_path < 9000:  # stops faster
             print("No improvements for 50 generations")
             print("Final generation: {}\nFinal mutation chance: {}".format(j, Gen.mutation_chance))
+            print("Best path: ", Gen.best_salesman[0:53])
             break
         elif j - latest_improvement > 50 and Gen.mutation_chance < 0.10:  # increase mutation as we go along without improvement
             Gen.mutation_chance += 0.005
