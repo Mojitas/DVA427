@@ -252,7 +252,7 @@ if __name__ == '__main__':
 
         population = Gen.new_start(population)  # makes the next generation
         if j - latest_improvement > 50 and shortest_path < 9000:  # stops faster
-            print("No improvements for 100 generations")
+            print("No improvements for 50 generations")
             print("Final generation: {}\nFinal mutation chance: {}".format(j, Gen.mutation_chance))
             break
         elif j - latest_improvement > 50 and Gen.mutation_chance < 0.10:  # increase mutation as we go along without improvement
@@ -263,7 +263,7 @@ if __name__ == '__main__':
     for m in range(53):  # Puts the best path in a list
         Rep.x_list.append(data_array[Gen.best_salesman[m] - 1, 1])
         Rep.y_list.append(data_array[Gen.best_salesman[m] - 1, 2])
-
-    Rep.plot_data(Rep.x_list, Rep.y_list, "Distance(x)", "Distance(y)", "Best path")
-    Rep.plot_data(Rep.gen_list, Rep.score_list, "Generations", "Path length", "Evolution")
     print("Execution time of GA: ", end - start)
+    Rep.plot_data(Rep.x_list, Rep.y_list, "Distance(x)", "Distance(y)", "Best total path")
+    Rep.plot_data(Rep.gen_list, Rep.score_list, "Generations", "Path length", "Evolution of salesmen")
+
