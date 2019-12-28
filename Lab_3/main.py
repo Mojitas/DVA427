@@ -43,7 +43,8 @@ class Genetics:
 
         return self.salesmen
 
-    def new_start(self, population):
+    @staticmethod
+    def new_start(population):
 
         ultraelitepop = Gen.ultra_elitism(population)
         elitepop = Gen.elitism(population)
@@ -251,8 +252,8 @@ if __name__ == '__main__':
             print("\nNew shortest path: {}\nGeneration: {}".format(shortest_path, j))
 
         population = Gen.new_start(population)  # makes the next generation
-        if j - latest_improvement > 50 and shortest_path < 9000:  # stops faster
-            print("No improvements for 50 generations")
+        if j - latest_improvement > 100 and shortest_path < 9000:  # stops faster
+            print("No improvements for 100 generations")
             print("Final generation: {}\nFinal mutation chance: {}".format(j, Gen.mutation_chance))
             print("Best path: ", Gen.best_salesman[0:53])
             break
