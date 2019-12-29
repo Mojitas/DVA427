@@ -2,14 +2,8 @@ import numpy as np
 import pandas as pd
 
 data_array = np.array(pd.read_csv("city 1.txt", header=None), dtype=(np.unicode_, 1))  # Reads from file
-path = []
-node_list = []
-
-for i in range(23):
-    node_list.append(path)
-
-node_list[0].append(5)
-node_list[8].append(15)
+path = [5, 15]
+node_list = [path for i in range(23)]
 print(node_list)
 
 
