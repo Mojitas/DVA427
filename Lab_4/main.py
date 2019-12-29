@@ -19,21 +19,21 @@ node_list = [Node('F')]
 
 counter = 1  # ??
 
-for C in range(23):
-    for i in range(35):
-        if data_array[i, 0] == node_list[C].value:
-            node_list[C].connections.append(data_array[i, 1])
-            node_list[C].weights.append(data_array[i, 2].astype(int))
-        elif data_array[i, 1] == node_list[C].value:
-            node_list[C].connections.append(data_array[i, 0])
-            node_list[C].weights.append(data_array[i, 2].astype(int))
+for i in range(23):
+    for j in range(35):
+        if data_array[j, 0] == node_list[i].value:
+            node_list[i].connections.append(data_array[j, 1])
+            node_list[i].weights.append(data_array[i, 2].astype(int))
+        elif data_array[j, 1] == node_list[i].value:
+            node_list[i].connections.append(data_array[j, 0])
+            node_list[i].weights.append(data_array[j, 2].astype(int))
 
-    for i in range(len(node_list[C].connections)):
+    for j in range(len(node_list[i].connections)):
         alreadyIn = 0
-        letter = node_list[C].connections[i]
+        letter = node_list[i].connections[j]
 
-        for j in range(len(node_list)):
-            if letter == node_list[j].value:
+        for k in range(len(node_list)):
+            if letter == node_list[k].value:
                 alreadyIn = 1
 
         if alreadyIn == 0:
@@ -45,8 +45,8 @@ for i in range(len(node_list)):
     if node_list[i].value == 'F':
         node_list[i].vstar = 0
 
-for j in range(len(node_list)):
-    print(node_list[j].value)
+for i in range(len(node_list)):
+    print(node_list[i].value)
 
 print(len(node_list))
 
