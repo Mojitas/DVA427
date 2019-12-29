@@ -1,11 +1,8 @@
 import numpy as np
 import pandas as pd
 
-rate = 0.9      #Never used?
-discount = 1
-
 data_array = np.array(pd.read_csv("city 1.txt", header=None), dtype=(np.unicode_, 1))  # Reads from file
-data_array[:, 2] = data_array[:, 2].astype(int) - discount  # what is discount?
+data_array[:, 2] = data_array[:, 2].astype(int) - 1  # what is discount?
 
 
 class Node:
@@ -15,39 +12,37 @@ class Node:
         self.weights = []  # list with connection weights
 
 
-node_list = [Node('F')]
 
-counter = 1  # ??
+exit('Butt!')
+if __name__ == '__main__':
 
-for i in range(23):
-    for j in range(35):
-        if data_array[j, 0] == node_list[i].value:
-            node_list[i].connections.append(data_array[j, 1])
-            node_list[i].weights.append(data_array[i, 2].astype(int))
-        elif data_array[j, 1] == node_list[i].value:
-            node_list[i].connections.append(data_array[j, 0])
-            node_list[i].weights.append(data_array[j, 2].astype(int))
+    node_list = [Node('F')]
 
-    for j in range(len(node_list[i].connections)):
-        alreadyIn = 0
-        letter = node_list[i].connections[j]
+    for i in range(23):
+        for j in range(35):
+            if data_array[j, 0] == node_list[i].value:
+                node_list[i].connections.append(data_array[j, 1])
+                node_list[i].weights.append(data_array[i, 2].astype(int))
+            elif data_array[j, 1] == node_list[i].value:
+                node_list[i].connections.append(data_array[j, 0])
+                node_list[i].weights.append(data_array[j, 2].astype(int))
 
-        for k in range(len(node_list)):
-            if letter == node_list[k].value:
-                alreadyIn = 1
+        for j in range(len(node_list[i].connections)):
+            alreadyIn = 0
+            letter = node_list[i].connections[j]
 
-        if alreadyIn == 0:
-            node_list.append(Node(letter))
+            for k in range(len(node_list)):
+                if letter == node_list[k].value:
+                    alreadyIn = 1
 
-for i in range(len(node_list)):
-    node_list[i].vstar = 100000
+            if alreadyIn == 0:
+                node_list.append(Node(letter))
 
-    if node_list[i].value == 'F':
-        node_list[i].vstar = 0
+    for i in range(len(node_list)):
+        node_list[i].vstar = 100000
 
-for i in range(len(node_list)):
-    print(node_list[i].value)
+        if node_list[i].value == 'F':
+            node_list[i].vstar = 0
 
-print(len(node_list))
-
-# print(data_array)
+    for i in range(len(node_list)):
+        print(node_list[i].value)

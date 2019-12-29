@@ -2,10 +2,11 @@ import numpy as np
 import pandas as pd
 
 data_array = np.array(pd.read_csv("city 1.txt", header=None), dtype=(np.unicode_, 1))
-path = [5, 15]
-node_list = [path for i in range(23)]  # a bit cleaner :)
-print(node_list)
-
+"""
+path = [5, 15]  # This isn't used...
+node_list = [path for i in range(23)]  # init the list with 23 nodes of type path
+# print(node_list)
+"""
 
 class Graph:
 
@@ -33,10 +34,10 @@ class Graph:
         self.printArr(dist)
 
 
-G = Graph(23)
-for i in range(35):
+G = Graph(23)   # init the graph with 23 nodes
+for i in range(35):     # Add the vertices(as numbers) and cost of edges
     G.addEdge(ord(data_array[i, 0]) - 65, ord(data_array[i, 1]) - 65, data_array[i, 2].astype(int))
-for i in range(35):  # Two sided?
+for i in range(35):     # Undirected graph, each edge goes both ways
     G.addEdge(ord(data_array[i, 1]) - 65, ord(data_array[i, 0]) - 65, data_array[i, 2].astype(int))
 
-G.BellmanFord(5)
+G.BellmanFord(5)    # Find 5, aka F
