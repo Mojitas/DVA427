@@ -223,14 +223,14 @@ class Representation:
 
 Gen = Genetics()
 Dist = Distances()
-Rep = Representation()
+Rep = Representation()  # iniializes everything
 population = Gen.dawn_of_time()  # sets the first generation going
-Dist.calculation(distance_array)
+Dist.calculation(distance_array)    # Makes a table of distances
 
 if __name__ == '__main__':
 
     shortest_path = 40000  # some high starting value
-    shortest_index = 0
+    shortest_index = 0   # Index for finding shortest path
     latest_improvement = 0
 
     start = time.time()  # Times the GA
@@ -252,6 +252,7 @@ if __name__ == '__main__':
             print("\nNew shortest path: {}\nGeneration: {}".format(shortest_path, j))
 
         population = Gen.new_start(population)  # makes the next generation
+
         if j - latest_improvement > 100 and shortest_path < 9000:  # stops faster
             print("No improvements for 100 generations")
             print("Final generation: {}\nFinal mutation chance: {}".format(j, Gen.mutation_chance))
@@ -265,6 +266,7 @@ if __name__ == '__main__':
     for m in range(53):  # Puts the best path in a list
         Rep.x_list.append(data_array[Gen.best_salesman[m] - 1, 1])
         Rep.y_list.append(data_array[Gen.best_salesman[m] - 1, 2])
+
     print("Execution time of GA: ", end - start)
     Rep.plot_data(Rep.x_list, Rep.y_list, "Distance(x)", "Distance(y)", "Best total path")
     Rep.plot_data(Rep.gen_list, Rep.score_list, "Generations", "Path length", "Evolution of salesmen")

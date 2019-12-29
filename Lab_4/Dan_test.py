@@ -2,20 +2,16 @@ import numpy as np
 import pandas as pd
 
 data_array = np.array(pd.read_csv("city 1.txt", header=None), dtype=(np.unicode_, 1))  # Reads from file
-
-
 path = []
-
-list = []
+node_list = []
 
 for i in range(23):
-    list.append(path)
+    node_list.append(path)
 
+node_list[0].append(5)
+node_list[8].append(15)
+print(node_list)
 
-
-list[0].append(5)
-list[8].append(15)
-print(list)
 
 class Graph:
 
