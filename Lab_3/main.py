@@ -21,7 +21,7 @@ class Genetics:
         self.amount = 100  # salesmen in each generation
         self.generations = 10000
         self.next_gen = 45  # Number of elites
-        self.mutation_chance = 0.05
+        self.mutation_chance = 0
 
         self.best_salesman = np.zeros((1, 54))
         self.salesmen = np.zeros((self.amount, 54))  # every salesman has a route of cities and total distance

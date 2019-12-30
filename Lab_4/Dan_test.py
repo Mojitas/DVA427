@@ -2,13 +2,15 @@ import numpy as np
 import pandas as pd
 
 data_array = np.array(pd.read_csv("city 1.txt", header=None), dtype=(np.unicode_, 1))
-"""
-path = [5, 15]  # This isn't used...
-node_list = [path for i in range(23)]  # init the list with 23 nodes of type path
-# print(node_list)
-"""
+
+node = []
+node_list = pd.DataFrame(node for i in range(23))
 
 
+print(node_list)
+
+
+exit(1)
 class Graph:
 
     def __init__(self, nodes):
