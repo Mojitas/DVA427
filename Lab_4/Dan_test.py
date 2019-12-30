@@ -53,9 +53,6 @@ for i in range(35):  # Undirected graph, each edge goes both ways
 
 G.BellmanFord(5)  # Find 5, aka F
 
-
-
-
 for i in range(23):
 
     stop = 0
