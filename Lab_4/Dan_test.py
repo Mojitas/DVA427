@@ -54,4 +54,8 @@ for i in range(35):  # Undirected graph, each edge goes both ways
 
 G.BellmanFord(5)  # Find 5, aka F
 
-print(Paths)
+Paths = Paths.astype(int)
+for i in range(23):
+    for j in range(8):
+        print(chr(Paths[i,j]+65), end='')
+    print("")
