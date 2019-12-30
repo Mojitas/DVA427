@@ -253,7 +253,7 @@ if __name__ == '__main__':
 
         population = Gen.new_start(population)  # makes the next generation
 
-        if j - latest_improvement > 400 and shortest_path < 9000:  # stops faster
+        if j - latest_improvement > 100 and shortest_path < 9000:  # stops faster
             print("No improvements for 100 generations")
             print("Final generation: {}\nFinal mutation chance: {}".format(j, Gen.mutation_chance))
             print("Best path: ", Gen.best_salesman[0:53])
