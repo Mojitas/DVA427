@@ -21,7 +21,7 @@ class Genetics:
         self.amount = 100  # salesmen in each generation
         self.generations = 10000
         self.next_gen = 45  # Number of elites
-        self.mutation_chance = 0
+        self.mutation_chance = 0.05
 
         self.best_salesman = np.zeros((1, 54))
         self.salesmen = np.zeros((self.amount, 54))  # every salesman has a route of cities and total distance
@@ -253,7 +253,7 @@ if __name__ == '__main__':
 
         population = Gen.new_start(population)  # makes the next generation
 
-        if j - latest_improvement > 400 and shortest_path < 9000:  # stops faster
+        if j - latest_improvement > 100 and shortest_path < 9000:  # stops faster
             print("No improvements for 100 generations")
             print("Final generation: {}\nFinal mutation chance: {}".format(j, Gen.mutation_chance))
             print("Best path: ", Gen.best_salesman[0:53])

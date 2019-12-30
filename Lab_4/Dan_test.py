@@ -18,7 +18,7 @@ class Graph:
         self.graph.append([city1, city2, weight])
 
     def printArr(self, dist):
-        print([(i, dist[i]) for i in range(self.Nodes)])
+        print([(chr(i+65), dist[i]) for i in range(self.Nodes)])
 
     def BellmanFord(self, src):
 
