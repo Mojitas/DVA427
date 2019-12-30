@@ -45,7 +45,6 @@ class Graph:
 
         self.printArr(dist)
 
-
 G = Graph(23)  # init the graph with 23 nodes
 for i in range(35):  # Add the vertices(as numbers) and cost of edges
     G.addEdge(ord(data_array[i, 0]) - 65, ord(data_array[i, 1]) - 65, data_array[i, 2].astype(int))
@@ -54,4 +53,23 @@ for i in range(35):  # Undirected graph, each edge goes both ways
 
 G.BellmanFord(5)  # Find 5, aka F
 
-print(Paths)
+
+
+
+for i in range(23):
+
+    stop = 0
+    j = 0
+
+    while stop == 0:
+        j = j + 1
+        if Paths[i, j] == -1: stop = 1
+
+    tempArray = Paths[i, 0:j]
+    tempArray2 = []
+
+    for k in range(len(tempArray)):
+        tempArray2.append(chr((tempArray[k] + 65).astype(int)))
+
+    print(tempArray2)
+
