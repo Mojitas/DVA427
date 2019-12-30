@@ -8,6 +8,7 @@ node_list = [path for i in range(23)]  # init the list with 23 nodes of type pat
 # print(node_list)
 """
 
+
 class Graph:
 
     def __init__(self, nodes):
@@ -18,18 +19,18 @@ class Graph:
         self.graph.append([city1, city2, weight])
 
     def printArr(self, dist):
-        print([(i, dist[i]) for i in range(self.Nodes)])
+        print([(chr(i+65), dist[i]) for i in range(self.Nodes)])
 
     def BellmanFord(self, src):
 
-        dist = [float("Inf")] * self.Nodes
-        dist[src] = 0
-
-        for i in range(2):
-            for u, v, w in self.graph:
+        dist = [float("Inf")] * self.Nodes  # list that keeps track of distance to each node from F, init to infinity
+        dist[src] = 0  # start at F
+        print(dist)
+        for j in range(2):  # v - 1 times in worst case
+            for u, v, w in self.graph:  # u,v are cities and w is distance
                 if dist[u] != [float("Inf")] and dist[u] + w < dist[v]:
-                    dist[v] = dist[u] + w
-                    print("Distance to " + str(v) + " has been updated via " + str(u))
+                    dist[v] = dist[u] + w  # update if shorter path is found
+                    print("Distance to " + chr(v+65) + " has been updated via " + chr(u+65))
 
         self.printArr(dist)
 
